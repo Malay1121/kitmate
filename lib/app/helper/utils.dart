@@ -7,41 +7,17 @@ GetStorage getStorage = GetStorage();
 
 List<Map> tabs = [
   {
-    "title": AppStrings.home,
-    "icon": Icons.home_rounded,
+    "title": AppStrings.mealPlans,
+    "icon": Icons.food_bank_outlined,
     "page": Routes.HOME,
   },
   {
-    "title": AppStrings.search,
-    "icon": Icons.search_rounded,
-    "page": Routes.HOME,
-  },
-  {
-    "title": AppStrings.profile,
-    "icon": Icons.person_rounded,
+    "title": AppStrings.storage,
+    "icon": Icons.local_grocery_store_outlined,
     "page": Routes.HOME,
   },
 ];
 
-List<Map> farmerTabs = [
-  {
-    "title": AppStrings.dashboard,
-    "icon": Icons.dashboard,
-    "page": Routes.HOME,
-  },
-  {
-    "title": AppStrings.products,
-    "icon": Icons.food_bank,
-    "page": Routes.HOME,
-  },
-  {
-    "title": AppStrings.profile,
-    "icon": Icons.person_rounded,
-    "page": Routes.HOME,
-  },
-];
-
-FirebaseStorage storage = FirebaseStorage.instance;
 Map apiKeys = {
   "gemini": "AIzaSyBp73DKyzF2KwK2yPNc5lYzO_hkdcgJxyk",
 };
@@ -212,10 +188,6 @@ run(VoidCallback task) async {
   try {
     task();
   } catch (e, stack) {
-    await FirebaseCrashlytics.instance.recordError(e, stack,
-        reason: task.toString(),
-        information: [ModalRoute.of(Get.context!)?.settings.name ?? '']);
-
     showDialog(
       context: Get.context!,
       builder: (context) => AlertDialog(
@@ -238,45 +210,45 @@ run(VoidCallback task) async {
   }
 }
 
-Future<Map<String, dynamic>> fetchDetailsAuto(
-    String text, List parameters) async {
-  String bodyEncoded = json.encode({
-    "system_instruction": {
-      "parts": [
-        {
-          "text": AppStrings.autoFillPrompt,
-        }
-      ]
-    },
-    "contents": [
-      {
-        "parts": [
-          {
-            "text": jsonEncode({
-              "text": text,
-              "parameters": parameters,
-            }),
-          }
-        ]
-      }
-    ],
-    "generationConfig": {"response_mime_type": "application/json"}
-  });
-  // print(bodyEncoded);
-  var headers = {'Content-Type': 'application/json'};
-  var request = await http.post(
-    Uri.parse(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKeys["gemini"]}'),
-    headers: headers,
-    body: bodyEncoded,
-  );
-
-  if (request.statusCode == 200) {
-    String response = request.body;
-    print(response);
-    return json.decode(response);
-  } else {
-    // print(request.statusCode);
-    return {};
-  }
-}
+// Future<Map<String, dynamic>> fetchDetailsAuto(
+//     String text, List parameters) async {
+//   String bodyEncoded = json.encode({
+//     "system_instruction": {
+//       "parts": [
+//         {
+//           "text": AppStrings.autoFillPrompt,
+//         }
+//       ]
+//     },
+//     "contents": [
+//       {
+//         "parts": [
+//           {
+//             "text": jsonEncode({
+//               "text": text,
+//               "parameters": parameters,
+//             }),
+//           }
+//         ]
+//       }
+//     ],
+//     "generationConfig": {"response_mime_type": "application/json"}
+//   });
+//   // print(bodyEncoded);
+//   var headers = {'Content-Type': 'application/json'};
+//   var request = await http.post(
+//     Uri.parse(
+//         'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKeys["gemini"]}'),
+//     headers: headers,
+//     body: bodyEncoded,
+//   );
+//
+//   if (request.statusCode == 200) {
+//     String response = request.body;
+//     print(response);
+//     return json.decode(response);
+//   } else {
+//     // print(request.statusCode);
+//     return {};
+//   }
+// }

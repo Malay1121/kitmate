@@ -1,1 +1,1 @@
-String SfProDisplay = "SF Pro Display";
+String SfProDisplay = "SfProDisplay";

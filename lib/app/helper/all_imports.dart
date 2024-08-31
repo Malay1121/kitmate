@@ -5,12 +5,6 @@ export 'package:get/get.dart' hide HeaderValue;
 export 'dart:convert';
 export 'package:flutter/services.dart';
 
-export 'package:firebase_auth/firebase_auth.dart';
-export 'package:firebase_core/firebase_core.dart';
-export 'package:cloud_firestore/cloud_firestore.dart';
-export 'package:firebase_storage/firebase_storage.dart';
-export 'package:firebase_crashlytics/firebase_crashlytics.dart';
-
 export 'package:flutter_responsive_helper/flutter_responsive_helper.dart';
 export 'package:flutter_easyloading/flutter_easyloading.dart';
 export 'package:auto_size_text/auto_size_text.dart';

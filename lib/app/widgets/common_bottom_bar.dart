@@ -4,10 +4,8 @@ class CommonBottomBar extends StatefulWidget {
   CommonBottomBar({
     super.key,
     required this.selectedTab,
-    this.farmer = false,
   });
   String selectedTab;
-  bool farmer;
   @override
   State<CommonBottomBar> createState() => _CommonBottomBarState();
 }
@@ -27,7 +25,7 @@ class _CommonBottomBarState extends State<CommonBottomBar> {
       ),
       child: Row(
         children: [
-          for (Map tab in widget.farmer ? farmerTabs : tabs)
+          for (Map tab in tabs)
             Expanded(
               child: GestureDetector(
                 onTap: () => Get.toNamed(tab["page"]),

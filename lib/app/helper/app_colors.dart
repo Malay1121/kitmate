@@ -7,6 +7,7 @@ class AppColors {
   static Color primaryText = Color(0xFF600FD4);
   static Color secondary = Color(0xFFFF324B);
   static Color stroke = Color(0xFFE5E5EA);
+  static Color cardColor = Color(0xFFF2F2F2);
   static Color lightGrey = Color(0xFFC9C9C9);
   static Color lightGrey2 = Color(0xFF3F3F3F);
   static Color lightBG = Color(0xFFF3F5F7);

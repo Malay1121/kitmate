@@ -5,8 +5,8 @@ class CommonButton extends StatefulWidget {
       {super.key,
       required this.text,
       required this.onTap,
-      this.height = 48,
-      this.width = 342,
+      this.height = 33,
+      this.width = 196,
       this.backgroundColor,
       this.textColor,
       this.border});
@@ -31,19 +31,17 @@ class _CommonButtonState extends State<CommonButton> {
         width: widget.width.w(context),
         decoration: BoxDecoration(
           color: widget.backgroundColor ?? AppColors.primary,
-          borderRadius: BorderRadius.circular(61),
+          borderRadius: BorderRadius.circular(8),
           border: widget.border,
         ),
         child: Center(
           child: AppText(
             text: widget.text,
-            height: 24.h(context),
+            height: 12.44.h(context),
             centered: true,
-            style: TextStyle(
+            style: Styles.bold(
               color: widget.textColor ?? AppColors.white,
-              fontFamily: SfProDisplay,
-              fontWeight: FontWeight.w500,
-              fontSize: 16.t(context),
+              fontSize: 10.05.t(context),
             ),
           ),
         ),

@@ -16,4 +16,31 @@ class AppStrings {
 
   static String next = "Next";
   static String previous = "Previous";
+  static String skip = "Skip";
+
+  static String doYouFollowAnyOfTheseDiets =
+      "Do you follow any of these diets?";
+  static String anyIngredientAllergies = "Any ingredient allergies?";
+  static String listOfIngredientsYouHave = "List of the ingredients you have";
+  static String toOfferYouBestTailoredDiet =
+      "To offer you the best tailored diet experience we need to know more information about you.";
+  static String none = "None";
+  static String vegan = "Vegan";
+  static String paleo = "Paleo";
+  static String dukan = "Dukan";
+  static String vegetarian = "Vegetarian";
+  static String atkins = "Atkins";
+  static String intermittentFasting = "Intermittent Fasting";
+
+  static String gluten = "Gluten";
+  static String diary = "Diary";
+  static String egg = "Egg";
+  static String soy = "Soy";
+  static String peanut = "Peanut";
+  static String wheat = "Wheat";
+  static String milk = "Milk";
+  static String fish = "Fish";
+
+  static String mealPlans = "Meal Plans";
+  static String storage = "Storage";
 }

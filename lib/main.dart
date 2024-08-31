@@ -4,7 +4,7 @@ void main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
 
-  initializeSize(390, 844);
+  initializeSize(220, 477);
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return Container(
       decoration: BoxDecoration(
