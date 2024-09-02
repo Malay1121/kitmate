@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-
-import 'package:get/get.dart';
 import 'package:kitmate/app/helper/all_imports.dart';
 
 import '../controllers/onboarding_controller.dart';
@@ -25,7 +22,7 @@ class OnboardingView extends GetView<OnboardingController> {
                   ),
                   child: Row(
                     children: [
-                      for (Map page in controller.data)
+                      for (Map<String, dynamic> page in controller.data)
                         Container(
                           margin: EdgeInsets.only(
                             right: 2.52.w(context),
@@ -85,7 +82,8 @@ class OnboardingView extends GetView<OnboardingController> {
                             height: 21.h(context),
                           ),
                           AppText(
-                            text: AppStrings.doYouFollowAnyOfTheseDiets,
+                            text: controller.data[controller.currentPage]
+                                ["title"],
                             maxLines: 2,
                             width: 160.w(context),
                             style: Styles.semiBold(
@@ -113,12 +111,10 @@ class OnboardingView extends GetView<OnboardingController> {
                             runSpacing: 9.h(context),
                             children: [
                               for (Map option in controller
-                                  .data[controller.currentPage]["options"])
+                                  .data[controller.currentPage]["options"]
+                                  .where((e) => e["custom"] != true))
                                 GestureDetector(
-                                  onTap: () => controller.toggleOption(
-                                      controller.data[controller.currentPage]
-                                              ["options"]
-                                          .indexOf(option)),
+                                  onTap: () => controller.toggleOption(option),
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
                                       horizontal: 11.w(context),
@@ -147,6 +143,116 @@ class OnboardingView extends GetView<OnboardingController> {
                                   ),
                                 ),
                             ],
+                          ),
+                          SizedBox(
+                            height: 10.h(context),
+                          ),
+                          Container(
+                            width: 196.w(context),
+                            decoration: BoxDecoration(
+                              color: AppColors.cardColor,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 10.h(context),
+                                horizontal: 10.w(context),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    width: 150.w(context),
+                                    child: Wrap(
+                                      runSpacing: 10.h(context),
+                                      spacing: 10.w(context),
+                                      children: [
+                                        if (controller
+                                            .data[controller.currentPage]
+                                                ["options"]
+                                            .where(
+                                              (e) => e["custom"] == true,
+                                            )
+                                            .isEmpty)
+                                          AppText(
+                                            text: controller.data[controller
+                                                .currentPage]["record"],
+                                            maxLines: null,
+                                            width: 150.w(context),
+                                            style: Styles.semiBold(
+                                              fontSize: 14,
+                                              color: AppColors.fontGrey,
+                                            ),
+                                          ),
+                                        for (var option in controller
+                                            .data[controller.currentPage]
+                                                ["options"]
+                                            .where(
+                                          (e) => e["custom"] == true,
+                                        ))
+                                          GestureDetector(
+                                            onTap: () =>
+                                                controller.deleteOption(option),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: option["selected"]
+                                                    ? AppColors.primary
+                                                    : AppColors.fontGrey,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 2.h(context),
+                                                  horizontal: 11.w(context),
+                                                ),
+                                                child: AppText(
+                                                  text: option["label"],
+                                                  style: Styles.semiBold(
+                                                      color: option["selected"]
+                                                          ? AppColors.white
+                                                          : AppColors.fontGrey,
+                                                      fontSize:
+                                                          9.53.t(context)),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      if (!controller.listening) {
+                                        try {
+                                          controller.getText();
+                                        } catch (e) {
+                                          controller.listening = false;
+                                          controller.update();
+                                          EasyLoading.dismiss();
+                                        }
+                                      }
+                                    },
+                                    child: Container(
+                                      height: 20.h(context),
+                                      width: 20.w(context),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: AppColors.primary,
+                                      ),
+                                      child: Icon(
+                                        controller.listening
+                                            ? Icons.stop
+                                            : Icons.mic,
+                                        size: 10.t(context),
+                                        color: AppColors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
