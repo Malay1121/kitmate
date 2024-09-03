@@ -13,17 +13,18 @@ class IngredientsView extends GetView<IngredientsController> {
       init: IngredientsController(),
       builder: (controller) {
         return Scaffold(
-          body: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 11.w(context),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 38.5.h(context),
+          backgroundColor: AppColors.white,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 38.5.h(context),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 11.w(context),
                 ),
-                AppText(
+                child: AppText(
                   text: AppStrings.ingredientsInStock,
                   maxLines: 2,
                   width: 160.w(context),
@@ -32,15 +33,30 @@ class IngredientsView extends GetView<IngredientsController> {
                     color: AppColors.fontDark,
                   ),
                 ),
-                SizedBox(
-                  height: 11.h(context),
+              ),
+              SizedBox(
+                height: 11.h(context),
+              ),
+              if (controller.ingredients.isEmpty)
+                AppText(
+                  text: AppStrings.noIngredientsAddedYet,
+                  style: Styles.bold(
+                    fontSize: 12.t(context),
+                    color: AppColors.fontDark,
+                  ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 11.w(context),
+                    ),
                     child: Column(
                       children: [
                         for (Map ingredient in controller.ingredients)
                           GestureDetector(
+                            onLongPress: () =>
+                                controller.removeIngredient(ingredient),
                             onTap: () => controller.addIngredient(
                               edit: true,
                               ingredient: ingredient,
@@ -54,7 +70,7 @@ class IngredientsView extends GetView<IngredientsController> {
                                 bottom: 11.h(context),
                               ),
                               decoration: BoxDecoration(
-                                color: AppColors.stroke,
+                                color: AppColors.cardColor,
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               width: 196.w(context),
@@ -84,18 +100,26 @@ class IngredientsView extends GetView<IngredientsController> {
                     ),
                   ),
                 ),
-                CommonButton(
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 11.w(context),
+                ),
+                child: CommonButton(
                   text: AppStrings.addIngredient,
                   backgroundColor: AppColors.primary,
                   width: 196.w(context),
                   textColor: AppColors.white,
                   onTap: () => controller.addIngredient(),
                 ),
-                SizedBox(
-                  height: 11.h(context),
-                ),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: 11.h(context),
+              ),
+              CommonBottomBar(
+                selectedTab: AppStrings.storage,
+              ),
+            ],
           ),
         );
       },

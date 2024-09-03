@@ -14,7 +14,7 @@ List<Map> tabs = [
   {
     "title": AppStrings.storage,
     "icon": Icons.local_grocery_store_outlined,
-    "page": Routes.HOME,
+    "page": Routes.INGREDIENTS,
   },
 ];
 

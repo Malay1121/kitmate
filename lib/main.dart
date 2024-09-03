@@ -4,6 +4,10 @@ void main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
 
+  if (getStorage.read("loggedin") == true) {
+    AppPages.INITIAL = Routes.HOME;
+  }
+
   initializeSize(220, 477);
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return Container(

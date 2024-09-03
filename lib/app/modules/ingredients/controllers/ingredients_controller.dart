@@ -37,6 +37,56 @@ class IngredientsController extends GetxController {
     super.onClose();
   }
 
+  void removeIngredient(Map ingredient) {
+    Get.dialog(
+      Dialog(
+        insetPadding: EdgeInsets.zero,
+        child: Container(
+          width: 196.w(Get.context!),
+          height: 158.h(Get.context!),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 11.w(Get.context!),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 14.5.h(Get.context!),
+                ),
+                AppText(
+                  text:
+                      "${AppStrings.areYouSureYouWantToRemove} ${ingredient["label"]}?",
+                  maxLines: null,
+                  centered: true,
+                  textAlign: TextAlign.center,
+                  width: 160.w(Get.context!),
+                  style: Styles.semiBold(
+                    fontSize: 14.55.t(Get.context!),
+                    color: AppColors.fontDark,
+                  ),
+                ),
+                Spacer(),
+                CommonButton(
+                    text: AppStrings.confirm,
+                    onTap: () {
+                      ingredients.remove(ingredient);
+
+                      update();
+                      getStorage.write("ingredients", ingredients);
+                      Get.back();
+                    }),
+                SizedBox(
+                  height: 20.h(Get.context!),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void addIngredient({
     bool edit = false,
     Map? ingredient,

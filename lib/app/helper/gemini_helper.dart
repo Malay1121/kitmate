@@ -39,6 +39,7 @@ class GeminiHelper {
 
     if (request.statusCode == 200) {
       String response = request.body;
+      print(response);
 
       Map<String, dynamic> decoded = json.decode(json
           .decode(response)["candidates"][0]["content"]["parts"][0]["text"]);

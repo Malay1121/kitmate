@@ -1,12 +1,27 @@
 import 'package:get/get.dart';
+import 'package:kitmate/app/helper/all_imports.dart';
+import 'package:kitmate/app/helper/gemini_helper.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
+  Map? recipe;
 
-  final count = 0.obs;
+  void generateRecipe() async {
+    Map geminiResult =
+        await GeminiHelper.fetch(systemPrompt: AppStrings.dishPrompt, data: {
+      "preferences": getStorage.read("preferences"),
+      "ingredients": getStorage.read("ingredients"),
+    });
+
+    if (geminiResult["context"] == true) {
+      recipe = geminiResult["data"];
+      update();
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
+    generateRecipe();
   }
 
   @override
@@ -18,6 +33,4 @@ class HomeController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }
