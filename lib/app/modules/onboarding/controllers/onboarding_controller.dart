@@ -11,6 +11,7 @@ class OnboardingController extends CommonController {
       "title": AppStrings.doYouFollowAnyOfTheseDiets,
       "record": AppStrings.recordDiets,
       "prompt": AppStrings.dietPrompt,
+      "id": "diet",
       "options": [
         {
           "label": AppStrings.none,
@@ -45,6 +46,7 @@ class OnboardingController extends CommonController {
     {
       "title": AppStrings.anyIngredientAllergies,
       "record": AppStrings.recordIngredients,
+      "id": "allergy",
       "prompt": AppStrings.allergyPrompt,
       "options": [
         {
@@ -86,7 +88,18 @@ class OnboardingController extends CommonController {
   void navigate(bool next) {
     if (next) {
       if (currentPage >= data.length - 1) {
-        Get.offAllNamed(Routes.HOME);
+        Map<String, List> preferences = {
+          "allergy": [],
+          "diet": [],
+        };
+        for (Map page in data) {
+          preferences[page["id"]] =
+              page["options"].where((e) => e["selected"] == true).toList();
+        }
+
+        getStorage.write("preferences", preferences);
+        getStorage.write("loggedin", true);
+        Get.offAllNamed(Routes.INGREDIENTS);
       } else {
         currentPage++;
         update();

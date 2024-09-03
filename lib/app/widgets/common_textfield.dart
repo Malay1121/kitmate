@@ -8,7 +8,7 @@ class CommonTextField extends StatefulWidget {
     super.key,
     required this.hintText,
     this.height = 45,
-    this.width = 342,
+    this.width = 196,
     this.prefixIcon,
     this.controller,
     this.keyboardType,
@@ -85,7 +85,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
         onChanged: widget.onChanged,
         textInputAction: widget.textInputAction,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.zero,
+          // contentPadding: EdgeInsets.zero,
           fillColor: AppColors.white,
           filled: true,
           hintText: widget.hintText,
@@ -94,7 +94,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
             child: Icon(
               widget.listening ? Icons.stop : Icons.mic,
               color: AppColors.primary,
-              size: 16.t(context),
+              size: 12.t(context),
             ),
           ),
           hintStyle: Styles.medium(
@@ -104,11 +104,17 @@ class _CommonTextFieldState extends State<CommonTextField> {
           prefixIcon: widget.prefixIcon,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(67),
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(
+              color: AppColors.stroke,
+              width: 1,
+            ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(67),
-            borderSide: BorderSide.none,
+            borderSide: BorderSide(
+              color: AppColors.primary,
+              width: 1,
+            ),
           ),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(67),
@@ -120,7 +126,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(67),
             borderSide: BorderSide(
-              color: AppColors.stroke,
+              color: AppColors.primary,
               width: 1,
             ),
           ),

@@ -47,6 +47,17 @@ class AppStrings {
   static String mealPlans = "Meal Plans";
   static String storage = "Storage";
 
+  static String ingredientsInStock = "Ingredients in stock";
+  static String addIngredient = "Add ingredient";
+  static String confirm = "Confirm";
+  static String addIngredientWithSpeech = "Add ingredients with speech";
+  static String ingredientName = "Ingredient name";
+  static String quantity = "Quantity";
+  static String quantityUnit = "Quantity Unit";
+  static String gram = "Gram(g)";
+  static String mililiter = "Mililiter(ml)";
+  static String item = "Item(1,2,3,4,...)";
+
   static String allergyPrompt =
       '''Check for the ingredients that a user has allergy from depending on the descriptions they give. Users will try to say the ingredients they have allergy from and it will be then converted into text and given to you. Check for the ingredients that the user has specified or is trying to convey. 
 
