@@ -20,10 +20,9 @@ class HomeView extends GetView<HomeController> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircularProgressIndicator(),
                       if (controller.recipe == null)
                         SizedBox(
-                          height: 10.h(context),
+                          height: 20.h(context),
                         ),
                       if (controller.recipe == null)
                         AppText(
@@ -39,17 +38,21 @@ class HomeView extends GetView<HomeController> {
                         ),
                       if (controller.recipe == null) Spacer(),
                       if (controller.recipe != null)
-                        SizedBox(
-                          height: 442.h(context),
-                          child: Column(
+                        Expanded(
+                          child: Stack(
                             children: [
-                              SizedBox(
-                                height: 442.h(context),
-                              ),
+                              // SizedBox(
+                              //   height: 442.h(context),
+                              // ),
                               Image.network(
                                 controller.recipe!["recipe_image"],
                                 errorBuilder: (context, error, stackTrace) {
-                                  return Icon(Icons.image);
+                                  return Container(
+                                    color: AppColors.cardColor,
+                                    width: 220.w(context),
+                                    height: 215.h(context),
+                                    child: Icon(Icons.image),
+                                  );
                                 },
                                 fit: BoxFit.cover,
                                 width: 220.w(context),
@@ -68,98 +71,124 @@ class HomeView extends GetView<HomeController> {
                                     ),
                                     color: AppColors.white,
                                   ),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 11.h(context),
-                                      ),
-                                      AppText(
-                                        text:
-                                            controller.recipe!["recipe_title"],
-                                        style: Styles.semiBold(
-                                          fontSize: 14.t(context),
-                                          color: AppColors.black,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 11.h(context),
                                         ),
-                                      ),
-                                      AppText(
-                                        text:
-                                            "${controller.recipe!["recipe_type"]} / ${controller.recipe!["time"]}",
-                                        style: Styles.semiBold(
-                                          fontSize: 7.t(context),
-                                          color: AppColors.fontGrey,
+                                        AppText(
+                                          text: controller
+                                              .recipe!["recipe_title"],
+                                          style: Styles.semiBold(
+                                            fontSize: 14.t(context),
+                                            color: AppColors.black,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 10.h(context),
-                                      ),
-                                      Container(
-                                        height: 34.h(context),
-                                        width: 220.w(context),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.cardColor,
+                                        AppText(
+                                          text:
+                                              "${controller.recipe!["recipe_type"]} / ${controller.recipe!["time"]}",
+                                          style: Styles.semiBold(
+                                            fontSize: 7.t(context),
+                                            color: AppColors.fontGrey,
+                                          ),
                                         ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            for (String stat in controller
-                                                .recipe!["statistics"].keys)
-                                              Column(
+                                        SizedBox(
+                                          height: 10.h(context),
+                                        ),
+                                        Container(
+                                          height: 34.h(context),
+                                          width: 220.w(context),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.cardColor,
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              for (String stat in controller
+                                                  .recipe!["statistics"].keys)
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    AppText(
+                                                      text: controller
+                                                          .recipe!["statistics"]
+                                                              [stat]
+                                                          .toString(),
+                                                      style: Styles.regular(
+                                                        fontSize: 7.t(context),
+                                                        color:
+                                                            AppColors.fontDark,
+                                                      ),
+                                                    ),
+                                                    AppText(
+                                                      text: stat
+                                                          .toString()
+                                                          .capitalizeFirst
+                                                          .toString(),
+                                                      style: Styles.medium(
+                                                        fontSize: 9.t(context),
+                                                        color:
+                                                            AppColors.fontDark,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 11.5.h(context),
+                                        ),
+                                        for (Map ingredient in controller
+                                            .recipe!["ingredients"])
+                                          SizedBox(
+                                            width: 220.w(context),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 11.w(context),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   AppText(
-                                                    text: controller
-                                                        .recipe!["statistics"]
-                                                            [stat]
+                                                    text: ingredient["name"]
                                                         .toString(),
                                                     style: Styles.regular(
-                                                      fontSize: 7.t(context),
-                                                      color: AppColors.fontDark,
-                                                    ),
-                                                  ),
-                                                  AppText(
-                                                    text: stat
-                                                        .toString()
-                                                        .capitalizeFirst
-                                                        .toString(),
-                                                    style: Styles.medium(
                                                       fontSize: 9.t(context),
                                                       color: AppColors.fontDark,
                                                     ),
                                                   ),
+                                                  AppText(
+                                                    text: ingredient["quantity"]
+                                                        .toString(),
+                                                    style: Styles.regular(
+                                                      fontSize: 8.t(context),
+                                                      color: AppColors.fontGrey,
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 11.5.h(context),
-                                      ),
-                                      for (Map ingredient
-                                          in controller.recipe!["ingredients"])
-                                        Row(
-                                          children: [
-                                            AppText(
-                                              text:
-                                                  ingredient["name"].toString(),
-                                              style: Styles.regular(
-                                                fontSize: 9.t(context),
-                                                color: AppColors.fontDark,
-                                              ),
                                             ),
-                                            Spacer(),
-                                            AppText(
-                                              text: ingredient["quantity"]
-                                                  .toString(),
-                                              style: Styles.regular(
-                                                fontSize: 8.t(context),
-                                                color: AppColors.fontGrey,
-                                              ),
-                                            ),
-                                          ],
+                                          ),
+                                        SizedBox(
+                                          height: 10.h(context),
                                         ),
-                                    ],
+                                        CommonButton(
+                                          text: AppStrings.startCooking,
+                                          onTap: () => {},
+                                        ),
+                                        SizedBox(
+                                          height: 10.h(context),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

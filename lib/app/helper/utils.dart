@@ -20,6 +20,7 @@ List<Map> tabs = [
 
 Map apiKeys = {
   "gemini": "AIzaSyBp73DKyzF2KwK2yPNc5lYzO_hkdcgJxyk",
+  "unsplash": "i7Jw5ebxgDS8oq44B4Is2QtDa4iAkWAW2WhAjmhTdgA",
 };
 
 String generateMd5(String input) {
@@ -208,6 +209,20 @@ run(VoidCallback task) async {
       ),
     );
   }
+}
+
+Future<String> getImage(String query) async {
+  var request = await http.get(Uri.parse(
+      'https://api.unsplash.com/search/photos?query=$query&client_id=i7Jw5ebxgDS8oq44B4Is2QtDa4iAkWAW2WhAjmhTdgA'));
+
+  String response = request.body;
+
+  if (request.statusCode == 200) {
+    return jsonDecode(response)["results"][0]["urls"]["raw"];
+  } else {
+    print(request.reasonPhrase);
+  }
+  return "";
 }
 
 // Future<Map<String, dynamic>> fetchDetailsAuto(

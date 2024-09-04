@@ -14,6 +14,8 @@ class HomeController extends GetxController {
 
     if (geminiResult["context"] == true) {
       recipe = geminiResult["data"];
+      String image = await getImage(recipe!["recipe_title"]);
+      recipe!["recipe_image"] = image;
       update();
     }
   }
