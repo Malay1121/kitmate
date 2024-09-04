@@ -77,12 +77,37 @@ class HomeView extends GetView<HomeController> {
                                         SizedBox(
                                           height: 11.h(context),
                                         ),
-                                        AppText(
-                                          text: controller
-                                              .recipe!["recipe_title"],
-                                          style: Styles.semiBold(
-                                            fontSize: 14.t(context),
-                                            color: AppColors.black,
+                                        SizedBox(
+                                          width: 220.w(context),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 11.w(context)),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () => controller
+                                                      .generateRecipe(),
+                                                  child: Icon(
+                                                    Icons.restart_alt,
+                                                    size: 14.t(context),
+                                                  ),
+                                                ),
+                                                AppText(
+                                                  text: controller
+                                                      .recipe!["recipe_title"],
+                                                  style: Styles.semiBold(
+                                                    fontSize: 14.t(context),
+                                                    color: AppColors.black,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 0,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                         AppText(
@@ -182,7 +207,9 @@ class HomeView extends GetView<HomeController> {
                                         ),
                                         CommonButton(
                                           text: AppStrings.startCooking,
-                                          onTap: () => {},
+                                          onTap: () => Get.toNamed(
+                                              Routes.RECIPE,
+                                              arguments: controller.recipe),
                                         ),
                                         SizedBox(
                                           height: 10.h(context),

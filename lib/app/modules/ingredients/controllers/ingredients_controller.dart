@@ -4,27 +4,12 @@ import 'package:kitmate/app/helper/all_imports.dart';
 import 'package:kitmate/app/helper/app_strings.dart';
 
 class IngredientsController extends GetxController {
-  List ingredients = [
-    {
-      "label": "test 1",
-      "quantity": 1,
-      "quantity_unit": AppStrings.gram,
-    },
-    {
-      "label": "test 1",
-      "quantity": 1,
-      "quantity_unit": AppStrings.mililiter,
-    },
-    {
-      "label": "test 1",
-      "quantity": 1,
-      "quantity_unit": AppStrings.item,
-    },
-  ];
+  List ingredients = [];
 
   @override
   void onInit() {
     super.onInit();
+    ingredients = getStorage.read("ingredients") ?? [];
   }
 
   @override

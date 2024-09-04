@@ -50,6 +50,9 @@ class AppStrings {
   static String generatingARecipe =
       "Generating a personalized recipe just for you! ~ 10 seconds";
   static String startCooking = "Start Cooking";
+  static String finish = "Finish";
+  static String step = "Step";
+  static String exit = "Exit";
 
   static String ingredientsInStock = "Ingredients in stock";
   static String noIngredientsAddedYet = "No ingredients added yet!";

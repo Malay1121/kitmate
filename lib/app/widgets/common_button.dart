@@ -27,8 +27,8 @@ class _CommonButtonState extends State<CommonButton> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        height: widget.height.h(context),
-        width: widget.width.w(context),
+        height: widget.height,
+        width: widget.width,
         decoration: BoxDecoration(
           color: widget.backgroundColor ?? AppColors.primary,
           borderRadius: BorderRadius.circular(8),

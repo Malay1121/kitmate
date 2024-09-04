@@ -6,6 +6,8 @@ import '../modules/ingredients/bindings/ingredients_binding.dart';
 import '../modules/ingredients/views/ingredients_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
+import '../modules/recipe/bindings/recipe_binding.dart';
+import '../modules/recipe/views/recipe_view.dart';
 
 part 'app_routes.dart';
 
@@ -29,6 +31,11 @@ class AppPages {
       name: _Paths.INGREDIENTS,
       page: () => const IngredientsView(),
       binding: IngredientsBinding(),
+    ),
+    GetPage(
+      name: _Paths.RECIPE,
+      page: () => const RecipeView(),
+      binding: RecipeBinding(),
     ),
   ];
 }
