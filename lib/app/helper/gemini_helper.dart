@@ -40,11 +40,13 @@ class GeminiHelper {
     if (request.statusCode == 200) {
       String response = request.body;
       print(response);
+      if (request.body.isNotEmpty) {
+        Map<String, dynamic> decoded = json.decode(json
+            .decode(response)["candidates"][0]["content"]["parts"][0]["text"]);
 
-      Map<String, dynamic> decoded = json.decode(json
-          .decode(response)["candidates"][0]["content"]["parts"][0]["text"]);
-
-      return decoded;
+        return decoded;
+      }
+      return {};
     } else {
       // print(request.statusCode);
       return {};

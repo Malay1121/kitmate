@@ -22,7 +22,37 @@ class HomeView extends GetView<HomeController> {
                     children: [
                       if (controller.recipe == null)
                         SizedBox(
-                          height: 20.h(context),
+                          height: 50.h(context),
+                        ),
+                      if (controller.recipe == null)
+                        GestureDetector(
+                          onTap: () => controller.settingsPopup(),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              AppText(
+                                text: AppStrings.settings,
+                                style: Styles.bold(
+                                  color: AppColors.primary,
+                                  fontSize: 12.t(context),
+                                ),
+                                maxLines: null,
+                              ),
+                              Container(
+                                width: 30.w(context),
+                                height: 30.h(context),
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.settings,
+                                  color: AppColors.primary,
+                                  size: 14.t(context),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       if (controller.recipe == null)
                         AppText(
@@ -36,14 +66,45 @@ class HomeView extends GetView<HomeController> {
                           ),
                           maxLines: null,
                         ),
+                      if (controller.recipe == null)
+                        SizedBox(
+                          height: 20.h(context),
+                        ),
+                      if (controller.recipe == null)
+                        GestureDetector(
+                          onTap: () => controller.generateRecipe(),
+                          child: AppText(
+                            text: AppStrings.facingIssues,
+                            centered: true,
+                            textAlign: TextAlign.center,
+                            width: 160.w(context),
+                            style: Styles.regular(
+                              color: AppColors.fontDark,
+                              fontSize: 10.t(context),
+                            ),
+                            maxLines: null,
+                          ),
+                        ),
+                      if (controller.recipe == null)
+                        GestureDetector(
+                          onTap: () => controller.generateRecipe(),
+                          child: AppText(
+                            text: AppStrings.regenerateRecipe,
+                            centered: true,
+                            textAlign: TextAlign.center,
+                            width: 160.w(context),
+                            style: Styles.bold(
+                              color: AppColors.primary,
+                              fontSize: 12.t(context),
+                            ),
+                            maxLines: null,
+                          ),
+                        ),
                       if (controller.recipe == null) Spacer(),
                       if (controller.recipe != null)
                         Expanded(
                           child: Stack(
                             children: [
-                              // SizedBox(
-                              //   height: 442.h(context),
-                              // ),
                               Image.network(
                                 controller.recipe!["recipe_image"],
                                 errorBuilder: (context, error, stackTrace) {
@@ -215,6 +276,26 @@ class HomeView extends GetView<HomeController> {
                                           height: 10.h(context),
                                         ),
                                       ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 20.h(context),
+                                right: 15.w(context),
+                                child: GestureDetector(
+                                  onTap: () => controller.settingsPopup(),
+                                  child: Container(
+                                    width: 30.w(context),
+                                    height: 30.h(context),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.settings,
+                                      color: AppColors.primary,
+                                      size: 14.t(context),
                                     ),
                                   ),
                                 ),

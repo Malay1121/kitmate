@@ -5,15 +5,15 @@ class CommonButton extends StatefulWidget {
       {super.key,
       required this.text,
       required this.onTap,
-      this.height = 33,
-      this.width = 196,
+      this.height,
+      this.width,
       this.backgroundColor,
       this.textColor,
       this.border});
   String text;
   VoidCallback onTap;
-  double height;
-  double width;
+  double? height;
+  double? width;
   Color? backgroundColor;
   Color? textColor;
   Border? border;
@@ -27,8 +27,8 @@ class _CommonButtonState extends State<CommonButton> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        height: widget.height,
-        width: widget.width,
+        height: widget.height ?? 28.h(context),
+        width: widget.width ?? 196.w(context),
         decoration: BoxDecoration(
           color: widget.backgroundColor ?? AppColors.primary,
           borderRadius: BorderRadius.circular(8),

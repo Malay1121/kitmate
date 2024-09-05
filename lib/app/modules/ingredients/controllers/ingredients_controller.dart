@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 import 'package:kitmate/app/helper/all_imports.dart';
-import 'package:kitmate/app/helper/app_strings.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+
+import '../../../helper/gemini_helper.dart';
 
 class IngredientsController extends GetxController {
   List ingredients = [];
@@ -9,6 +9,7 @@ class IngredientsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    initializeSpeech();
     ingredients = getStorage.read("ingredients") ?? [];
   }
 
@@ -20,6 +21,46 @@ class IngredientsController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  bool listening = false;
+  SpeechToText speechToText = SpeechToText();
+  bool speechEnabled = false;
+  Future<String> getText() async {
+    String result = "";
+    listening = true;
+    update();
+    await speechToText.listen(
+        listenOptions: SpeechListenOptions(listenMode: ListenMode.dictation),
+        partialResults: false,
+        onResult: (res) async {
+          result = res.recognizedWords;
+          listening = false;
+          update();
+          Map<String, dynamic> geminiResult = await GeminiHelper.fetch(
+              systemPrompt: AppStrings.ingredientsPrompt, text: result);
+          if (geminiResult["context"] == true) {
+            ingredients.addAll(geminiResult["data"]);
+            getStorage.write("ingredients", ingredients);
+            update();
+          }
+        });
+
+    return result;
+  }
+
+  void initializeSpeech() async {
+    speechEnabled = await speechToText.initialize(onError: (errorNotification) {
+      print(errorNotification);
+      listening = false;
+      update();
+      EasyLoading.dismiss();
+    }, onStatus: (status) {
+      if (status == "done") {
+        print(status);
+      }
+      print(status);
+    });
   }
 
   void removeIngredient(Map ingredient) {

@@ -185,6 +185,10 @@ void showFirebaseError(error) {
   Get.snackbar(AppStrings.appName, error);
 }
 
+String idToString(String id) {
+  return id.replaceAll("_", " ").capitalizeFirst ?? id;
+}
+
 run(VoidCallback task) async {
   try {
     task();

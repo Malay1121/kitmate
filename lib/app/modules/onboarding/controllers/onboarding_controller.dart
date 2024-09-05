@@ -99,6 +99,13 @@ class OnboardingController extends CommonController {
 
         getStorage.write("preferences", preferences);
         getStorage.write("loggedin", true);
+        getStorage.write("settings", {
+          "consider_current_time": true,
+          "consider_allergies": true,
+          "consider_diet": true,
+          "time_limit": "",
+          "custom_message": "",
+        });
         Get.offAllNamed(Routes.INGREDIENTS);
       } else {
         currentPage++;

@@ -37,12 +37,34 @@ class IngredientsView extends GetView<IngredientsController> {
               SizedBox(
                 height: 11.h(context),
               ),
-              if (controller.ingredients.isEmpty)
-                AppText(
-                  text: AppStrings.noIngredientsAddedYet,
-                  style: Styles.bold(
-                    fontSize: 12.t(context),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 11.w(context),
+                ),
+                child: AppText(
+                  text: AppStrings.longPressAnIngredientToRemoveIt,
+                  maxLines: 1,
+                  width: 160.w(context),
+                  style: Styles.regular(
+                    fontSize: 8.55.t(context),
                     color: AppColors.fontDark,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 5.h(context),
+              ),
+              if (controller.ingredients.isEmpty)
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 50.h(context)),
+                  child: Center(
+                    child: AppText(
+                      text: AppStrings.noIngredientsAddedYet,
+                      style: Styles.bold(
+                        fontSize: 12.t(context),
+                        color: AppColors.fontDark,
+                      ),
+                    ),
                   ),
                 ),
               Expanded(
@@ -96,10 +118,45 @@ class IngredientsView extends GetView<IngredientsController> {
                               ),
                             ),
                           ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 11.w(context),
+                          ),
+                          child: AppText(
+                            text: AppStrings.ingredientBySpeechExample,
+                            centered: true,
+                            textAlign: TextAlign.center,
+                            maxLines: null,
+                            style: Styles.regular(
+                              fontSize: 8.55.t(context),
+                              color: AppColors.fontDark,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 5.h(context),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 11.w(context),
+                ),
+                child: CommonButton(
+                  text: controller.listening
+                      ? "Listening... Go ahead!"
+                      : AppStrings.addIngredientWithSpeech,
+                  backgroundColor: AppColors.primary,
+                  width: 196.w(context),
+                  textColor: AppColors.white,
+                  onTap: () => controller.getText(),
+                ),
+              ),
+              SizedBox(
+                height: 5.h(context),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(

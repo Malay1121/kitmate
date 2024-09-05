@@ -49,16 +49,26 @@ class AppStrings {
 
   static String generatingARecipe =
       "Generating a personalized recipe just for you! ~ 10 seconds";
+  static String facingIssues = "Are you facing issues?";
+  static String regenerateRecipe = "Regenerate Recipe";
   static String startCooking = "Start Cooking";
   static String finish = "Finish";
   static String step = "Step";
   static String exit = "Exit";
+  static String settings = "Settings";
+  static String writeOrTypeCustomConditions = "Write or type custom conditions";
 
   static String ingredientsInStock = "Ingredients in stock";
+  static String longPressAnIngredientToRemoveIt =
+      "Long press an ingredient to remove it";
+  static String ingredientBySpeechExample =
+      ("Add ingredients by speech: Speak the list of ingredients available at your home with its amount and unit. \n Example: Umm, I have 4kg wheat 1 oven and 600 grams of lemon and also salt of 200 gram I also have 500 grams of beetroot I have 5 kg rice 2 litre milk 500 gram cheese 10 potatoes 200 gram onion no wait I have 250 gram of onion");
   static String noIngredientsAddedYet = "No ingredients added yet!";
   static String addIngredient = "Add ingredient";
   static String areYouSureYouWantToRemove = "Are you sure you want to remove";
   static String confirm = "Confirm";
+  static String save = "Save";
+  static String saveAndRegenerate = "Save & Regenerate";
   static String addIngredientWithSpeech = "Add ingredients with speech";
   static String ingredientName = "Ingredient name";
   static String quantity = "Quantity";
@@ -112,8 +122,74 @@ Example Output: {"data": [{
       "custom": true // Will stay true no matter what
     },], "context": true}''';
 
+  static String ingredientsPrompt =
+      '''User will try to say all the ingredients that they have at theri home and you will have to fetch all the ingredients and return in a structed JSON code. The user would mention the ingredient name, amount of ingredient they have, and the ingredient's unit for example kg, gram, g, kilogram, ml, litre, etc. If they do not specify any unit then consider it as an "item". For example if the user says that they have 1 oven, then they won't specify any unit so you can consider its unit as "item" and amount as 1 and the name as Oven. The user will say a lot of ingredients and that won't be structure so you will have to intelligently extract details. User might make a mistake and correct it later, so use the correct value that they have said later instead of the wrong one. Also the only units supported in the application is "gram", "mililiter", and "items". Items will be used where gram and mililiter cannot be used. Convert the kilogram and other units into the ones that are supported. If none is supported then keep it as "items"
+
+If the user's text doesn't match the context of parameters that the user has asked for, change {"context": false}. Or else give the value and change {"context":true}.
+If a particular parameter has not been talked about in the text, then return null in that particular field.
+
+RETURN JUST THE JSON CODE, NOTHING ELSE. 
+
+Example Input: "Umm, I have 4kg wheat 1 oven and 600 grams of lemon and also salt of 200 gram I also have 500 grams of beetroot I have 5 kg rice 2 litre milk 500 gram cheese 10 potatoes 200 gram onion no wait I have 250 gram of onion"
+
+Example Output: {"data": [
+{
+      "label": "Wheat",
+"quantity":4000, 
+      "quantity_unit": "Gram(g)" ,
+    },
+{
+      "label": "Oven",
+"quantity": 1, 
+      "quantity_unit": "Item(1,2,3,4...)" ,
+    },{
+      "label": "Lemon",
+"quantity":600,
+      "quantity_unit": "Gram(g)" ,
+    },{
+      "label": "Salt",
+"quantity":200, 
+      "quantity_unit": "Gram(g)" ,
+    },{
+      "label": "Beetroot",
+"quantity":500, 
+      "quantity_unit": "Gram(g)" ,
+    },
+{
+      "label": "Rice",
+"quantity":5000, 
+      "quantity_unit": "Gram(g)" ,
+    },
+{
+      "label": "Milk",
+"quantity":2000, 
+      "quantity_unit": "Mililiter(ml)" ,
+    },{
+      "label": "Cheese",
+"quantity":500, 
+      "quantity_unit": "Gram(g)" ,
+    },{
+      "label": "Potato",
+"quantity":10, 
+      "quantity_unit": "Item(1,2,3,4,...)" ,
+    },{
+      "label": "Onion",
+"quantity":250, 
+      "quantity_unit": "Gram(g)" ,
+    },
+], "context": true}''';
+
   static String dishPrompt = '''
   Suggest a dish that a user can make to eat depending on their preferences(What diet they eat, and what allergies do they have) and ingredients that are available with them. There will be a JSON object that will contain the preferences and ingredients that the user has. The ingredients will also have its quantity and the unit. For example quantity: 100, quantity_unit: grams, which means the user has 100 grams of that ingredient. Check for the ingredients that the user has specified and provide a best recipe that they can make and is compatible to their preferences. If no ingredients given, you can return any good recipe depending on the preferences or vice versa. If none is provided then give a random recipe. Give a detailed recipe which the user can follow. Also return an image of that dish with the recipe, and a few statistics about the recipe(statitcs to include: Energy(k), protein(g)m Carbs(g), Fat(g)).
+  
+  The input will also contain settings like this, give the recipe which comply to it. Ignore a setting if it is an empty string or turned to false: 
+  "settings": {
+    "consider_current_time": true, // Return a recipe that is suitable to consume at that time. "current_time" will be provided in the input.
+    "consider_allergies": true, // Return a recipe that is suitable for the user to consume keeping the allergies the user has in mind. "allergy" will be provided in the input.
+    "consider_diet": true, // Return a recipe that is complies with the diet the user follows. "diet" will be provided in the input.
+    "time_limit": "", // Return a recipe that the user can make in x minutes. User will provide the minutes they require here itself, if it is an empty string then ignore.
+    "custom_message": "", // This is the field with top most priority. Create a recipe that complies with the conditions that user gives in here. If any condition is said here which is contradicting another condition anywhere else, then prioritize the condition given here. If the custom message given here is out of context or doesn't make sense then ignore.
+  }
 
 If the user's text doesn't match the context of parameters that the user has asked for, change {"context": false}. Or else give the value and change {"context":true}.
 If a particular parameter has not been talked about in the text, then return null in that particular field.
