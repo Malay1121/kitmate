@@ -19,7 +19,7 @@ List<Map> tabs = [
 ];
 
 Map apiKeys = {
-  "gemini": "AIzaSyBp73DKyzF2KwK2yPNc5lYzO_hkdcgJxyk",
+  "gemini": "AIzaSyB6frvuqS6igR3CkWF1arz0kTTQODGSxLU",
   "unsplash": "i7Jw5ebxgDS8oq44B4Is2QtDa4iAkWAW2WhAjmhTdgA",
 };
 

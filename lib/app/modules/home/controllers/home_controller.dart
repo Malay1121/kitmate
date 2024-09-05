@@ -13,6 +13,13 @@ class HomeController extends GetxController {
     "custom_message": "",
   };
   void generateRecipe() async {
+    print({
+      "preferences": getStorage.read("preferences"),
+      "ingredients": getStorage.read("ingredients"),
+      "settings": settings,
+      "current_time":
+          "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
+    });
     Map geminiResult =
         await GeminiHelper.fetch(systemPrompt: AppStrings.dishPrompt, data: {
       "preferences": getStorage.read("preferences"),

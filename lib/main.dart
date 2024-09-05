@@ -9,6 +9,8 @@ void main() async {
   }
 
   initializeSize(220, 477);
+  configureEasyLoading();
+
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return Container(
       decoration: BoxDecoration(

@@ -149,6 +149,7 @@ class OnboardingController extends CommonController {
               systemPrompt: data[currentPage]["prompt"], text: result);
           if (geminiResult["context"] == true) {
             List existingItems = data[currentPage]["options"];
+            print(geminiResult);
             List finalItems = [
               for (var item in existingItems) item,
               for (var item in geminiResult["data"]) item,
