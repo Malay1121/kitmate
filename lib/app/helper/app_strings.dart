@@ -5,6 +5,8 @@ class AppStrings {
 
   static String commonValidation = "Please fill all the details";
   static String emailValidation = "Please enter a valid email";
+  static String nameValidation = "Please enter a valid name";
+
   static String phoneValidation = "Please enter a valid phone number";
   static String lastNameValidation = "Please enter a valid first name";
   static String firstNameValidation = "Please enter a valid last name";
@@ -31,6 +33,19 @@ class AppStrings {
   static String vegetarian = "Vegetarian";
   static String atkins = "Atkins";
   static String intermittentFasting = "Intermittent Fasting";
+
+  static String createAccount = 'Create Account';
+  static String weAreHereToHelpYou = 'We are here to help you!';
+  static String yourName = 'Your Name';
+  static String yourEmail = 'Your Email';
+  static String password = 'Password';
+  static String or = 'or';
+  static String doYouHaveAnAccount = 'Do you have an account ?';
+  static String signIn = 'Sign In';
+  static String hiWelcomeBack = 'Hi, Welcome Back! ';
+  static String dontHaveAnAccountYet = 'Don’t have an account yet?';
+  static String signUp = 'Sign up';
+  static String hopeYoureDoingFine = 'Hope you’re doing fine.';
 
   static String gluten = "Gluten";
   static String diary = "Diary";

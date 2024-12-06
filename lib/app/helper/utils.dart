@@ -86,6 +86,12 @@ String greet() {
   return greeting;
 }
 
+void logout() {
+  getStorage.erase();
+  FirebaseAuth.instance.signOut();
+  Get.offAllNamed(Routes.SIGNUP);
+}
+
 void writeUserDetails(Map<String, dynamic> data) {
   // print(data);
   getStorage.write("userDetails", data);

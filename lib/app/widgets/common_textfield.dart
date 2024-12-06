@@ -7,7 +7,7 @@ class CommonTextField extends StatefulWidget {
   CommonTextField({
     super.key,
     required this.hintText,
-    this.height = 45,
+    this.height = 28,
     this.width = 196,
     this.prefixIcon,
     this.controller,
@@ -83,6 +83,9 @@ class _CommonTextFieldState extends State<CommonTextField> {
         keyboardType: widget.keyboardType,
         maxLines: widget.maxLines,
         onChanged: widget.onChanged,
+        style: Styles.medium(
+          color: AppColors.fontGrey,
+        ),
         textInputAction: widget.textInputAction,
         decoration: InputDecoration(
           // contentPadding: EdgeInsets.zero,
@@ -103,28 +106,28 @@ class _CommonTextFieldState extends State<CommonTextField> {
           prefixIconConstraints: widget.prefixIconConstraints,
           prefixIcon: widget.prefixIcon,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(67),
+            borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(
               color: AppColors.stroke,
               width: 1,
             ),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(67),
+            borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(
               color: AppColors.primary,
               width: 1,
             ),
           ),
           disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(67),
+            borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(
               color: AppColors.stroke,
               width: 1,
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(67),
+            borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(
               color: AppColors.primary,
               width: 1,

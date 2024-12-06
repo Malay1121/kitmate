@@ -85,7 +85,7 @@ class OnboardingController extends CommonController {
     },
   ];
 
-  void navigate(bool next) {
+  void navigate(bool next) async {
     if (next) {
       if (currentPage >= data.length - 1) {
         Map<String, List> preferences = {
@@ -96,16 +96,18 @@ class OnboardingController extends CommonController {
           preferences[page["id"]] =
               page["options"].where((e) => e["selected"] == true).toList();
         }
-
-        getStorage.write("preferences", preferences);
-        getStorage.write("loggedin", true);
-        getStorage.write("settings", {
+        Map settings = {
           "consider_current_time": true,
           "consider_allergies": true,
           "consider_diet": true,
           "time_limit": "",
           "custom_message": "",
+        };
+        await DatabaseHelper.editUser(user: user!, data: {
+          "preferences": preferences,
+          "settings": settings,
         });
+
         Get.offAllNamed(Routes.INGREDIENTS);
       } else {
         currentPage++;

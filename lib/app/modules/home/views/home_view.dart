@@ -144,6 +144,8 @@ class HomeView extends GetView<HomeController> {
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: 11.w(context)),
                                             child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               mainAxisAlignment:
                                                   MainAxisAlignment
                                                       .spaceBetween,
@@ -159,6 +161,10 @@ class HomeView extends GetView<HomeController> {
                                                 AppText(
                                                   text: controller
                                                       .recipe!["recipe_title"],
+                                                  width: 184.w(context),
+                                                  centered: true,
+                                                  maxLines: null,
+                                                  textAlign: TextAlign.center,
                                                   style: Styles.semiBold(
                                                     fontSize: 14.t(context),
                                                     color: AppColors.black,
@@ -234,33 +240,55 @@ class HomeView extends GetView<HomeController> {
                                             .recipe!["ingredients"])
                                           SizedBox(
                                             width: 220.w(context),
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                horizontal: 11.w(context),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  AppText(
-                                                    text: ingredient["name"]
-                                                        .toString(),
-                                                    style: Styles.regular(
-                                                      fontSize: 9.t(context),
-                                                      color: AppColors.fontDark,
-                                                    ),
+                                            child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 11.w(context),
                                                   ),
-                                                  AppText(
-                                                    text: ingredient["quantity"]
-                                                        .toString(),
-                                                    style: Styles.regular(
-                                                      fontSize: 8.t(context),
-                                                      color: AppColors.fontGrey,
-                                                    ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      AppText(
+                                                        text: ingredient["name"]
+                                                            .toString(),
+                                                        maxLines: null,
+                                                        width: 120.w(context),
+                                                        style: Styles.regular(
+                                                          fontSize:
+                                                              9.t(context),
+                                                          color: AppColors
+                                                              .fontDark,
+                                                        ),
+                                                      ),
+                                                      AppText(
+                                                        text: ingredient[
+                                                                "quantity"]
+                                                            .toString(),
+                                                        width: 48.w(context),
+                                                        maxLines: null,
+                                                        style: Styles.regular(
+                                                          fontSize:
+                                                              8.t(context),
+                                                          color: AppColors
+                                                              .fontGrey,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 2.h(context)),
+                                                  child: Container(
+                                                    width: 198.w(context),
+                                                    height: 1,
+                                                    color: AppColors.stroke,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         SizedBox(

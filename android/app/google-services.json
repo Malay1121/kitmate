@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "964196933360",
+    "project_id": "kitmate-app",
+    "storage_bucket": "kitmate-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964196933360:android:2d10bd046245cf38b1ac35",
+        "android_client_info": {
+          "package_name": "com.malay.kitmate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFgQPpbHCinURCcJ4qH6e-iHIyx0mVnnw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
