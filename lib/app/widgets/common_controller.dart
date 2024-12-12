@@ -1,6 +1,8 @@
-import 'package:kitmate/app/widgets/anon_common_controller.dart';
+import 'dart:async';
 
 import '../helper/all_imports.dart';
+
+Map userDetails = {};
 
 class CommonController extends AnonCommonController {
   User? get user {
@@ -13,12 +15,17 @@ class CommonController extends AnonCommonController {
     return null;
   }
 
-  Future<Map?> get userDetails async {
-    return await DatabaseHelper.getUser(user: user!);
-  }
+  StreamSubscription? userStream;
+  var onUserUpdate;
 
   @override
   void onInit() {
     super.onInit();
+  }
+
+  @override
+  void dispose() {
+    userStream?.cancel();
+    super.dispose();
   }
 }

@@ -1,21 +1,24 @@
 import 'package:kitmate/app/helper/all_imports.dart';
+import 'package:kitmate/app/modules/home/controllers/home_controller.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../helper/gemini_helper.dart';
 
-class IngredientsController extends GetxController {
+class IngredientsController extends CommonController {
   List ingredients = [];
 
   @override
   void onInit() {
     super.onInit();
     initializeSpeech();
-    ingredients = getStorage.read("ingredients") ?? [];
+    ingredients = userDetails["ingredients"] ?? [];
+    update();
   }
 
   @override
   void onReady() {
     super.onReady();
+    update();
   }
 
   @override
@@ -26,6 +29,12 @@ class IngredientsController extends GetxController {
   bool listening = false;
   SpeechToText speechToText = SpeechToText();
   bool speechEnabled = false;
+
+  void updateIngredients() {
+    DatabaseHelper.updateIngredient(
+        user: user!, data: {"ingredients": ingredients});
+  }
+
   Future<String> getText() async {
     String result = "";
     listening = true;
@@ -41,7 +50,7 @@ class IngredientsController extends GetxController {
               systemPrompt: AppStrings.ingredientsPrompt, text: result);
           if (geminiResult["context"] == true) {
             ingredients.addAll(geminiResult["data"]);
-            getStorage.write("ingredients", ingredients);
+            updateIngredients();
             update();
           }
         });
@@ -97,9 +106,8 @@ class IngredientsController extends GetxController {
                     text: AppStrings.confirm,
                     onTap: () {
                       ingredients.remove(ingredient);
-
+                      updateIngredients();
                       update();
-                      getStorage.write("ingredients", ingredients);
                       Get.back();
                     }),
                 SizedBox(
@@ -177,28 +185,28 @@ class IngredientsController extends GetxController {
                   hintText: AppStrings.quantityUnit,
                   inputDecorationTheme: InputDecorationTheme(
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(67),
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
                         color: AppColors.primary,
                         width: 1,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(67),
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
                         color: AppColors.primary,
                         width: 1,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(67),
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
                         color: AppColors.primary,
                         width: 1,
                       ),
                     ),
                     disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(67),
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
                         color: AppColors.primary,
                         width: 1,
@@ -240,7 +248,7 @@ class IngredientsController extends GetxController {
                         ingredients.add(content);
                       }
                       update();
-                      getStorage.write("ingredients", ingredients);
+                      updateIngredients();
                       Get.back();
                     }),
               ],

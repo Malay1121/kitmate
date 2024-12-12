@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:kitmate/app/helper/all_imports.dart';
 import 'package:kitmate/app/helper/gemini_helper.dart';
 
-class HomeController extends GetxController {
+class HomeController extends CommonController {
   Map? recipe;
   Map settings = {
     "consider_current_time": true,
@@ -14,16 +14,16 @@ class HomeController extends GetxController {
   };
   void generateRecipe() async {
     print({
-      "preferences": getStorage.read("preferences"),
-      "ingredients": getStorage.read("ingredients"),
+      "preferences": userDetails["preferences"],
+      "ingredients": userDetails["ingredients"],
       "settings": settings,
       "current_time":
           "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
     });
     Map geminiResult =
         await GeminiHelper.fetch(systemPrompt: AppStrings.dishPrompt, data: {
-      "preferences": getStorage.read("preferences"),
-      "ingredients": getStorage.read("ingredients"),
+      "preferences": userDetails["preferences"],
+      "ingredients": userDetails["ingredients"],
       "settings": settings,
       "current_time":
           "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
@@ -31,7 +31,9 @@ class HomeController extends GetxController {
 
     if (geminiResult["context"] == true) {
       recipe = geminiResult["data"];
-      String image = await getImage(recipe!["recipe_title"]);
+      String image =
+          "https://image.pollinations.ai/prompt/${recipe!["recipe_title"].toString().replaceAll(" ", "-")}";
+      // String image = await getImage(recipe!["recipe_title"]);
       recipe!["recipe_image"] = image;
       update();
     }
@@ -178,6 +180,17 @@ class HomeController extends GetxController {
     if (getStorage.read("settings") != null) {
       settings = getStorage.read("settings");
     }
+    userStream = FirebaseFirestore.instance
+        .collection("users")
+        .doc(user?.uid)
+        .snapshots()
+        .listen(
+      (event) {
+        userDetails = event.data() ?? {};
+        print("userDetails: $userDetails");
+        update();
+      },
+    );
     generateRecipe();
   }
 

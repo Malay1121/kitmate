@@ -74,4 +74,17 @@ class DatabaseHelper {
       showFirebaseError(error.message);
     }
   }
+
+  static Future updateIngredient(
+      {required User user, required Map<String, dynamic> data}) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.uid)
+          .update(data);
+      return data;
+    } on FirebaseException catch (error) {
+      showFirebaseError(error.message);
+    }
+  }
 }

@@ -9,6 +9,7 @@ class IngredientsView extends GetView<IngredientsController> {
   const IngredientsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    controller.ingredients = userDetails["ingredients"] ?? [];
     return GetBuilder<IngredientsController>(
       init: IngredientsController(),
       builder: (controller) {
@@ -24,13 +25,18 @@ class IngredientsView extends GetView<IngredientsController> {
                 padding: EdgeInsets.symmetric(
                   horizontal: 11.w(context),
                 ),
-                child: AppText(
-                  text: AppStrings.ingredientsInStock,
-                  maxLines: 2,
-                  width: 160.w(context),
-                  style: Styles.semiBold(
-                    fontSize: 15.55.t(context),
-                    color: AppColors.fontDark,
+                child: GestureDetector(
+                  onTap: () {
+                    print(userDetails);
+                  },
+                  child: AppText(
+                    text: AppStrings.ingredientsInStock,
+                    maxLines: 2,
+                    width: 160.w(context),
+                    style: Styles.semiBold(
+                      fontSize: 15.55.t(context),
+                      color: AppColors.fontDark,
+                    ),
                   ),
                 ),
               ),

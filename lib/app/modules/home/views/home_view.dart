@@ -1,7 +1,3 @@
-import 'package:flutter/material.dart';
-
-import 'package:get/get.dart';
-
 import '../../../helper/all_imports.dart';
 import '../controllers/home_controller.dart';
 
