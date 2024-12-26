@@ -4,10 +4,8 @@ import 'package:kitmate/app/helper/utils.dart';
 class DatabaseHelper {
   static Future getApis() async {
     try {
-      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-          .collection("api_key")
-          .doc("api_key")
-          .get();
+      DocumentSnapshot documentSnapshot =
+          await FirebaseFirestore.instance.collection("apis").doc("apis").get();
       apiKeys = documentSnapshot.data() != null
           ? documentSnapshot.data() as Map
           : apiKeys;
@@ -83,6 +81,18 @@ class DatabaseHelper {
           .doc(user.uid)
           .update(data);
       return data;
+    } on FirebaseException catch (error) {
+      showFirebaseError(error.message);
+    }
+  }
+
+  static Future updateApiIndex({required String apiName}) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("apis")
+          .doc("apis")
+          .update(apiKeys[apiName]);
+      return apiKeys[apiName];
     } on FirebaseException catch (error) {
       showFirebaseError(error.message);
     }

@@ -39,7 +39,7 @@ class GeminiHelper {
     //     ), data: bodyEncoded);
     var request = await http.post(
       Uri.parse(
-          'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKeys["gemini"]}'),
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${getApi("gemini")}'),
       headers: headers,
       body: bodyEncoded,
     );
@@ -57,6 +57,14 @@ class GeminiHelper {
         return await fetch(systemPrompt: systemPrompt, data: data, text: text);
       }
     } else {
+      if (request.statusCode == 429) {
+        EasyLoading.show();
+        await DatabaseHelper.updateApiIndex(apiName: "gemini");
+        Map<String, dynamic> reData =
+            await fetch(systemPrompt: systemPrompt, data: data, text: text);
+        EasyLoading.dismiss();
+        return reData;
+      }
       // print(request.statusCode);
       return {};
     }

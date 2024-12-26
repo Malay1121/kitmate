@@ -19,9 +19,23 @@ List<Map> tabs = [
 ];
 
 Map apiKeys = {
-  "gemini": "AIzaSyB6frvuqS6igR3CkWF1arz0kTTQODGSxLU",
-  "unsplash": "i7Jw5ebxgDS8oq44B4Is2QtDa4iAkWAW2WhAjmhTdgA",
+  "gemini": {
+    "apis": [
+      "AIzaSyB6frvuqS6igR3CkWF1arz0kTTQODGSxLU",
+    ],
+    "index": 0,
+  },
+  "unsplash": {
+    "apis": [
+      "i7Jw5ebxgDS8oq44B4Is2QtDa4iAkWAW2WhAjmhTdgA",
+    ],
+    "index": 0,
+  },
 };
+
+String getApi(String api) {
+  return apiKeys[api]["apis"][apiKeys[api]["index"]];
+}
 
 String generateMd5(String input) {
   return md5.convert(utf8.encode(input)).toString();

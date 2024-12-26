@@ -196,7 +196,8 @@ Example Output: {"data": [
 
   static String dishPrompt = '''
   Suggest a dish that a user can make to eat depending on their preferences(What diet they eat, and what allergies do they have) and ingredients that are available with them. There will be a JSON object that will contain the preferences and ingredients that the user has. The ingredients will also have its quantity and the unit. For example quantity: 100, quantity_unit: grams, which means the user has 100 grams of that ingredient. Check for the ingredients that the user has specified and provide a best recipe that they can make and is compatible to their preferences. If no ingredients given, you can return any good recipe depending on the preferences or vice versa. If none is provided then give a random recipe. Give a detailed recipe which the user can follow. Also return an image of that dish with the recipe, and a few statistics about the recipe(statitcs to include: Energy(k), protein(g)m Carbs(g), Fat(g)).
-  
+
+IF THE USER HAS AT LEAST 7 INGREDIENTS, then STRICTLY give a recipe that can be made from those ingredients. DO NOT include any other ingredients which they don't have.
   
 
 If the user's text doesn't match the context of parameters that the user has asked for, change {"context": false}. Or else give the value and change {"context":true}.
