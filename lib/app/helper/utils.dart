@@ -1,7 +1,6 @@
-import 'package:speech_to_text/speech_to_text.dart';
 import 'package:http/http.dart' as http;
+
 import 'all_imports.dart';
-import 'package:intl/intl.dart';
 
 GetStorage getStorage = GetStorage();
 
@@ -32,6 +31,18 @@ Map apiKeys = {
     "index": 0,
   },
 };
+
+dynamic getKey(Map data, List location, dynamic replacement) {
+  dynamic value = data;
+  for (var key in location) {
+    if (value is Map) {
+      value = value[key];
+    } else {
+      return replacement;
+    }
+  }
+  return value ?? replacement;
+}
 
 String getApi(String api) {
   return apiKeys[api]["apis"][apiKeys[api]["index"]];
@@ -118,7 +129,7 @@ Map<String, dynamic>? readUserDetails() {
 
 showSnackbar({String? title, String? message}) {
   Get.snackbar(
-    title ?? 'LocalHarvest',
+    title ?? 'Kitmate',
     message ?? '',
     backgroundColor: AppColors.primary,
     colorText: AppColors.white,

@@ -1,17 +1,14 @@
 import 'package:kitmate/app/helper/all_imports.dart';
-import 'package:kitmate/app/modules/home/controllers/home_controller.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../helper/gemini_helper.dart';
 
 class IngredientsController extends CommonController {
-  List ingredients = [];
-
   @override
   void onInit() {
     super.onInit();
     initializeSpeech();
-    ingredients = userDetails["ingredients"] ?? [];
+
     update();
   }
 
@@ -30,11 +27,6 @@ class IngredientsController extends CommonController {
   SpeechToText speechToText = SpeechToText();
   bool speechEnabled = false;
 
-  void updateIngredients() {
-    DatabaseHelper.updateIngredient(
-        user: user!, data: {"ingredients": ingredients});
-  }
-
   Future<String> getText() async {
     String result = "";
     listening = true;
@@ -49,9 +41,12 @@ class IngredientsController extends CommonController {
           Map<String, dynamic> geminiResult = await GeminiHelper.fetch(
               systemPrompt: AppStrings.ingredientsPrompt, text: result);
           if (geminiResult["context"] == true) {
-            ingredients.addAll(geminiResult["data"]);
-            updateIngredients();
-            update();
+            List resultIngredients = geminiResult["data"];
+            var result = await DatabaseHelper.addIngredients(
+                userId: user?.uid ?? "", ingredients: resultIngredients);
+            if (result != null) {
+              update();
+            }
           }
         });
 
@@ -104,11 +99,13 @@ class IngredientsController extends CommonController {
                 Spacer(),
                 CommonButton(
                     text: AppStrings.confirm,
-                    onTap: () {
-                      ingredients.remove(ingredient);
-                      updateIngredients();
-                      update();
-                      Get.back();
+                    onTap: () async {
+                      var result = await DatabaseHelper.removeIngredients(
+                          userId: user?.uid ?? "", ingredients: [ingredient]);
+                      if (result != null) {
+                        update();
+                        Get.back();
+                      }
                     }),
                 SizedBox(
                   height: 20.h(Get.context!),
@@ -133,7 +130,7 @@ class IngredientsController extends CommonController {
     List<String> quantityUnits = <String>[
       AppStrings.gram,
       AppStrings.mililiter,
-      AppStrings.item
+      AppStrings.pieces
     ];
     String quantityUnit =
         edit ? ingredient["quantity_unit"] : quantityUnits.first;
@@ -235,21 +232,21 @@ class IngredientsController extends CommonController {
                 ),
                 CommonButton(
                     text: AppStrings.confirm,
-                    onTap: () {
-                      Map content = {
+                    onTap: () async {
+                      Map<String, dynamic> content = {
                         "label": ingredientNameController.text,
                         "quantity": int.parse(quantityController.text),
                         "quantity_unit": quantityUnit,
                       };
-                      if (edit) {
-                        int index = ingredients.indexOf(ingredient);
-                        ingredients[index] = content;
-                      } else {
-                        ingredients.add(content);
+
+                      var result = await DatabaseHelper.addIngredients(
+                        userId: user?.uid ?? "",
+                        ingredients: [content],
+                      );
+
+                      if (result != null) {
+                        Get.back();
                       }
-                      update();
-                      updateIngredients();
-                      Get.back();
                     }),
               ],
             ),

@@ -1,5 +1,4 @@
 import 'package:kitmate/app/helper/all_imports.dart';
-import 'package:kitmate/app/helper/utils.dart';
 
 class DatabaseHelper {
   static Future getApis() async {
@@ -49,11 +48,11 @@ class DatabaseHelper {
   }
 
   static Future editUser(
-      {required User user, required Map<String, dynamic> data}) async {
+      {required String userId, required Map<String, dynamic> data}) async {
     try {
       await FirebaseFirestore.instance
           .collection("users")
-          .doc(user.uid)
+          .doc(userId)
           .update(data);
       editUserDetails(data);
     } on FirebaseException catch (error) {
@@ -61,11 +60,11 @@ class DatabaseHelper {
     }
   }
 
-  static Future getUser({required User user}) async {
+  static Future getUser({required String userId}) async {
     try {
       DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
           .collection("users")
-          .doc(user.uid)
+          .doc(userId)
           .get();
       return userSnapshot.data();
     } on FirebaseException catch (error) {
@@ -73,12 +72,61 @@ class DatabaseHelper {
     }
   }
 
+  static Future addIngredients(
+      {required String userId, required List ingredients}) async {
+    try {
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+      CollectionReference ingredientsCollection = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection("ingredients");
+      String created_at = toUtc(DateTime.now());
+
+      for (Map ingredient in ingredients) {
+        DocumentReference documentReference = ingredientsCollection.doc();
+        ingredient.addEntries({
+          "id": documentReference.id,
+          "created_at": created_at,
+        }.entries);
+        batch.set(documentReference, ingredient);
+      }
+      await batch.commit();
+      return {"message": "Success"};
+    } on FirebaseException catch (error) {
+      showFirebaseError(error.message);
+      return null;
+    }
+  }
+
+  static Future removeIngredients(
+      {required String userId, required List<Map> ingredients}) async {
+    try {
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+      CollectionReference ingredientsCollection = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection("ingredients");
+
+      for (Map ingredient in ingredients) {
+        DocumentReference documentReference =
+            ingredientsCollection.doc(getKey(ingredient, ["id"], ""));
+
+        batch.delete(documentReference);
+      }
+      await batch.commit();
+      return {"message": "Success"};
+    } on FirebaseException catch (error) {
+      showFirebaseError(error.message);
+      return null;
+    }
+  }
+
   static Future updateIngredient(
-      {required User user, required Map<String, dynamic> data}) async {
+      {required String userId, required Map<String, dynamic> data}) async {
     try {
       await FirebaseFirestore.instance
           .collection("users")
-          .doc(user.uid)
+          .doc(userId)
           .update(data);
       return data;
     } on FirebaseException catch (error) {

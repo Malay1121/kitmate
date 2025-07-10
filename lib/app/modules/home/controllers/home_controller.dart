@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 import 'package:kitmate/app/helper/all_imports.dart';
 import 'package:kitmate/app/helper/gemini_helper.dart';
+import 'package:kitmate/app/modules/home/views/settings_view.dart';
 
 class HomeController extends CommonController {
   Map? recipe;
@@ -15,162 +14,89 @@ class HomeController extends CommonController {
   void generateRecipe() async {
     print({
       "preferences": userDetails["preferences"],
-      "ingredients": userDetails["ingredients"],
+      "ingredients": ingredients,
       "settings": settings,
       "current_time":
           "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
     });
-    Map geminiResult =
-        await GeminiHelper.fetch(systemPrompt: AppStrings.dishPrompt, data: {
-      "preferences": userDetails["preferences"],
-      "ingredients": userDetails["ingredients"],
-      "settings": settings,
-      "current_time":
-          "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
-    });
+    if (ingredients.length >= 5) {
+      Map geminiResult =
+          await GeminiHelper.fetch(systemPrompt: AppStrings.dishPrompt, data: {
+        "preferences": userDetails["preferences"],
+        "ingredients": ingredients,
+        "settings": settings,
+        "current_time":
+            "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
+      });
 
-    if (geminiResult["context"] == true) {
-      recipe = geminiResult["data"];
-      String image =
-          "https://image.pollinations.ai/prompt/${recipe!["recipe_title"].toString().replaceAll(" ", "-")}";
-      // String image = await getImage(recipe!["recipe_title"]);
-      recipe!["recipe_image"] = image;
-      update();
+      if (geminiResult["context"] == true) {
+        recipe = geminiResult["data"];
+        String image =
+            "https://image.pollinations.ai/prompt/${recipe!["recipe_title"].toString().replaceAll(" ", "-")}";
+        // String image = await getImage(recipe!["recipe_title"]);
+        recipe!["recipe_image"] = image;
+        update();
+      }
+    } else {
+      showSnackbar(message: AppStrings.ingredientNumberValidation);
     }
   }
 
-  void settingsPopup() {
-    TextEditingController customMessageController =
-        TextEditingController(text: settings[settings]);
-    Get.dialog(
-      Dialog(
-        insetPadding: EdgeInsets.zero,
-        child: StatefulBuilder(builder: (context, setState) {
-          return Container(
-            width: 196.w(Get.context!),
-            height: 420.h(Get.context!),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 11.w(Get.context!),
+  void settingsPopup(HomeController controller) {
+    showDialog(
+      builder: (context) {
+        return Dialog(
+          backgroundColor: AppColors.white,
+          insetPadding: EdgeInsets.zero,
+          child: StatefulBuilder(builder: (context, setState) {
+            return Container(
+              width: 196.w(Get.context!),
+              height: 320.h(Get.context!),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: SizedBox(
-                height: 420.h(Get.context!),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 14.5.h(Get.context!),
-                      ),
-                      AppText(
-                        text: AppStrings.settings,
-                        maxLines: null,
-                        centered: true,
-                        textAlign: TextAlign.center,
-                        width: 160.w(Get.context!),
-                        style: Styles.semiBold(
-                          fontSize: 14.55.t(Get.context!),
-                          color: AppColors.fontDark,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 11.w(Get.context!),
+                ),
+                child: SizedBox(
+                  height: 420.h(Get.context!),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 14.5.h(Get.context!),
                         ),
-                      ),
-                      for (String setting in settings.keys)
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 11.w(Get.context!),
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  AppText(
-                                    text: idToString(setting),
-                                    style: Styles.medium(
-                                      fontSize: 9.5.t(Get.context!),
-                                      color: AppColors.fontDark,
-                                    ),
-                                  ),
-                                  Switch(
-                                      value: settings[setting] is String
-                                          ? settings[setting]
-                                              .toString()
-                                              .isNotEmpty
-                                          : settings[setting],
-                                      onChanged: (value) {
-                                        if (setting == "time_limit" ||
-                                            setting == "custom_message") {
-                                          if (settings[setting]
-                                              .toString()
-                                              .isNotEmpty) {
-                                            settings[setting] = "";
-                                          } else {
-                                            settings[setting] = "5";
-                                          }
-                                        } else {
-                                          settings[setting] = value;
-                                        }
-
-                                        update();
-                                        setState(() {});
-                                      }),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 8.h(Get.context!),
-                              ),
-                              if (setting == "time_limit" &&
-                                  settings[setting] != "")
-                                CupertinoTimerPicker(
-                                  initialTimerDuration: Duration(
-                                    minutes: int.parse(settings["time_limit"]),
-                                  ),
-                                  onTimerDurationChanged: (value) {
-                                    settings[setting] =
-                                        value.inMinutes.toString();
-                                  },
-                                ),
-                              if (setting == "custom_message" &&
-                                  settings[setting] != "")
-                                CommonTextField(
-                                  controller: customMessageController,
-                                  hintText:
-                                      AppStrings.writeOrTypeCustomConditions,
-                                  onChanged: (value) {
-                                    settings[setting] = value;
-                                  },
-                                ),
-                              Container(
-                                height: 1,
-                                width: 191.w(Get.context!),
-                                decoration: BoxDecoration(
-                                  color: AppColors.cardColor,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8.h(Get.context!),
-                              ),
-                            ],
+                        AppText(
+                          text: AppStrings.settings,
+                          maxLines: null,
+                          centered: true,
+                          textAlign: TextAlign.center,
+                          width: 160.w(Get.context!),
+                          style: Styles.semiBold(
+                            fontSize: 14.55.t(Get.context!),
+                            color: AppColors.fontDark,
                           ),
                         ),
-                      CommonButton(
-                          text: AppStrings.saveAndRegenerate,
-                          onTap: () {
-                            getStorage.write("settings", settings);
-                            generateRecipe();
-                            Get.back();
-                          }),
-                      SizedBox(
-                        height: 20.h(Get.context!),
-                      ),
-                    ],
+                        SettingsView(
+                          controller: controller,
+                          customMessage: settings[settings],
+                          popup: true,
+                        ),
+                        SizedBox(
+                          height: 20.h(Get.context!),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        }),
-      ),
+            );
+          }),
+        );
+      },
+      context: Get.context!,
     );
   }
 
@@ -191,12 +117,45 @@ class HomeController extends CommonController {
         update();
       },
     );
-    generateRecipe();
+    ingredientsStream = FirebaseFirestore.instance
+        .collection("users")
+        .doc(user?.uid)
+        .collection("ingredients")
+        .snapshots()
+        .listen(
+      (event) {
+        for (DocumentChange change in event.docChanges) {
+          if (change.type == DocumentChangeType.added) {
+            ingredients.add(change.doc.data());
+            continue;
+          }
+          if (change.type == DocumentChangeType.modified) {
+            int index = ingredients.indexWhere(
+              (element) =>
+                  getKey(element, ["label"], "existing") ==
+                  getKey(change.doc.data() as Map, ["label"], "change"),
+            );
+            ingredients[index] = change.doc.data();
+            continue;
+          }
+          if (change.type == DocumentChangeType.removed) {
+            ingredients.removeWhere(
+              (element) =>
+                  getKey(element, ["label"], "existing") ==
+                  getKey(change.doc.data() as Map, ["label"], "change"),
+            );
+            continue;
+          }
+        }
+        update();
+      },
+    );
   }
 
   @override
   void onReady() {
     super.onReady();
+    generateRecipe();
   }
 
   @override

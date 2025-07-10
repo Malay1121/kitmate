@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:kitmate/app/helper/all_imports.dart';
 
 class EmailVerificationController extends CommonController {

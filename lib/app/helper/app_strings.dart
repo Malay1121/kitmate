@@ -1,5 +1,3 @@
-import 'all_imports.dart';
-
 class AppStrings {
   static String appName = "Kitmate";
 
@@ -15,6 +13,8 @@ class AppStrings {
   static String passwordValidation = "Please enter a valid password";
   static String passwordErrorMessage =
       "Minimum 8 characters, at least 1 lower case, at least 1 upper case, at least 1 digit";
+  static String ingredientNumberValidation =
+      "You need to have at least 5 ingredients to get recipe suggestions";
 
   static String next = "Next";
   static String previous = "Previous";
@@ -66,6 +66,7 @@ class AppStrings {
       "Generating a personalized recipe just for you! ~ 10 seconds";
   static String facingIssues = "Are you facing issues?";
   static String regenerateRecipe = "Regenerate Recipe";
+  static String generateRecipe = "Generate Recipe";
   static String startCooking = "Start Cooking";
   static String finish = "Finish";
   static String step = "Step";
@@ -84,13 +85,14 @@ class AppStrings {
   static String confirm = "Confirm";
   static String save = "Save";
   static String saveAndRegenerate = "Save & Regenerate";
+  static String saveAndGenerate = "Save & Generate";
   static String addIngredientWithSpeech = "Add ingredients with speech";
   static String ingredientName = "Ingredient name";
   static String quantity = "Quantity";
   static String quantityUnit = "Quantity Unit";
   static String gram = "Gram(g)";
   static String mililiter = "Mililiter(ml)";
-  static String item = "Item(1,2,3,4,...)";
+  static String pieces = "Pieces(1,2,3,4,...)";
 
   static String allergyPrompt =
       '''Check for the ingredients that a user has allergy from depending on the descriptions they give. Users will try to say the ingredients they have allergy from and it will be then converted into text and given to you. Check for the ingredients that the user has specified or is trying to convey. 
@@ -156,7 +158,7 @@ Example Output: {"data": [
 {
       "label": "Oven",
 "quantity": 1, 
-      "quantity_unit": "Item(1,2,3,4...)" ,
+      "quantity_unit": "Pieces(1,2,3,4...)" ,
     },{
       "label": "Lemon",
 "quantity":600,
@@ -186,7 +188,7 @@ Example Output: {"data": [
     },{
       "label": "Potato",
 "quantity":10, 
-      "quantity_unit": "Item(1,2,3,4,...)" ,
+      "quantity_unit": "Pieces(1,2,3,4,...)" ,
     },{
       "label": "Onion",
 "quantity":250, 
@@ -197,7 +199,7 @@ Example Output: {"data": [
   static String dishPrompt = '''
   Suggest a dish that a user can make to eat depending on their preferences(What diet they eat, and what allergies do they have) and ingredients that are available with them. There will be a JSON object that will contain the preferences and ingredients that the user has. The ingredients will also have its quantity and the unit. For example quantity: 100, quantity_unit: grams, which means the user has 100 grams of that ingredient. Check for the ingredients that the user has specified and provide a best recipe that they can make and is compatible to their preferences. If no ingredients given, you can return any good recipe depending on the preferences or vice versa. If none is provided then give a random recipe. Give a detailed recipe which the user can follow. Also return an image of that dish with the recipe, and a few statistics about the recipe(statitcs to include: Energy(k), protein(g)m Carbs(g), Fat(g)).
 
-IF THE USER HAS AT LEAST 7 INGREDIENTS, then STRICTLY give a recipe that can be made from those ingredients. DO NOT include any other ingredients which they don't have.
+IF THE USER HAS AT LEAST 7 INGREDIENTS, then STRICTLY give a recipe that can be made from those ingredients. DO NOT include any other ingredients which they don't have. PLEASE STICK TO THE INGREDIENTS THE USER HAS, DO NOT GIVE RECIPE THAT REQUIRES SOME OTHER INGREDIENTS. ALSO MAKE SURE THE INGREDIENTS HAS SUFFICIENT QUANTITY REQUIRED FOR THE RECIPE.
   
 
 If the user's text doesn't match the context of parameters that the user has asked for, change {"context": false}. Or else give the value and change {"context":true}.

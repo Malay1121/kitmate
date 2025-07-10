@@ -1,3 +1,5 @@
+import 'package:kitmate/app/modules/home/views/settings_view.dart';
+
 import '../../../helper/all_imports.dart';
 import '../controllers/home_controller.dart';
 
@@ -17,86 +19,50 @@ class HomeView extends GetView<HomeController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (controller.recipe == null)
-                        SizedBox(
-                          height: 50.h(context),
-                        ),
-                      if (controller.recipe == null)
-                        GestureDetector(
-                          onTap: () => controller.settingsPopup(),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              AppText(
-                                text: AppStrings.settings,
-                                style: Styles.bold(
-                                  color: AppColors.primary,
-                                  fontSize: 12.t(context),
-                                ),
-                                maxLines: null,
-                              ),
-                              Container(
-                                width: 30.w(context),
-                                height: 30.h(context),
-                                decoration: BoxDecoration(
-                                  color: AppColors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.settings,
-                                  color: AppColors.primary,
-                                  size: 14.t(context),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      if (controller.recipe == null)
-                        AppText(
-                          text: AppStrings.generatingARecipe,
-                          centered: true,
-                          textAlign: TextAlign.center,
-                          width: 160.w(context),
-                          style: Styles.bold(
-                            color: AppColors.fontDark,
-                            fontSize: 12.t(context),
-                          ),
-                          maxLines: null,
-                        ),
-                      if (controller.recipe == null)
-                        SizedBox(
-                          height: 20.h(context),
-                        ),
-                      if (controller.recipe == null)
-                        GestureDetector(
-                          onTap: () => controller.generateRecipe(),
-                          child: AppText(
-                            text: AppStrings.facingIssues,
-                            centered: true,
-                            textAlign: TextAlign.center,
-                            width: 160.w(context),
-                            style: Styles.regular(
-                              color: AppColors.fontDark,
-                              fontSize: 10.t(context),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 15.w(context),
                             ),
-                            maxLines: null,
-                          ),
-                        ),
-                      if (controller.recipe == null)
-                        GestureDetector(
-                          onTap: () => controller.generateRecipe(),
-                          child: AppText(
-                            text: AppStrings.regenerateRecipe,
-                            centered: true,
-                            textAlign: TextAlign.center,
-                            width: 160.w(context),
-                            style: Styles.bold(
-                              color: AppColors.primary,
-                              fontSize: 12.t(context),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 50.h(context),
+                                ),
+                                AppRichText(
+                                  text: TextSpan(
+                                    text: "${greet()} \n",
+                                    children: [
+                                      TextSpan(
+                                        text: getKey(userDetails, ["name"], ""),
+                                        style: Styles.bold(
+                                          color: AppColors.primary,
+                                          fontSize: 12.t(context),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  width: 160.w(context),
+                                  style: Styles.bold(
+                                    color: AppColors.fontDark,
+                                    fontSize: 12.t(context),
+                                  ),
+                                  maxLines: null,
+                                ),
+                                SizedBox(
+                                  height: 20.h(context),
+                                ),
+                                Expanded(
+                                    child:
+                                        SettingsView(controller: controller)),
+                                SizedBox(
+                                  height: 10.h(context),
+                                ),
+                              ],
                             ),
-                            maxLines: null,
                           ),
                         ),
-                      if (controller.recipe == null) Spacer(),
                       if (controller.recipe != null)
                         Expanded(
                           child: Stack(
@@ -154,16 +120,20 @@ class HomeView extends GetView<HomeController> {
                                                     size: 14.t(context),
                                                   ),
                                                 ),
-                                                AppText(
-                                                  text: controller
-                                                      .recipe!["recipe_title"],
-                                                  width: 184.w(context),
-                                                  centered: true,
-                                                  maxLines: null,
-                                                  textAlign: TextAlign.center,
-                                                  style: Styles.semiBold(
-                                                    fontSize: 14.t(context),
-                                                    color: AppColors.black,
+                                                GestureDetector(
+                                                  onTap: () =>
+                                                      print(ingredients),
+                                                  child: AppText(
+                                                    text: controller.recipe![
+                                                        "recipe_title"],
+                                                    width: 184.w(context),
+                                                    centered: true,
+                                                    maxLines: null,
+                                                    textAlign: TextAlign.center,
+                                                    style: Styles.semiBold(
+                                                      fontSize: 14.t(context),
+                                                      color: AppColors.black,
+                                                    ),
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -308,7 +278,8 @@ class HomeView extends GetView<HomeController> {
                                 top: 20.h(context),
                                 right: 15.w(context),
                                 child: GestureDetector(
-                                  onTap: () => controller.settingsPopup(),
+                                  onTap: () =>
+                                      controller.settingsPopup(controller),
                                   child: Container(
                                     width: 30.w(context),
                                     height: 30.h(context),

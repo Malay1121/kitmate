@@ -1,6 +1,5 @@
 import 'package:kitmate/app/helper/all_imports.dart';
 import 'package:kitmate/app/helper/gemini_helper.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 class OnboardingController extends CommonController {
@@ -103,7 +102,7 @@ class OnboardingController extends CommonController {
           "time_limit": "",
           "custom_message": "",
         };
-        await DatabaseHelper.editUser(user: user!, data: {
+        await DatabaseHelper.editUser(userId: user?.uid ?? "", data: {
           "preferences": preferences,
           "settings": settings,
         });

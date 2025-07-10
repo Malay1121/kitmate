@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-
-import 'package:get/get.dart';
 import 'package:kitmate/app/helper/all_imports.dart';
 
 import '../controllers/ingredients_controller.dart';
@@ -9,7 +6,6 @@ class IngredientsView extends GetView<IngredientsController> {
   const IngredientsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    controller.ingredients = userDetails["ingredients"] ?? [];
     return GetBuilder<IngredientsController>(
       init: IngredientsController(),
       builder: (controller) {
@@ -60,7 +56,7 @@ class IngredientsView extends GetView<IngredientsController> {
               SizedBox(
                 height: 5.h(context),
               ),
-              if (controller.ingredients.isEmpty)
+              if (ingredients.isEmpty)
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 50.h(context)),
                   child: Center(
@@ -81,7 +77,7 @@ class IngredientsView extends GetView<IngredientsController> {
                     ),
                     child: Column(
                       children: [
-                        for (Map ingredient in controller.ingredients)
+                        for (Map ingredient in ingredients)
                           GestureDetector(
                             onLongPress: () =>
                                 controller.removeIngredient(ingredient),
@@ -106,6 +102,8 @@ class IngredientsView extends GetView<IngredientsController> {
                                 children: [
                                   AppText(
                                     text: ingredient["label"],
+                                    minFontSize: 10.t(context).floorToDouble(),
+                                    overflow: TextOverflow.ellipsis,
                                     style: Styles.bold(
                                       fontSize: 10.t(context),
                                       color: AppColors.fontDark,
@@ -116,7 +114,7 @@ class IngredientsView extends GetView<IngredientsController> {
                                     text:
                                         "${ingredient["quantity"]} ${ingredient["quantity_unit"]}",
                                     style: Styles.bold(
-                                      fontSize: 10.t(context),
+                                      fontSize: 7.t(context),
                                       color: AppColors.fontDark,
                                     ),
                                   ),

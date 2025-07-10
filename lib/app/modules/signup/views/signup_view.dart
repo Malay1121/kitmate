@@ -145,7 +145,7 @@ class SignupView extends GetView<SignupController> {
                     ],
                   ),
                   SizedBox(
-                    height: 24.h(context),
+                    height: 10.h(context),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -171,6 +171,9 @@ class SignupView extends GetView<SignupController> {
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 20.h(context),
                   ),
                 ],
               ),
