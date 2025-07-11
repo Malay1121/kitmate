@@ -155,7 +155,9 @@ class IngredientsController extends CommonController {
                   height: 14.5.h(Get.context!),
                 ),
                 AppText(
-                  text: AppStrings.addIngredient,
+                  text: edit
+                      ? AppStrings.updateIngredient
+                      : AppStrings.addIngredient,
                   style: Styles.semiBold(
                     fontSize: 14.55.t(Get.context!),
                     color: AppColors.fontDark,
@@ -180,6 +182,7 @@ class IngredientsController extends CommonController {
                 DropdownMenu<String>(
                   width: 174.w(Get.context!),
                   hintText: AppStrings.quantityUnit,
+                  initialSelection: quantityUnit,
                   inputDecorationTheme: InputDecorationTheme(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -233,19 +236,32 @@ class IngredientsController extends CommonController {
                 CommonButton(
                     text: AppStrings.confirm,
                     onTap: () async {
-                      Map<String, dynamic> content = {
-                        "label": ingredientNameController.text,
-                        "quantity": int.parse(quantityController.text),
-                        "quantity_unit": quantityUnit,
-                      };
+                      if (edit) {
+                        ingredient!["label"] = ingredientNameController.text;
+                        ingredient["quantity"] =
+                            int.parse(quantityController.text);
+                        ingredient["quantity_unit"] = quantityUnit;
+                        var result = await DatabaseHelper.updateIngredient(
+                          userId: user?.uid ?? "",
+                          data: ingredient! as Map<String, dynamic>,
+                        );
+                        if (result != null) {
+                          Get.back();
+                        }
+                      } else {
+                        Map<String, dynamic> content = {
+                          "label": ingredientNameController.text,
+                          "quantity": int.parse(quantityController.text),
+                          "quantity_unit": quantityUnit,
+                        };
+                        var result = await DatabaseHelper.addIngredients(
+                          userId: user?.uid ?? "",
+                          ingredients: [content],
+                        );
 
-                      var result = await DatabaseHelper.addIngredients(
-                        userId: user?.uid ?? "",
-                        ingredients: [content],
-                      );
-
-                      if (result != null) {
-                        Get.back();
+                        if (result != null) {
+                          Get.back();
+                        }
                       }
                     }),
               ],

@@ -1,6 +1,6 @@
-import 'all_imports.dart';
 import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
+
+import 'all_imports.dart';
 
 class GeminiHelper {
   static Future<Map<String, dynamic>> fetch(
@@ -57,7 +57,9 @@ class GeminiHelper {
         return await fetch(systemPrompt: systemPrompt, data: data, text: text);
       }
     } else {
-      if (request.statusCode == 429) {
+      if (request.statusCode == 429 ||
+          request.statusCode == 400 ||
+          request.statusCode == 403) {
         EasyLoading.show();
         await DatabaseHelper.updateApiIndex(apiName: "gemini");
         Map<String, dynamic> reData =

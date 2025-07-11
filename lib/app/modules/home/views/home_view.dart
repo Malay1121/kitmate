@@ -54,8 +54,13 @@ class HomeView extends GetView<HomeController> {
                                   height: 20.h(context),
                                 ),
                                 Expanded(
-                                    child:
-                                        SettingsView(controller: controller)),
+                                    child: SettingsView(
+                                  controller: controller,
+                                  customMessage: getKey(controller.settings,
+                                      ["custom_message"], ""),
+                                  servings: getKey(
+                                      controller.settings, ["servings"], ""),
+                                )),
                                 SizedBox(
                                   height: 10.h(context),
                                 ),
@@ -289,6 +294,26 @@ class HomeView extends GetView<HomeController> {
                                     ),
                                     child: Icon(
                                       Icons.settings,
+                                      color: AppColors.primary,
+                                      size: 14.t(context),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 20.h(context),
+                                left: 15.w(context),
+                                child: GestureDetector(
+                                  onTap: () => controller.closeRecipe(),
+                                  child: Container(
+                                    width: 30.w(context),
+                                    height: 30.h(context),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.white,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.close,
                                       color: AppColors.primary,
                                       size: 14.t(context),
                                     ),

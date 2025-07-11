@@ -127,6 +127,8 @@ class DatabaseHelper {
       await FirebaseFirestore.instance
           .collection("users")
           .doc(userId)
+          .collection("ingredients")
+          .doc(getKey(data, ["id"], ""))
           .update(data);
       return data;
     } on FirebaseException catch (error) {

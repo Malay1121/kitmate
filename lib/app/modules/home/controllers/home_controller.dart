@@ -10,7 +10,9 @@ class HomeController extends CommonController {
     "consider_diet": true,
     "time_limit": "",
     "custom_message": "",
+    "servings": "",
   };
+
   void generateRecipe() async {
     print({
       "preferences": userDetails["preferences"],
@@ -30,16 +32,27 @@ class HomeController extends CommonController {
       });
 
       if (geminiResult["context"] == true) {
-        recipe = geminiResult["data"];
-        String image =
-            "https://image.pollinations.ai/prompt/${recipe!["recipe_title"].toString().replaceAll(" ", "-")}";
-        // String image = await getImage(recipe!["recipe_title"]);
-        recipe!["recipe_image"] = image;
-        update();
+        if (getKey(geminiResult, ["data", "recipe_found"], null) != null) {
+          recipe = geminiResult["data"];
+          String image =
+              "https://image.pollinations.ai/prompt/${recipe!["recipe_title"].toString().replaceAll(" ", "-")}";
+          // String image = await getImage(recipe!["recipe_title"]);
+          recipe!["recipe_image"] = image;
+          update();
+        } else {
+          showSnackbar(
+            message: AppStrings.recipeNotFound,
+          );
+        }
       }
     } else {
       showSnackbar(message: AppStrings.ingredientNumberValidation);
     }
+  }
+
+  void closeRecipe() {
+    recipe = null;
+    update();
   }
 
   void settingsPopup(HomeController controller) {
@@ -81,7 +94,9 @@ class HomeController extends CommonController {
                         ),
                         SettingsView(
                           controller: controller,
-                          customMessage: settings[settings],
+                          customMessage:
+                              getKey(settings, ["custom_message"], ""),
+                          servings: getKey(settings, ["servings"], ""),
                           popup: true,
                         ),
                         SizedBox(
@@ -103,9 +118,7 @@ class HomeController extends CommonController {
   @override
   void onInit() {
     super.onInit();
-    if (getStorage.read("settings") != null) {
-      settings = getStorage.read("settings");
-    }
+
     userStream = FirebaseFirestore.instance
         .collection("users")
         .doc(user?.uid)

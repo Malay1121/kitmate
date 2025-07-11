@@ -3,14 +3,17 @@ import 'package:kitmate/app/helper/all_imports.dart';
 import 'package:kitmate/app/modules/home/controllers/home_controller.dart';
 
 class SettingsView extends StatefulWidget {
-  SettingsView(
-      {super.key,
-      required this.controller,
-      this.customMessage,
-      this.popup = false});
+  SettingsView({
+    super.key,
+    required this.controller,
+    this.popup = false,
+    this.customMessage,
+    this.servings,
+  });
 
   HomeController controller;
   String? customMessage;
+  String? servings;
   bool popup;
 
   @override
@@ -19,9 +22,11 @@ class SettingsView extends StatefulWidget {
 
 class _SettingsViewState extends State<SettingsView> {
   TextEditingController customMessageController = TextEditingController();
+  TextEditingController servingsController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     customMessageController.text = widget.customMessage ?? "";
+    servingsController.text = widget.servings ?? "";
     return Column(
       children: [
         Container(
@@ -58,7 +63,8 @@ class _SettingsViewState extends State<SettingsView> {
                                     : widget.controller.settings[setting],
                                 onChanged: (value) {
                                   if (setting == "time_limit" ||
-                                      setting == "custom_message") {
+                                      setting == "custom_message" ||
+                                      setting == "servings") {
                                     if (widget.controller.settings[setting]
                                         .toString()
                                         .isNotEmpty) {
@@ -95,6 +101,15 @@ class _SettingsViewState extends State<SettingsView> {
                           CommonTextField(
                             controller: customMessageController,
                             hintText: AppStrings.writeOrTypeCustomConditions,
+                            onChanged: (value) {
+                              widget.controller.settings[setting] = value;
+                            },
+                          ),
+                        if (setting == "servings" &&
+                            widget.controller.settings[setting] != "")
+                          CommonTextField(
+                            controller: servingsController,
+                            hintText: AppStrings.numberOfDishes,
                             onChanged: (value) {
                               widget.controller.settings[setting] = value;
                             },

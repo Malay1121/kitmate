@@ -101,6 +101,7 @@ class OnboardingController extends CommonController {
           "consider_diet": true,
           "time_limit": "",
           "custom_message": "",
+          "servings": "1",
         };
         await DatabaseHelper.editUser(userId: user?.uid ?? "", data: {
           "preferences": preferences,

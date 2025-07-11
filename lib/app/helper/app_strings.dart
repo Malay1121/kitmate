@@ -15,6 +15,8 @@ class AppStrings {
       "Minimum 8 characters, at least 1 lower case, at least 1 upper case, at least 1 digit";
   static String ingredientNumberValidation =
       "You need to have at least 5 ingredients to get recipe suggestions";
+  static String recipeNotFound =
+      "No recipe found with the ingredients, try adding some more ingredients";
 
   static String next = "Next";
   static String previous = "Previous";
@@ -73,6 +75,7 @@ class AppStrings {
   static String exit = "Exit";
   static String settings = "Settings";
   static String writeOrTypeCustomConditions = "Write or type custom conditions";
+  static String numberOfDishes = "Number of people(Default 1)";
 
   static String ingredientsInStock = "Ingredients in stock";
   static String longPressAnIngredientToRemoveIt =
@@ -81,6 +84,7 @@ class AppStrings {
       ("Add ingredients by speech: Speak the list of ingredients available at your home with its amount and unit. \n Example: Umm, I have 4kg wheat 1 oven and 600 grams of lemon and also salt of 200 gram I also have 500 grams of beetroot I have 5 kg rice 2 litre milk 500 gram cheese 10 potatoes 200 gram onion no wait I have 250 gram of onion");
   static String noIngredientsAddedYet = "No ingredients added yet!";
   static String addIngredient = "Add ingredient";
+  static String updateIngredient = "Update ingredient";
   static String areYouSureYouWantToRemove = "Are you sure you want to remove";
   static String confirm = "Confirm";
   static String save = "Save";
@@ -140,7 +144,7 @@ Example Output: {"data": [{
     },], "context": true}''';
 
   static String ingredientsPrompt =
-      '''User will try to say all the ingredients that they have at theri home and you will have to fetch all the ingredients and return in a structed JSON code. The user would mention the ingredient name, amount of ingredient they have, and the ingredient's unit for example kg, gram, g, kilogram, ml, litre, etc. If they do not specify any unit then consider it as an "item". For example if the user says that they have 1 oven, then they won't specify any unit so you can consider its unit as "item" and amount as 1 and the name as Oven. The user will say a lot of ingredients and that won't be structure so you will have to intelligently extract details. User might make a mistake and correct it later, so use the correct value that they have said later instead of the wrong one. Also the only units supported in the application is "gram", "mililiter", and "items". Items will be used where gram and mililiter cannot be used. Convert the kilogram and other units into the ones that are supported. If none is supported then keep it as "items"
+      '''User will try to say all the ingredients that they have at their home and you will have to fetch all the ingredients and return in a structured JSON code. The user would mention the ingredient name, amount of ingredient they have, and the ingredient's unit for example kg, gram, g, kilogram, ml, litre, etc. If they do not specify any unit then consider it as "piece". For example if the user says that they have 1 oven, then they won't specify any unit so you can consider its unit as "pieces" and amount as 1 and the name as Oven. The user will say a lot of ingredients and that won't be structure so you will have to intelligently extract details. User might make a mistake and correct it later, so use the correct value that they have said later instead of the wrong one. Also the only units supported in the application is "gram", "milliliter", and "items". Items will be used where gram and milliliter cannot be used. Convert the kilogram and other units into the ones that are supported. If none is supported then keep it as "items"
 
 If the user's text doesn't match the context of parameters that the user has asked for, change {"context": false}. Or else give the value and change {"context":true}.
 If a particular parameter has not been talked about in the text, then return null in that particular field.
@@ -197,12 +201,15 @@ Example Output: {"data": [
 ], "context": true}''';
 
   static String dishPrompt = '''
-  Suggest a dish that a user can make to eat depending on their preferences(What diet they eat, and what allergies do they have) and ingredients that are available with them. There will be a JSON object that will contain the preferences and ingredients that the user has. The ingredients will also have its quantity and the unit. For example quantity: 100, quantity_unit: grams, which means the user has 100 grams of that ingredient. Check for the ingredients that the user has specified and provide a best recipe that they can make and is compatible to their preferences. If no ingredients given, you can return any good recipe depending on the preferences or vice versa. If none is provided then give a random recipe. Give a detailed recipe which the user can follow. Also return an image of that dish with the recipe, and a few statistics about the recipe(statitcs to include: Energy(k), protein(g)m Carbs(g), Fat(g)).
-
-IF THE USER HAS AT LEAST 7 INGREDIENTS, then STRICTLY give a recipe that can be made from those ingredients. DO NOT include any other ingredients which they don't have. PLEASE STICK TO THE INGREDIENTS THE USER HAS, DO NOT GIVE RECIPE THAT REQUIRES SOME OTHER INGREDIENTS. ALSO MAKE SURE THE INGREDIENTS HAS SUFFICIENT QUANTITY REQUIRED FOR THE RECIPE.
+  Suggest a dish that a user can make to eat depending on their preferences(What diet they eat, and what allergies do they have) and ingredients that are available with them. There will be a JSON object that will contain the preferences and ingredients that the user has. The JSON object will also contain a parameter 'servings' that says how many dishes does the user want, so please suggest dishes and ingredients required accordingly. The ingredients will also have its quantity and the unit. For example quantity: 100, quantity_unit: grams, which means the user has 100 grams of that ingredient. Check for the ingredients that the user has specified and provide a best recipe that they can make and is compatible to their preferences. If no ingredients given, you can return any good recipe depending on the preferences or vice versa. If none is provided then give a random recipe. Give a detailed recipe which the user can follow. Also return an image of that dish with the recipe, and a few statistics about the recipe(statitcs to include: Energy(k), protein(g)m Carbs(g), Fat(g)), and the statistics should be of per serving, ignoring the 'servings' parameter. 
+  If parameter 'current_time' is given with a valid value, then suggest a dish that is suitable for that time of the day, so if the time is in morning so give recipes that are usually eaten for breakfast.
+  If parameter 'custom_message' is given with a valid value, then take that custom message into account and suggest recipes accordingly. That custom prompt holds more value than other things like ingredients list, diet, allergies, etc. For example, if the user doesn't have an ingredient in the list but it says that they do have the ingredient in custom message, then prioritize the custom message and give results accordingly.
+  
+  IF THE USER HAS AT LEAST 5 INGREDIENTS, then STRICTLY give a recipe that can be made from those ingredients. DO NOT include any other ingredients which they don't have. PLEASE STICK TO THE INGREDIENTS THE USER HAS, DO NOT GIVE RECIPE THAT REQUIRES SOME OTHER INGREDIENTS. ALSO MAKE SURE THE INGREDIENTS HAS SUFFICIENT QUANTITY REQUIRED FOR THE RECIPE.
   
 
 If the user's text doesn't match the context of parameters that the user has asked for, change {"context": false}. Or else give the value and change {"context":true}.
+If you find no recipe that can be made with the amount ingredients that the user has, change {"recipe_found": false}. Or else give the value and change {"recipe_found": true}
 If a particular parameter has not been talked about in the text, then return null in that particular field.
 
 RETURN JUST THE JSON CODE, NOTHING ELSE.
@@ -242,6 +249,7 @@ Output structure: {"data": {
       ],
       "procedure": "Describe the whole procedure on what to do"
     },
-  ]
+  ],
+  "recipe_found": true,
 }, "context": true}''';
 }
