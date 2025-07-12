@@ -15,7 +15,7 @@ class _CommonBottomBarState extends State<CommonBottomBar> {
   Widget build(BuildContext context) {
     return Container(
       width: 220.w(context),
-      height: 35.h(context),
+      height: 40.h(context),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -30,7 +30,7 @@ class _CommonBottomBarState extends State<CommonBottomBar> {
               child: GestureDetector(
                 onTap: () => Get.toNamed(tab["page"]),
                 child: Container(
-                  height: 35.h(context),
+                  height: 40.h(context),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                   ),

@@ -152,7 +152,7 @@ class IngredientsView extends GetView<IngredientsController> {
                 child: CommonButton(
                   text: controller.listening
                       ? "Listening... Go ahead!"
-                      : AppStrings.addIngredientWithSpeech,
+                      : AppStrings.updateIngredientWithSpeech,
                   backgroundColor: AppColors.primary,
                   width: 196.w(context),
                   textColor: AppColors.white,

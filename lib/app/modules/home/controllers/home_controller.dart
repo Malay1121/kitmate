@@ -168,7 +168,6 @@ class HomeController extends CommonController {
   @override
   void onReady() {
     super.onReady();
-    generateRecipe();
   }
 
   @override

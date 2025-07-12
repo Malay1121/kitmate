@@ -121,6 +121,56 @@ class DatabaseHelper {
     }
   }
 
+  static Future updateIngredientsFromGemini(
+      {required String userId,
+      required bool add,
+      required List ingredients}) async {
+    try {
+      EasyLoading.show();
+      for (Map ingredient in ingredients) {
+        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(userId)
+            .collection("ingredients")
+            .where("label", isEqualTo: getKey(ingredient, ["label"], ""))
+            .get();
+        if (querySnapshot.docs.isNotEmpty) {
+          String ingredientId = querySnapshot.docs.first.id;
+          Map baseIngredient = querySnapshot.docs.first.data() as Map;
+
+          double quantity = getKey(baseIngredient, ["quantity"], 0).toDouble();
+          if (quantity - getKey(ingredient, ["quantity"], 0) <= 0 && !add) {
+            removeIngredients(userId: userId, ingredients: [baseIngredient]);
+          } else {
+            baseIngredient["quantity"] = add
+                ? quantity + getKey(ingredient, ["quantity"], 0)
+                : quantity - getKey(ingredient, ["quantity"], 0);
+            await FirebaseFirestore.instance
+                .collection("users")
+                .doc(userId)
+                .collection("ingredients")
+                .doc(ingredientId)
+                .update(baseIngredient as Map<String, dynamic>);
+          }
+        } else {
+          if (add) {
+            addIngredients(userId: userId, ingredients: [ingredient]);
+          } else {
+            showSnackbar(
+                message: getKey(ingredient, ["label"], "Ingredient") +
+                    " Not found, please update manually.");
+          }
+        }
+      }
+      EasyLoading.dismiss();
+
+      return ingredients;
+    } on FirebaseException catch (error) {
+      showFirebaseError(error.message);
+      EasyLoading.dismiss();
+    }
+  }
+
   static Future updateIngredient(
       {required String userId, required Map<String, dynamic> data}) async {
     try {

@@ -9,8 +9,14 @@ class RecipeController extends CommonController {
     super.onInit();
   }
 
-  void nextStep() {
+  void nextStep({bool removeIngredients = true}) async {
     if (steps.length <= currentStep + 1) {
+      if (removeIngredients) {
+        await DatabaseHelper.updateIngredientsFromGemini(
+            userId: user?.uid ?? "",
+            add: false,
+            ingredients: getKey(recipe ?? {}, ["ingredients"], []));
+      }
       Get.back();
     } else {
       currentStep++;

@@ -86,198 +86,243 @@ class HomeView extends GetView<HomeController> {
                                 width: 220.w(context),
                                 height: 215.h(context),
                               ),
-                              Positioned(
-                                top: 187.h(context),
-                                child: Container(
-                                  constraints: BoxConstraints(
-                                    minHeight: 290.h(context),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(28),
-                                      topLeft: Radius.circular(28),
-                                    ),
-                                    color: AppColors.white,
-                                  ),
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 11.h(context),
-                                        ),
-                                        SizedBox(
-                                          width: 220.w(context),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 11.w(context)),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                              Column(
+                                children: [
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 187.h(context),
+                                          ),
+                                          Container(
+                                            constraints: BoxConstraints(
+                                              maxHeight: 217.h(context),
+                                            ),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(28),
+                                                topLeft: Radius.circular(28),
+                                              ),
+                                              color: AppColors.white,
+                                            ),
+                                            child: Column(
                                               children: [
-                                                GestureDetector(
-                                                  onTap: () => controller
-                                                      .generateRecipe(),
-                                                  child: Icon(
-                                                    Icons.restart_alt,
-                                                    size: 14.t(context),
+                                                SizedBox(
+                                                  height: 11.h(context),
+                                                ),
+                                                SizedBox(
+                                                  width: 220.w(context),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal:
+                                                                11.w(context)),
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () => controller
+                                                              .generateRecipe(),
+                                                          child: Icon(
+                                                            Icons.restart_alt,
+                                                            size: 14.t(context),
+                                                          ),
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () => print(
+                                                              ingredients),
+                                                          child: AppText(
+                                                            text: controller
+                                                                    .recipe![
+                                                                "recipe_title"],
+                                                            width:
+                                                                184.w(context),
+                                                            centered: true,
+                                                            maxLines: null,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style:
+                                                                Styles.semiBold(
+                                                              fontSize:
+                                                                  14.t(context),
+                                                              color: AppColors
+                                                                  .black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 0,
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                                GestureDetector(
-                                                  onTap: () =>
-                                                      print(ingredients),
-                                                  child: AppText(
-                                                    text: controller.recipe![
-                                                        "recipe_title"],
-                                                    width: 184.w(context),
-                                                    centered: true,
-                                                    maxLines: null,
-                                                    textAlign: TextAlign.center,
-                                                    style: Styles.semiBold(
-                                                      fontSize: 14.t(context),
-                                                      color: AppColors.black,
-                                                    ),
+                                                AppText(
+                                                  text:
+                                                      "${controller.recipe!["recipe_type"]} / ${controller.recipe!["time"]}",
+                                                  style: Styles.semiBold(
+                                                    fontSize: 7.t(context),
+                                                    color: AppColors.fontGrey,
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  width: 0,
+                                                  height: 10.h(context),
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        AppText(
-                                          text:
-                                              "${controller.recipe!["recipe_type"]} / ${controller.recipe!["time"]}",
-                                          style: Styles.semiBold(
-                                            fontSize: 7.t(context),
-                                            color: AppColors.fontGrey,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 10.h(context),
-                                        ),
-                                        Container(
-                                          height: 34.h(context),
-                                          width: 220.w(context),
-                                          decoration: BoxDecoration(
-                                            color: AppColors.cardColor,
-                                          ),
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              for (String stat in controller
-                                                  .recipe!["statistics"].keys)
-                                                Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    AppText(
-                                                      text: controller
-                                                          .recipe!["statistics"]
-                                                              [stat]
-                                                          .toString(),
-                                                      style: Styles.regular(
-                                                        fontSize: 7.t(context),
-                                                        color:
-                                                            AppColors.fontDark,
-                                                      ),
-                                                    ),
-                                                    AppText(
-                                                      text: stat
-                                                          .toString()
-                                                          .capitalizeFirst
-                                                          .toString(),
-                                                      style: Styles.medium(
-                                                        fontSize: 9.t(context),
-                                                        color:
-                                                            AppColors.fontDark,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 11.5.h(context),
-                                        ),
-                                        for (Map ingredient in controller
-                                            .recipe!["ingredients"])
-                                          SizedBox(
-                                            width: 220.w(context),
-                                            child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 11.w(context),
+                                                Container(
+                                                  height: 34.h(context),
+                                                  width: 220.w(context),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColors.cardColor,
                                                   ),
                                                   child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .spaceBetween,
+                                                            .spaceEvenly,
                                                     children: [
-                                                      AppText(
-                                                        text: ingredient["name"]
-                                                            .toString(),
-                                                        maxLines: null,
-                                                        width: 120.w(context),
-                                                        style: Styles.regular(
-                                                          fontSize:
-                                                              9.t(context),
-                                                          color: AppColors
-                                                              .fontDark,
+                                                      for (String stat
+                                                          in controller
+                                                              .recipe![
+                                                                  "statistics"]
+                                                              .keys)
+                                                        Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            AppText(
+                                                              text: controller
+                                                                  .recipe![
+                                                                      "statistics"]
+                                                                      [stat]
+                                                                  .toString(),
+                                                              style: Styles
+                                                                  .regular(
+                                                                fontSize: 7
+                                                                    .t(context),
+                                                                color: AppColors
+                                                                    .fontDark,
+                                                              ),
+                                                            ),
+                                                            AppText(
+                                                              text: stat
+                                                                  .toString()
+                                                                  .capitalizeFirst
+                                                                  .toString(),
+                                                              style:
+                                                                  Styles.medium(
+                                                                fontSize: 9
+                                                                    .t(context),
+                                                                color: AppColors
+                                                                    .fontDark,
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ),
-                                                      AppText(
-                                                        text: ingredient[
-                                                                "quantity"]
-                                                            .toString(),
-                                                        width: 48.w(context),
-                                                        maxLines: null,
-                                                        style: Styles.regular(
-                                                          fontSize:
-                                                              8.t(context),
-                                                          color: AppColors
-                                                              .fontGrey,
-                                                        ),
-                                                      ),
                                                     ],
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 2.h(context)),
-                                                  child: Container(
-                                                    width: 198.w(context),
-                                                    height: 1,
-                                                    color: AppColors.stroke,
-                                                  ),
+                                                SizedBox(
+                                                  height: 11.5.h(context),
                                                 ),
+                                                for (Map ingredient
+                                                    in controller
+                                                        .recipe!["ingredients"])
+                                                  SizedBox(
+                                                    width: 220.w(context),
+                                                    child: Column(
+                                                      children: [
+                                                        Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                            horizontal:
+                                                                11.w(context),
+                                                          ),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              AppText(
+                                                                text: ingredient[
+                                                                        "label"]
+                                                                    .toString(),
+                                                                maxLines: null,
+                                                                width: 120
+                                                                    .w(context),
+                                                                style: Styles
+                                                                    .regular(
+                                                                  fontSize: 9.t(
+                                                                      context),
+                                                                  color: AppColors
+                                                                      .fontDark,
+                                                                ),
+                                                              ),
+                                                              AppText(
+                                                                text: getKey(
+                                                                        ingredient,
+                                                                        [
+                                                                          "quantity_label"
+                                                                        ],
+                                                                        "")
+                                                                    .toString(),
+                                                                width: 48
+                                                                    .w(context),
+                                                                maxLines: null,
+                                                                style: Styles
+                                                                    .regular(
+                                                                  fontSize: 8.t(
+                                                                      context),
+                                                                  color: AppColors
+                                                                      .fontGrey,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  vertical: 2.h(
+                                                                      context)),
+                                                          child: Container(
+                                                            width:
+                                                                198.w(context),
+                                                            height: 1,
+                                                            color: AppColors
+                                                                .stroke,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
                                               ],
                                             ),
                                           ),
-                                        SizedBox(
-                                          height: 10.h(context),
-                                        ),
-                                        CommonButton(
-                                          text: AppStrings.startCooking,
-                                          onTap: () => Get.toNamed(
-                                              Routes.RECIPE,
-                                              arguments: controller.recipe),
-                                        ),
-                                        SizedBox(
-                                          height: 10.h(context),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  SizedBox(
+                                    height: 5.h(context),
+                                  ),
+                                  CommonButton(
+                                    text: AppStrings.startCooking,
+                                    onTap: () => Get.toNamed(Routes.RECIPE,
+                                        arguments: controller.recipe),
+                                  ),
+                                  SizedBox(
+                                    height: 10.h(context),
+                                  ),
+                                ],
                               ),
                               Positioned(
                                 top: 20.h(context),

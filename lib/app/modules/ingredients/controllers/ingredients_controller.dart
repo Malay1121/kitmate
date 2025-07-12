@@ -41,9 +41,16 @@ class IngredientsController extends CommonController {
           Map<String, dynamic> geminiResult = await GeminiHelper.fetch(
               systemPrompt: AppStrings.ingredientsPrompt, text: result);
           if (geminiResult["context"] == true) {
-            List resultIngredients = geminiResult["data"];
-            var result = await DatabaseHelper.addIngredients(
-                userId: user?.uid ?? "", ingredients: resultIngredients);
+            Map result = geminiResult["data"];
+
+            await DatabaseHelper.updateIngredientsFromGemini(
+                userId: user?.uid ?? "",
+                add: true,
+                ingredients: getKey(result, ["add"], []));
+            await DatabaseHelper.updateIngredientsFromGemini(
+                userId: user?.uid ?? "",
+                add: false,
+                ingredients: getKey(result, ["remove"], []));
             if (result != null) {
               update();
             }
@@ -73,7 +80,11 @@ class IngredientsController extends CommonController {
         insetPadding: EdgeInsets.zero,
         child: Container(
           width: 196.w(Get.context!),
-          height: 158.h(Get.context!),
+          height: 118.h(Get.context!),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 11.w(Get.context!),
@@ -84,9 +95,20 @@ class IngredientsController extends CommonController {
                 SizedBox(
                   height: 14.5.h(Get.context!),
                 ),
-                AppText(
-                  text:
-                      "${AppStrings.areYouSureYouWantToRemove} ${ingredient["label"]}?",
+                AppRichText(
+                  text: TextSpan(
+                    text: "${AppStrings.areYouSureYouWantToRemove} ",
+                    children: [
+                      TextSpan(
+                        text: getKey(ingredient, ["label"], ""),
+                        style: Styles.semiBold(
+                          fontSize: 14.55.t(Get.context!),
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      TextSpan(text: "?"),
+                    ],
+                  ),
                   maxLines: null,
                   centered: true,
                   textAlign: TextAlign.center,
@@ -108,7 +130,7 @@ class IngredientsController extends CommonController {
                       }
                     }),
                 SizedBox(
-                  height: 20.h(Get.context!),
+                  height: 10.h(Get.context!),
                 ),
               ],
             ),
