@@ -1,10 +1,26 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kitmate/app/helper/all_imports.dart';
 
 void main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+  await dotenv.load();
 
   await Firebase.initializeApp();
+  await Purchases.configure(
+    PurchasesConfiguration(dotenv.env['revenuecat'] ?? ""),
+  );
+  apiKeys = {
+    "gemini": {
+      "apis": [dotenv.env['gemini']],
+      "index": 0,
+    },
+    "unsplash": {
+      "apis": [dotenv.env['unsplash']],
+      "index": 0,
+    },
+  };
+
   initializeSize(220, 477);
   configureEasyLoading();
 

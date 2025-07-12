@@ -15,19 +15,20 @@ List<Map> tabs = [
     "icon": Icons.local_grocery_store_outlined,
     "page": Routes.INGREDIENTS,
   },
+  {
+    "title": AppStrings.profile,
+    "icon": Icons.person_outline_rounded,
+    "page": Routes.PROFILE,
+  },
 ];
 
 Map apiKeys = {
   "gemini": {
-    "apis": [
-      "AIzaSyB6frvuqS6igR3CkWF1arz0kTTQODGSxLU",
-    ],
+    "apis": [],
     "index": 0,
   },
   "unsplash": {
-    "apis": [
-      "i7Jw5ebxgDS8oq44B4Is2QtDa4iAkWAW2WhAjmhTdgA",
-    ],
+    "apis": [],
     "index": 0,
   },
 };

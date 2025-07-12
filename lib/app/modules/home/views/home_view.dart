@@ -97,7 +97,7 @@ class HomeView extends GetView<HomeController> {
                                           ),
                                           Container(
                                             constraints: BoxConstraints(
-                                              maxHeight: 217.h(context),
+                                              minHeight: 217.h(context),
                                             ),
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.only(

@@ -28,6 +28,8 @@ dependencies:
   flutter: 
     sdk: flutter
   firebase_storage: ^12.3.7
+  purchases_flutter: ^8.10.6
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies: 
   flutter_lints: 4.0.0
@@ -42,6 +44,8 @@ flutter:
     - assets/images/
     - assets/fonts/
     - assets/icons/
+    - .env
+    - assets/.env
   fonts:
     - family: SfProDisplay
       fonts:

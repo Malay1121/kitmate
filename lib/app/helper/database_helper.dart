@@ -24,6 +24,8 @@ class DatabaseHelper {
           .doc(data["uid"])
           .set(data);
       writeUserDetails(data);
+      await SubscriptionManager.loginRevenueCat();
+
       return user.user;
     } on FirebaseException catch (error) {
       showFirebaseError(error.message);
@@ -41,6 +43,8 @@ class DatabaseHelper {
               .get())
           .data();
       if (userData != null) writeUserDetails(userData);
+      await SubscriptionManager.loginRevenueCat();
+      await SubscriptionManager.syncSubscriptionStatus();
       return user;
     } on FirebaseException catch (error) {
       showFirebaseError(error.message);

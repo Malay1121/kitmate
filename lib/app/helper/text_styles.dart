@@ -15,7 +15,7 @@ class Styles {
       fontSize: fontSize,
       color: color,
       fontFamily: SfProDisplay,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w500,
     );
   }
 
@@ -33,7 +33,7 @@ class Styles {
       fontSize: fontSize,
       color: color,
       fontFamily: SfProDisplay,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w600,
     );
   }
 }

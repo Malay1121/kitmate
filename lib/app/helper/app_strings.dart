@@ -62,7 +62,17 @@ class AppStrings {
   static String recordIngredients = "Record Ingredients";
 
   static String mealPlans = "Meal Plans";
+  static String profile = "Profile";
   static String storage = "Storage";
+
+  static String editProfile = "Edit Profile";
+  static String manageSubscriptions = "Manage Subscriptions";
+  static String logout = "Log out";
+  static String deleteAccount = "Delete Account";
+  static String privacyPolicy = "Privacy Policy";
+  static String termsAndConditions = "Terms & Conditions";
+  static String contactUs = "Contact Us";
+  static String aboutUs = "About Us";
 
   static String generatingARecipe =
       "Generating a personalized recipe just for you! ~ 10 seconds";
@@ -100,6 +110,18 @@ class AppStrings {
   static String gram = "Gram(g)";
   static String mililiter = "Mililiter(ml)";
   static String pieces = "Pieces(1,2,3,4,...)";
+
+  static String yourPersonalPlanIsReady = "Your personal plan is ready";
+  static String upgradeYourAccountForFullAccess =
+      "Upgrade your account and get full access to jumpstart your practice.";
+  static String oneMonthPlan = "1 Month Plan";
+  static String oneYearPlan = "1 Year Plan";
+  static String billedMonthlyCancelAnytime = "Billed monthly. Cancel anytime.";
+  static String billedYearlyCancelAnytime = "Billed yearly. Cancel anytime.";
+  static String forOnly = "For only";
+  static String month = "Month";
+  static String upgrade = "Upgrade";
+  static String byContinuingYouAgreeToThe = "By continuing you agree to the";
 
   static String allergyPrompt =
       '''Check for the ingredients that a user has allergy from depending on the descriptions they give. Users will try to say the ingredients they have allergy from and it will be then converted into text and given to you. Check for the ingredients that the user has specified or is trying to convey. 

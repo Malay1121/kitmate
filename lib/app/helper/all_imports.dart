@@ -17,6 +17,7 @@ export 'package:flutter_tts/flutter_tts.dart';
 export 'package:get/get.dart' hide HeaderValue, Response;
 export 'package:get_storage/get_storage.dart';
 export 'package:kitmate/app/helper/database_helper.dart';
+export 'package:kitmate/app/helper/subscription_manager.dart';
 export 'package:kitmate/app/routes/app_pages.dart';
 export 'package:kitmate/app/widgets/anon_common_controller.dart';
 export 'package:kitmate/app/widgets/common_bottom_bar.dart';
@@ -25,6 +26,7 @@ export 'package:kitmate/app/widgets/common_controller.dart';
 export 'package:kitmate/app/widgets/common_text.dart';
 export 'package:kitmate/app/widgets/common_textfield.dart';
 export 'package:kitmate/main.dart';
+export 'package:purchases_flutter/purchases_flutter.dart';
 
 export 'app_colors.dart';
 export 'app_images.dart';

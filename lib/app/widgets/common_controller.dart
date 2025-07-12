@@ -14,6 +14,12 @@ class CommonController extends AnonCommonController {
     return null;
   }
 
+  bool pro = false;
+  void isProUser() async {
+    pro = await SubscriptionManager.isProUser();
+    update();
+  }
+
   StreamSubscription? userStream;
   StreamSubscription? ingredientsStream;
   var onUserUpdate;
@@ -21,6 +27,7 @@ class CommonController extends AnonCommonController {
   @override
   void onInit() {
     super.onInit();
+    isProUser();
     ingredients.listen(
       (p0) => update(),
     );
