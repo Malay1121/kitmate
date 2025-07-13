@@ -130,7 +130,6 @@ class DatabaseHelper {
       required bool add,
       required List ingredients}) async {
     try {
-      EasyLoading.show();
       for (Map ingredient in ingredients) {
         QuerySnapshot querySnapshot = await FirebaseFirestore.instance
             .collection("users")
@@ -166,12 +165,10 @@ class DatabaseHelper {
           }
         }
       }
-      EasyLoading.dismiss();
 
       return ingredients;
     } on FirebaseException catch (error) {
       showFirebaseError(error.message);
-      EasyLoading.dismiss();
     }
   }
 

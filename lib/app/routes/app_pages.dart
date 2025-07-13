@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/edit_profile/bindings/edit_profile_binding.dart';
+import '../modules/edit_profile/views/edit_profile_view.dart';
 import '../modules/email_verification/bindings/email_verification_binding.dart';
 import '../modules/email_verification/views/email_verification_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -71,6 +73,11 @@ class AppPages {
       name: _Paths.SUBSCRIPTIONS,
       page: () => const SubscriptionsView(),
       binding: SubscriptionsBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_PROFILE,
+      page: () => const EditProfileView(),
+      binding: EditProfileBinding(),
     ),
   ];
 }

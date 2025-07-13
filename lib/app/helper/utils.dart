@@ -22,6 +22,29 @@ List<Map> tabs = [
   },
 ];
 
+List proFeatures = [
+  {
+    "label": AppStrings.unlimitedIngredients,
+    "icon": Icons.inventory_2_outlined,
+  },
+  {
+    "label": AppStrings.unlimitedRecipes,
+    "icon": Icons.menu_book_outlined,
+  },
+  {
+    "label": AppStrings.unlimitedSpeechFeatures,
+    "icon": Icons.mic_none_outlined,
+  },
+  {
+    "label": AppStrings.accessToCustomMessage,
+    "icon": Icons.message_outlined,
+  },
+  {
+    "label": AppStrings.accessToServings,
+    "icon": Icons.dining_outlined,
+  },
+];
+
 Map apiKeys = {
   "gemini": {
     "apis": [],

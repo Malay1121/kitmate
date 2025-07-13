@@ -7,7 +7,6 @@ class IngredientsController extends CommonController {
   @override
   void onInit() {
     super.onInit();
-    initializeSpeech();
 
     update();
   }
@@ -28,39 +27,6 @@ class IngredientsController extends CommonController {
   bool speechEnabled = false;
 
   Future<String> getText() async {
-    String result = "";
-    listening = true;
-    update();
-    await speechToText.listen(
-        listenOptions: SpeechListenOptions(listenMode: ListenMode.dictation),
-        partialResults: false,
-        onResult: (res) async {
-          result = res.recognizedWords;
-          listening = false;
-          update();
-          Map<String, dynamic> geminiResult = await GeminiHelper.fetch(
-              systemPrompt: AppStrings.ingredientsPrompt, text: result);
-          if (geminiResult["context"] == true) {
-            Map result = geminiResult["data"];
-
-            await DatabaseHelper.updateIngredientsFromGemini(
-                userId: user?.uid ?? "",
-                add: true,
-                ingredients: getKey(result, ["add"], []));
-            await DatabaseHelper.updateIngredientsFromGemini(
-                userId: user?.uid ?? "",
-                add: false,
-                ingredients: getKey(result, ["remove"], []));
-            if (result != null) {
-              update();
-            }
-          }
-        });
-
-    return result;
-  }
-
-  void initializeSpeech() async {
     speechEnabled = await speechToText.initialize(onError: (errorNotification) {
       print(errorNotification);
       listening = false;
@@ -72,6 +38,47 @@ class IngredientsController extends CommonController {
       }
       print(status);
     });
+    String result = "";
+    if (speechEnabled) {
+      listening = true;
+      update();
+      await speechToText.listen(
+          listenOptions: SpeechListenOptions(listenMode: ListenMode.dictation),
+          partialResults: false,
+          onResult: (res) async {
+            EasyLoading.show();
+
+            result = res.recognizedWords;
+            listening = false;
+            update();
+            Map<String, dynamic> geminiResult = await GeminiHelper.fetch(
+                systemPrompt: AppStrings.ingredientsPrompt, text: result);
+            if (geminiResult["context"] == true) {
+              Map result = geminiResult["data"];
+
+              await DatabaseHelper.updateIngredientsFromGemini(
+                  userId: user?.uid ?? "",
+                  add: true,
+                  ingredients: getKey(result, ["add"], []));
+              await DatabaseHelper.updateIngredientsFromGemini(
+                  userId: user?.uid ?? "",
+                  add: false,
+                  ingredients: getKey(result, ["remove"], []));
+              if (result != null) {
+                update();
+              }
+            }
+            EasyLoading.dismiss();
+          });
+    } else {
+      if (!(await speechToText.hasPermission)) {
+        showSnackbar(message: AppStrings.youHaveDeniedMicPermission);
+      } else {
+        showSnackbar(message: "Error with Speech");
+      }
+    }
+
+    return result;
   }
 
   void removeIngredient(Map ingredient) {
@@ -122,12 +129,17 @@ class IngredientsController extends CommonController {
                 CommonButton(
                     text: AppStrings.confirm,
                     onTap: () async {
+                      EasyLoading.show();
+
                       var result = await DatabaseHelper.removeIngredients(
                           userId: user?.uid ?? "", ingredients: [ingredient]);
                       if (result != null) {
                         update();
+                        EasyLoading.dismiss();
+
                         Get.back();
                       }
+                      EasyLoading.dismiss();
                     }),
                 SizedBox(
                   height: 10.h(Get.context!),
@@ -258,6 +270,8 @@ class IngredientsController extends CommonController {
                 CommonButton(
                     text: AppStrings.confirm,
                     onTap: () async {
+                      EasyLoading.show();
+
                       if (edit) {
                         ingredient!["label"] = ingredientNameController.text;
                         ingredient["quantity"] =
@@ -285,6 +299,7 @@ class IngredientsController extends CommonController {
                           Get.back();
                         }
                       }
+                      EasyLoading.dismiss();
                     }),
               ],
             ),

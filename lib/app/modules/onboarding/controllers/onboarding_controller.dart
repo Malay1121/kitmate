@@ -137,35 +137,6 @@ class OnboardingController extends CommonController {
   SpeechToText speechToText = SpeechToText();
   bool speechEnabled = false;
   Future<String> getText() async {
-    String result = "";
-    listening = true;
-    update();
-    await speechToText.listen(
-        listenOptions: SpeechListenOptions(listenMode: ListenMode.dictation),
-        partialResults: false,
-        onResult: (res) async {
-          result = res.recognizedWords;
-          listening = false;
-          update();
-          Map<String, dynamic> geminiResult = await GeminiHelper.fetch(
-              systemPrompt: data[currentPage]["prompt"], text: result);
-          if (geminiResult["context"] == true) {
-            List existingItems = data[currentPage]["options"];
-            print(geminiResult);
-            List finalItems = [
-              for (var item in existingItems) item,
-              for (var item in geminiResult["data"]) item,
-            ];
-            data[currentPage]["options"] = finalItems;
-
-            update();
-          }
-        });
-
-    return result;
-  }
-
-  void initializeSpeech() async {
     speechEnabled = await speechToText.initialize(onError: (errorNotification) {
       print(errorNotification);
       listening = false;
@@ -177,12 +148,48 @@ class OnboardingController extends CommonController {
       }
       print(status);
     });
+    String result = "";
+    if (speechEnabled) {
+      listening = true;
+      update();
+      await speechToText.listen(
+          listenOptions: SpeechListenOptions(listenMode: ListenMode.dictation),
+          partialResults: false,
+          onResult: (res) async {
+            EasyLoading.show();
+
+            result = res.recognizedWords;
+            listening = false;
+            update();
+            Map<String, dynamic> geminiResult = await GeminiHelper.fetch(
+                systemPrompt: data[currentPage]["prompt"], text: result);
+            if (geminiResult["context"] == true) {
+              List existingItems = data[currentPage]["options"];
+              print(geminiResult);
+              List finalItems = [
+                for (var item in existingItems) item,
+                for (var item in geminiResult["data"]) item,
+              ];
+              data[currentPage]["options"] = finalItems;
+
+              update();
+            }
+            EasyLoading.dismiss();
+          });
+    } else {
+      if (!(await speechToText.hasPermission)) {
+        showSnackbar(message: AppStrings.youHaveDeniedMicPermission);
+      } else {
+        showSnackbar(message: "Error with Speech");
+      }
+    }
+
+    return result;
   }
 
   @override
   void onInit() {
     super.onInit();
-    initializeSpeech();
   }
 
   @override

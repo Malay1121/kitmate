@@ -17,6 +17,8 @@ class AppStrings {
       "You need to have at least 5 ingredients to get recipe suggestions";
   static String recipeNotFound =
       "No recipe found with the ingredients, try adding some more ingredients";
+  static String youHaveDeniedMicPermission =
+      "You have denied microphone permission, please go to settings > apps > Kitmate > permissions and allow microphone access";
 
   static String next = "Next";
   static String previous = "Previous";
@@ -112,6 +114,8 @@ class AppStrings {
   static String pieces = "Pieces(1,2,3,4,...)";
 
   static String yourPersonalPlanIsReady = "Your personal plan is ready";
+  static String youHaveAlreadySubscribedToPro =
+      "You have already subscribed to pro!";
   static String upgradeYourAccountForFullAccess =
       "Upgrade your account and get full access to jumpstart your practice.";
   static String oneMonthPlan = "1 Month Plan";
@@ -121,7 +125,16 @@ class AppStrings {
   static String forOnly = "For only";
   static String month = "Month";
   static String upgrade = "Upgrade";
+  static String goBack = "Go Back";
   static String byContinuingYouAgreeToThe = "By continuing you agree to the";
+
+  static String unlimitedIngredients = "Unlimited Ingredients";
+  static String unlimitedRecipes = "Unlimited Recipes";
+  static String unlimitedSpeechFeatures = "Unlimited Speech features";
+  static String accessToCustomMessage =
+      "Access to Custom Message to give customized prompt";
+  static String accessToServings =
+      "Access to Servings to create a dish in more than one quantity";
 
   static String allergyPrompt =
       '''Check for the ingredients that a user has allergy from depending on the descriptions they give. Users will try to say the ingredients they have allergy from and it will be then converted into text and given to you. Check for the ingredients that the user has specified or is trying to convey. 
@@ -211,7 +224,7 @@ Example Output: {
   If parameter 'custom_message' is given with a valid value, then take that custom message into account and suggest recipes accordingly. That custom prompt holds more value than other things like ingredients list, diet, allergies, etc. For example, if the user doesn't have an ingredient in the list but it says that they do have the ingredient in custom message, then prioritize the custom message and give results accordingly. 
   
   IF THE USER HAS AT LEAST 5 INGREDIENTS, then STRICTLY give a recipe that can be made from those ingredients. DO NOT include any other ingredients which they don't have. PLEASE STICK TO THE INGREDIENTS THE USER HAS, DO NOT GIVE RECIPE THAT REQUIRES SOME OTHER INGREDIENTS. ALSO MAKE SURE THE INGREDIENTS HAS SUFFICIENT QUANTITY REQUIRED FOR THE RECIPE.
-  
+  DO NOT USE ANY OTHER INGREDIENT THAT WHAT USER HAS, NOT EVEN A SMALL INGREDIENT. STRICTLY!!!
 
 If the user's text doesn't match the context of parameters that the user has asked for, change {"context": false}. Or else give the value and change {"context":true}.
 If you find no recipe that can be made with the amount ingredients that the user has, change {"recipe_found": false}. Or else give the value and change {"recipe_found": true}

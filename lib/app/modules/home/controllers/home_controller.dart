@@ -14,6 +14,7 @@ class HomeController extends CommonController {
   };
 
   void generateRecipe() async {
+    EasyLoading.show();
     print({
       "preferences": userDetails["preferences"],
       "ingredients": ingredients,
@@ -48,6 +49,7 @@ class HomeController extends CommonController {
     } else {
       showSnackbar(message: AppStrings.ingredientNumberValidation);
     }
+    EasyLoading.dismiss();
   }
 
   void closeRecipe() {

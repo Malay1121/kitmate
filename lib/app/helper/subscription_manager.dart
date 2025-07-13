@@ -49,7 +49,7 @@ class SubscriptionManager {
         'plan': isPro ? 'pro' : 'free',
         'entitlementActive': isPro,
         'revenuecatUserId': revenuecatUserId,
-        'subscriptionLastChecked': FieldValue.serverTimestamp(),
+        'subscriptionLastChecked': toUtc(DateTime.now()),
       }
     });
   }
