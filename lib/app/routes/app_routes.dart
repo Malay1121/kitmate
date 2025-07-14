@@ -13,6 +13,8 @@ abstract class Routes {
   static const PROFILE = _Paths.PROFILE;
   static const SUBSCRIPTIONS = _Paths.SUBSCRIPTIONS;
   static const EDIT_PROFILE = _Paths.EDIT_PROFILE;
+  static const CONTACT_US = _Paths.CONTACT_US;
+  static const TICKET = _Paths.TICKET;
 }
 
 abstract class _Paths {
@@ -27,4 +29,6 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   static const SUBSCRIPTIONS = '/subscriptions';
   static const EDIT_PROFILE = '/edit-profile';
+  static const CONTACT_US = '/contact-us';
+  static const TICKET = '/ticket';
 }

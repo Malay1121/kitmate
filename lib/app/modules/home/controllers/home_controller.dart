@@ -8,6 +8,7 @@ class HomeController extends CommonController {
     "consider_current_time": true,
     "consider_allergies": true,
     "consider_diet": true,
+    "allow_flexibility": false,
     "time_limit": "",
     "custom_message": "",
     "servings": "",
@@ -94,12 +95,17 @@ class HomeController extends CommonController {
                             color: AppColors.fontDark,
                           ),
                         ),
-                        SettingsView(
-                          controller: controller,
-                          customMessage:
-                              getKey(settings, ["custom_message"], ""),
-                          servings: getKey(settings, ["servings"], ""),
-                          popup: true,
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 11.w(Get.context!),
+                          ),
+                          child: SettingsView(
+                            controller: controller,
+                            customMessage:
+                                getKey(settings, ["custom_message"], ""),
+                            servings: getKey(settings, ["servings"], ""),
+                            popup: true,
+                          ),
                         ),
                         SizedBox(
                           height: 20.h(Get.context!),

@@ -36,8 +36,7 @@ class ProfileController extends CommonController {
       {
         "title": AppStrings.contactUs,
         "icon": Icons.contact_support,
-        "onTap": () =>
-            launchUrl(Uri.parse("https://kitmate-app.web.app/contact-us")),
+        "onTap": () => navigate(Routes.CONTACT_US),
       },
       {
         "title": AppStrings.privacyPolicy,

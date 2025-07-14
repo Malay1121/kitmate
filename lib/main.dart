@@ -10,6 +10,9 @@ void main() async {
   await Purchases.configure(
     PurchasesConfiguration(dotenv.env['revenuecat'] ?? ""),
   );
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: AppColors.primary,
+      statusBarIconBrightness: Brightness.light));
   apiKeys = {
     "gemini": {
       "apis": [dotenv.env['gemini']],

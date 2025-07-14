@@ -76,6 +76,16 @@ class AppStrings {
   static String contactUs = "Contact Us";
   static String aboutUs = "About Us";
 
+  static String youHaventCreatedAnyTicketYet =
+      "You haven't created any ticket yet";
+  static String createTicket = "Create Ticket";
+  static String ticket = "Ticket";
+  static String tickets = "Tickets";
+  static String send = "Send";
+  static String writeMessage = "Write Message";
+  static String createTicketByExplainingIssueAndSendingTheMessage =
+      "Create a ticket by explaining issue bellow";
+
   static String generatingARecipe =
       "Generating a personalized recipe just for you! ~ 10 seconds";
   static String facingIssues = "Are you facing issues?";
@@ -92,6 +102,7 @@ class AppStrings {
   static String numberOfDishes = "Number of people(Default 1)";
 
   static String ingredientsInStock = "Ingredients in stock";
+  static String searchIngredients = "Search Ingredients";
   static String longPressAnIngredientToRemoveIt =
       "Long press an ingredient to remove it";
   static String ingredientBySpeechExample =
@@ -219,12 +230,12 @@ Example Output: {
 ''';
 
   static String dishPrompt = '''
-  Suggest a dish that a user can make to eat depending on their preferences(What diet they eat, and what allergies do they have) and ingredients that are available with them. There will be a JSON object that will contain the preferences and ingredients that the user has. The JSON object will also contain a parameter 'servings' that says how many dishes does the user want, so please suggest dishes and ingredients required accordingly. The ingredients will also have its quantity and the unit. For example quantity: 100, quantity_unit: grams, which means the user has 100 grams of that ingredient. Check for the ingredients that the user has specified and provide a best recipe that they can make and is compatible to their preferences. If no ingredients given, you can return any good recipe depending on the preferences or vice versa. If none is provided then give a random recipe. Give a detailed recipe which the user can follow. Also return an image of that dish with the recipe, and a few statistics about the recipe(statistics to include: Energy(k), protein(g)m Carbs(g), Fat(g)), and the statistics should be of per serving, ignoring the 'servings' parameter. 
+  Suggest a dish that a user can make to eat depending on their preferences(What diet they eat, and what allergies do they have) and ingredients that are available with them. There will be a JSON object that will contain the preferences and ingredients that the user has. The JSON object will also contain a parameter 'servings' that says how many dishes does the user want, so please suggest dishes and ingredients required accordingly. The ingredients will also have its quantity and the unit. For example quantity: 100, quantity_unit: grams, which means the user has 100 grams of that ingredient. Check for the ingredients that the user has specified and provide a best recipe that they can make and is compatible to their preferences. Give a detailed recipe which the user can follow. Also return an image of that dish with the recipe, and a few statistics about the recipe(statistics to include: Energy(k), protein(g)m Carbs(g), Fat(g)), and the statistics should be of per serving, ignoring the 'servings' parameter. 
   If parameter 'current_time' is given with a valid value, then suggest a dish that is suitable for that time of the day, so if the time is in morning so give recipes that are usually eaten for breakfast.
   If parameter 'custom_message' is given with a valid value, then take that custom message into account and suggest recipes accordingly. That custom prompt holds more value than other things like ingredients list, diet, allergies, etc. For example, if the user doesn't have an ingredient in the list but it says that they do have the ingredient in custom message, then prioritize the custom message and give results accordingly. 
+  If parameter 'allow_flexibility' is true, then only suggest a recipe that needs A REALLYYY FEW more ingredients than the user has. It doesn't mean that you give a recipe with a lot of new ingredients, just 1 or 2 small ingredients. If it is false, then DO NOT SUGGEST A RECIPE THAT REQUIRES MORE INGREDIENTS THAT WHAT THE USER ALREADY HAS. If the parameter is false and you cannot find any recipe that can be made ONLY with the ingredients that the user has, then return false in "recipe_found", but do not return any recipe that contains even a VERYYY small extra ingredient.
   
   IF THE USER HAS AT LEAST 5 INGREDIENTS, then STRICTLY give a recipe that can be made from those ingredients. DO NOT include any other ingredients which they don't have. PLEASE STICK TO THE INGREDIENTS THE USER HAS, DO NOT GIVE RECIPE THAT REQUIRES SOME OTHER INGREDIENTS. ALSO MAKE SURE THE INGREDIENTS HAS SUFFICIENT QUANTITY REQUIRED FOR THE RECIPE.
-  DO NOT USE ANY OTHER INGREDIENT THAT WHAT USER HAS, NOT EVEN A SMALL INGREDIENT. STRICTLY!!!
 
 If the user's text doesn't match the context of parameters that the user has asked for, change {"context": false}. Or else give the value and change {"context":true}.
 If you find no recipe that can be made with the amount ingredients that the user has, change {"recipe_found": false}. Or else give the value and change {"recipe_found": true}

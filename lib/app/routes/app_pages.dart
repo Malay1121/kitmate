@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/contact_us/bindings/contact_us_binding.dart';
+import '../modules/contact_us/views/contact_us_view.dart';
 import '../modules/edit_profile/bindings/edit_profile_binding.dart';
 import '../modules/edit_profile/views/edit_profile_view.dart';
 import '../modules/email_verification/bindings/email_verification_binding.dart';
@@ -20,6 +22,8 @@ import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/subscriptions/bindings/subscriptions_binding.dart';
 import '../modules/subscriptions/views/subscriptions_view.dart';
+import '../modules/ticket/bindings/ticket_binding.dart';
+import '../modules/ticket/views/ticket_view.dart';
 
 part 'app_routes.dart';
 
@@ -78,6 +82,16 @@ class AppPages {
       name: _Paths.EDIT_PROFILE,
       page: () => const EditProfileView(),
       binding: EditProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.CONTACT_US,
+      page: () => const ContactUsView(),
+      binding: ContactUsBinding(),
+    ),
+    GetPage(
+      name: _Paths.TICKET,
+      page: () => const TicketView(),
+      binding: TicketBinding(),
     ),
   ];
 }

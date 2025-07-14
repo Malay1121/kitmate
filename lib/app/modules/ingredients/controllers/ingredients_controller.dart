@@ -4,6 +4,8 @@ import 'package:speech_to_text/speech_to_text.dart';
 import '../../../helper/gemini_helper.dart';
 
 class IngredientsController extends CommonController {
+  List visibleIngredients = [];
+
   @override
   void onInit() {
     super.onInit();
@@ -20,6 +22,13 @@ class IngredientsController extends CommonController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  String searchText = "";
+
+  void onSearch(String text) {
+    searchText = text;
+    update();
   }
 
   bool listening = false;

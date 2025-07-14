@@ -1,4 +1,3 @@
-import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import '../helper/all_imports.dart';
@@ -88,6 +87,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
         ),
         textInputAction: widget.textInputAction,
         decoration: InputDecoration(
+          isDense: true,
           // contentPadding: EdgeInsets.zero,
           fillColor: AppColors.white,
           filled: true,
@@ -96,7 +96,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
             onTap: () => speak(),
             child: Icon(
               widget.listening ? Icons.stop : Icons.mic,
-              color: AppColors.primary,
+              color: AppColors.black,
               size: 12.t(context),
             ),
           ),
@@ -108,21 +108,21 @@ class _CommonTextFieldState extends State<CommonTextField> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(
-              color: AppColors.stroke,
+              color: AppColors.black,
               width: 1,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(
-              color: AppColors.primary,
+              color: AppColors.black,
               width: 1,
             ),
           ),
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(
-              color: AppColors.stroke,
+              color: AppColors.black,
               width: 1,
             ),
           ),

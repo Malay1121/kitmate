@@ -38,94 +38,95 @@ class _SettingsViewState extends State<SettingsView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 for (String setting in widget.controller.settings.keys)
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 11.w(Get.context!),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            AppText(
-                              text: idToString(setting),
-                              style: Styles.medium(
-                                fontSize: 9.5.t(Get.context!),
-                                color: AppColors.fontDark,
-                              ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          AppText(
+                            text: idToString(setting),
+                            style: Styles.medium(
+                              fontSize: 9.5.t(Get.context!),
+                              color: AppColors.fontDark,
                             ),
-                            Switch(
-                                value: widget.controller.settings[setting]
-                                        is String
-                                    ? widget.controller.settings[setting]
-                                        .toString()
-                                        .isNotEmpty
-                                    : widget.controller.settings[setting],
-                                onChanged: (value) {
-                                  if (setting == "time_limit" ||
-                                      setting == "custom_message" ||
-                                      setting == "servings") {
-                                    if (widget.controller.settings[setting]
-                                        .toString()
-                                        .isNotEmpty) {
-                                      widget.controller.settings[setting] = "";
-                                    } else {
-                                      widget.controller.settings[setting] = "5";
-                                    }
-                                  } else {
-                                    widget.controller.settings[setting] = value;
-                                  }
+                          ),
+                          Switch(
+                            value: widget.controller.settings[setting] is String
+                                ? widget.controller.settings[setting]
+                                    .toString()
+                                    .isNotEmpty
+                                : widget.controller.settings[setting],
+                            onChanged: (value) {
+                              if (setting == "time_limit" ||
+                                  setting == "custom_message" ||
+                                  setting == "servings") {
+                                if (widget.controller.settings[setting]
+                                    .toString()
+                                    .isNotEmpty) {
+                                  widget.controller.settings[setting] = "";
+                                } else {
+                                  widget.controller.settings[setting] = "5";
+                                }
+                              } else {
+                                widget.controller.settings[setting] = value;
+                              }
 
-                                  widget.controller.update();
-                                  setState(() {});
-                                }),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 8.h(Get.context!),
-                        ),
-                        if (setting == "time_limit" &&
-                            widget.controller.settings[setting] != "")
-                          CupertinoTimerPicker(
-                            initialTimerDuration: Duration(
-                              minutes: int.parse(
-                                  widget.controller.settings["time_limit"]),
-                            ),
-                            onTimerDurationChanged: (value) {
-                              widget.controller.settings[setting] =
-                                  value.inMinutes.toString();
+                              widget.controller.update();
+                              setState(() {});
                             },
+                            activeColor: AppColors.primary,
+                            trackOutlineColor:
+                                WidgetStateProperty.resolveWith<Color?>(
+                                    (Set<WidgetState> states) {
+                              return Colors.transparent;
+                            }),
                           ),
-                        if (setting == "custom_message" &&
-                            widget.controller.settings[setting] != "")
-                          CommonTextField(
-                            controller: customMessageController,
-                            hintText: AppStrings.writeOrTypeCustomConditions,
-                            onChanged: (value) {
-                              widget.controller.settings[setting] = value;
-                            },
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8.h(Get.context!),
+                      ),
+                      if (setting == "time_limit" &&
+                          widget.controller.settings[setting] != "")
+                        CupertinoTimerPicker(
+                          initialTimerDuration: Duration(
+                            minutes: int.parse(
+                                widget.controller.settings["time_limit"]),
                           ),
-                        if (setting == "servings" &&
-                            widget.controller.settings[setting] != "")
-                          CommonTextField(
-                            controller: servingsController,
-                            hintText: AppStrings.numberOfDishes,
-                            onChanged: (value) {
-                              widget.controller.settings[setting] = value;
-                            },
-                          ),
-                        Container(
-                          height: 1,
-                          width: 191.w(Get.context!),
-                          decoration: BoxDecoration(
-                            color: AppColors.cardColor,
-                          ),
+                          onTimerDurationChanged: (value) {
+                            widget.controller.settings[setting] =
+                                value.inMinutes.toString();
+                          },
                         ),
-                        SizedBox(
-                          height: 8.h(Get.context!),
+                      if (setting == "custom_message" &&
+                          widget.controller.settings[setting] != "")
+                        CommonTextField(
+                          controller: customMessageController,
+                          hintText: AppStrings.writeOrTypeCustomConditions,
+                          onChanged: (value) {
+                            widget.controller.settings[setting] = value;
+                          },
                         ),
-                      ],
-                    ),
+                      if (setting == "servings" &&
+                          widget.controller.settings[setting] != "")
+                        CommonTextField(
+                          controller: servingsController,
+                          hintText: AppStrings.numberOfDishes,
+                          onChanged: (value) {
+                            widget.controller.settings[setting] = value;
+                          },
+                        ),
+                      Container(
+                        height: 1,
+                        width: 191.w(Get.context!),
+                        decoration: BoxDecoration(
+                          color: AppColors.cardColor,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8.h(Get.context!),
+                      ),
+                    ],
                   ),
               ],
             ),

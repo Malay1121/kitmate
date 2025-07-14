@@ -10,12 +10,13 @@ class IngredientsView extends GetView<IngredientsController> {
       init: IngredientsController(),
       builder: (controller) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: AppColors.white,
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 38.5.h(context),
+                height: 35.5.h(context),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -37,7 +38,7 @@ class IngredientsView extends GetView<IngredientsController> {
                 ),
               ),
               SizedBox(
-                height: 11.h(context),
+                height: 5.h(context),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -56,6 +57,21 @@ class IngredientsView extends GetView<IngredientsController> {
               SizedBox(
                 height: 5.h(context),
               ),
+              if (ingredients.isNotEmpty)
+                SizedBox(
+                  height: 5.h(context),
+                ),
+              if (ingredients.isNotEmpty)
+                Center(
+                  child: CommonTextField(
+                    hintText: AppStrings.searchIngredients,
+                    onChanged: (p0) => controller.onSearch(p0),
+                  ),
+                ),
+              if (ingredients.isNotEmpty)
+                SizedBox(
+                  height: 10.h(context),
+                ),
               if (ingredients.isEmpty)
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 50.h(context)),
@@ -77,7 +93,12 @@ class IngredientsView extends GetView<IngredientsController> {
                     ),
                     child: Column(
                       children: [
-                        for (Map ingredient in ingredients)
+                        for (Map ingredient in ingredients.where(
+                          (p0) => getKey(p0, ["label"], "")
+                              .toString()
+                              .toLowerCase()
+                              .startsWith(controller.searchText.toLowerCase()),
+                        ))
                           GestureDetector(
                             onLongPress: () =>
                                 controller.removeIngredient(ingredient),

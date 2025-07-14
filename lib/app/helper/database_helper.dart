@@ -198,4 +198,63 @@ class DatabaseHelper {
       showFirebaseError(error.message);
     }
   }
+
+  static Future createTicket(
+      {required String userId, required String message}) async {
+    try {
+      String time = toUtc(DateTime.now());
+
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+      CollectionReference ingredientsCollection =
+          FirebaseFirestore.instance.collection("tickets");
+
+      DocumentReference doc = ingredientsCollection.doc();
+      Map<String, dynamic> ticket = {
+        "message": message,
+        "user": userId,
+        "created_at": time,
+        "updated_at": time,
+        "id": doc.id,
+        "seen": false,
+      };
+
+      batch.set(doc, ticket);
+
+      await batch.commit();
+      await replyTicket(userId: userId, ticketId: doc.id, message: message);
+      return {"message": "Success", "ticket": doc.id};
+    } on FirebaseException catch (error) {
+      showFirebaseError(error.message);
+      return null;
+    }
+  }
+
+  static Future replyTicket(
+      {required String userId,
+      required String ticketId,
+      required String message}) async {
+    try {
+      String time = toUtc(DateTime.now());
+      Map<String, dynamic> chat = {
+        "message": message,
+        "user": userId,
+        "created_at": time,
+      };
+      await FirebaseFirestore.instance
+          .collection("tickets")
+          .doc(ticketId)
+          .collection("chat")
+          .add(chat);
+      await FirebaseFirestore.instance
+          .collection("tickets")
+          .doc(ticketId)
+          .update({
+        "seen": true,
+      });
+      return {"message": "Success"};
+    } on FirebaseException catch (error) {
+      showFirebaseError(error.message);
+      return null;
+    }
+  }
 }
