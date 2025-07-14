@@ -31,6 +31,7 @@ class SubscriptionsController extends CommonController {
           await SubscriptionManager.syncSubscriptionStatus();
           showSnackbar(message: "You've successfully upgraded to Pro!");
         }
+        update();
       }
       EasyLoading.dismiss();
     } catch (e) {

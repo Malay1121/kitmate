@@ -5,6 +5,7 @@ import '../../../helper/gemini_helper.dart';
 
 class IngredientsController extends CommonController {
   List visibleIngredients = [];
+  TextEditingController searchController = TextEditingController();
 
   @override
   void onInit() {
@@ -182,21 +183,19 @@ class IngredientsController extends CommonController {
         insetPadding: EdgeInsets.zero,
         child: Container(
           width: 196.w(Get.context!),
-          height: 258.h(Get.context!),
+          constraints: BoxConstraints(
+            maxHeight: 218.h(Get.context!),
+          ),
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(5),
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: 11.w(Get.context!),
-            ),
+                horizontal: 11.w(Get.context!), vertical: 11.h(Get.context!)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 14.5.h(Get.context!),
-                ),
                 AppText(
                   text: edit
                       ? AppStrings.updateIngredient
@@ -211,14 +210,14 @@ class IngredientsController extends CommonController {
                 ),
                 CommonTextField(
                   hintText: AppStrings.ingredientName,
-                  height: 31.5.h(Get.context!),
+                  height: 22.5.h(Get.context!),
                   width: 174.w(Get.context!),
                   controller: ingredientNameController,
                 ),
                 CommonTextField(
                   hintText: AppStrings.quantity,
                   keyboardType: TextInputType.number,
-                  height: 31.5.h(Get.context!),
+                  height: 22.5.h(Get.context!),
                   width: 174.w(Get.context!),
                   controller: quantityController,
                 ),

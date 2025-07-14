@@ -44,7 +44,7 @@ class ContactUsView extends GetView<ContactUsController> {
                     ],
                   ),
                   SizedBox(
-                    height: 30.h(context),
+                    height: 20.h(context),
                   ),
                   Expanded(
                     child: SingleChildScrollView(

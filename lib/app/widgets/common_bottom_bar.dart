@@ -28,7 +28,13 @@ class _CommonBottomBarState extends State<CommonBottomBar> {
           for (Map tab in tabs)
             Expanded(
               child: GestureDetector(
-                onTap: () => Get.toNamed(tab["page"]),
+                onTap: () => tab["title"] == widget.selectedTab
+                    ? null
+                    : tab["page"] == Routes.HOME
+                        ? Get.back()
+                        : widget.selectedTab == AppStrings.mealPlans
+                            ? Get.toNamed(tab["page"])
+                            : Get.offAndToNamed(tab["page"]),
                 child: Container(
                   height: 40.h(context),
                   decoration: BoxDecoration(

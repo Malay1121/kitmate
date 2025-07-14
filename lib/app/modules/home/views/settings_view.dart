@@ -29,10 +29,7 @@ class _SettingsViewState extends State<SettingsView> {
     servingsController.text = widget.servings ?? "";
     return Column(
       children: [
-        Container(
-          constraints: BoxConstraints(
-            maxHeight: 280.h(context),
-          ),
+        Expanded(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,11 +129,9 @@ class _SettingsViewState extends State<SettingsView> {
             ),
           ),
         ),
-        if (!widget.popup) Spacer(),
-        if (widget.popup)
-          SizedBox(
-            height: 10.h(context),
-          ),
+        SizedBox(
+          height: 10.h(context),
+        ),
         CommonButton(
             text: AppStrings.saveAndGenerate,
             onTap: () {

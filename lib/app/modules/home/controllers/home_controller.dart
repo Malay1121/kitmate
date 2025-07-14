@@ -77,28 +77,30 @@ class HomeController extends CommonController {
                   horizontal: 11.w(Get.context!),
                 ),
                 child: SizedBox(
-                  height: 420.h(Get.context!),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 14.5.h(Get.context!),
+                  height: 260.h(Get.context!),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 14.5.h(Get.context!),
+                      ),
+                      AppText(
+                        text: AppStrings.settings,
+                        maxLines: null,
+                        centered: true,
+                        textAlign: TextAlign.center,
+                        width: 160.w(Get.context!),
+                        height: 20.h(context),
+                        style: Styles.semiBold(
+                          fontSize: 14.55.t(Get.context!),
+                          color: AppColors.fontDark,
                         ),
-                        AppText(
-                          text: AppStrings.settings,
-                          maxLines: null,
-                          centered: true,
-                          textAlign: TextAlign.center,
-                          width: 160.w(Get.context!),
-                          style: Styles.semiBold(
-                            fontSize: 14.55.t(Get.context!),
-                            color: AppColors.fontDark,
-                          ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 11.w(Get.context!),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 11.w(Get.context!),
-                          ),
+                        child: SizedBox(
+                          height: 275.5.h(context),
                           child: SettingsView(
                             controller: controller,
                             customMessage:
@@ -107,11 +109,11 @@ class HomeController extends CommonController {
                             popup: true,
                           ),
                         ),
-                        SizedBox(
-                          height: 20.h(Get.context!),
-                        ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        height: 10.h(Get.context!),
+                      ),
+                    ],
                   ),
                 ),
               ),

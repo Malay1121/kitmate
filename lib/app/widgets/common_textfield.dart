@@ -57,8 +57,9 @@ class _CommonTextFieldState extends State<CommonTextField> {
         listenOptions: SpeechListenOptions(listenMode: ListenMode.dictation),
         partialResults: false,
         onResult: (result) {
-          if (widget.controller != null)
+          if (widget.controller != null) {
             widget.controller!.text += result.recognizedWords;
+          }
         },
       );
     } else {

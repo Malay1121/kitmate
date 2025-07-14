@@ -57,9 +57,8 @@ class GeminiHelper {
         return await fetch(systemPrompt: systemPrompt, data: data, text: text);
       }
     } else {
-      if (request.statusCode == 429 ||
-          request.statusCode == 400 ||
-          request.statusCode == 403) {
+      List errorCodes = [400, 403, 429];
+      if (errorCodes.contains(request.statusCode)) {
         EasyLoading.show();
         await DatabaseHelper.updateApiIndex(apiName: "gemini");
         Map<String, dynamic> reData =

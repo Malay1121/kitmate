@@ -315,7 +315,7 @@ class SubscriptionsView extends GetView<SubscriptionsController> {
                                                   ),
                                                 ),
                                             SizedBox(
-                                              height: 24.h(context),
+                                              height: 20.h(context),
                                             ),
                                             CommonButton(
                                               text: controller.pro
@@ -328,7 +328,22 @@ class SubscriptionsView extends GetView<SubscriptionsController> {
                                                           .selectedPackage),
                                             ),
                                             SizedBox(
-                                              height: 12.h(context),
+                                              height: 8.h(context),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () =>
+                                                  controller.restorePurchases(),
+                                              child: AppText(
+                                                text:
+                                                    AppStrings.restorePurchases,
+                                                style: Styles.bold(
+                                                  fontSize: 8.t(context),
+                                                  color: AppColors.fontDark,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 8.h(context),
                                             ),
                                             if (!controller.pro)
                                               AppText(
