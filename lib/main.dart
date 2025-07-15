@@ -47,7 +47,7 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   runApp(
     GetMaterialApp(
-      title: "Application",
+      title: "Kitmate",
       initialRoute: AppPages.INITIAL,
       builder: EasyLoading.init(),
       getPages: AppPages.routes,

@@ -16,11 +16,13 @@ class CommonTextField extends StatefulWidget {
     this.maxLines = 1,
     this.prefixIconConstraints,
     this.onChanged,
+    this.hideMic = false,
   });
   String hintText;
   double? width;
   double? height;
   Widget? prefixIcon;
+  bool hideMic;
   TextEditingController? controller;
   bool obscureText;
   TextInputType? keyboardType;
@@ -93,17 +95,20 @@ class _CommonTextFieldState extends State<CommonTextField> {
           fillColor: AppColors.white,
           filled: true,
           hintText: widget.hintText,
-          suffixIcon: GestureDetector(
-            onTap: () => speak(),
-            child: Icon(
-              widget.listening ? Icons.stop : Icons.mic,
-              color: AppColors.black,
-              size: 12.t(context),
-            ),
-          ),
+          suffixIcon: !widget.hideMic
+              ? GestureDetector(
+                  onTap: () => speak(),
+                  child: Icon(
+                    widget.listening ? Icons.stop : Icons.mic,
+                    color: AppColors.black,
+                    size: 12.t(context),
+                  ),
+                )
+              : null,
           hintStyle: Styles.medium(
             color: AppColors.fontGrey,
           ),
+
           prefixIconConstraints: widget.prefixIconConstraints,
           prefixIcon: widget.prefixIcon,
           border: OutlineInputBorder(

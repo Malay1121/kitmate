@@ -192,6 +192,21 @@ class IngredientsView extends GetView<IngredientsController> {
                     horizontal: 11.w(context),
                   ),
                   child: CommonButton(
+                    text: AppStrings.addIngredientsFromBill,
+                    backgroundColor: AppColors.primary,
+                    width: 196.w(context),
+                    textColor: AppColors.white,
+                    onTap: () => controller.selectBillPicture(),
+                  ),
+                ),
+                SizedBox(
+                  height: 5.h(context),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 11.w(context),
+                  ),
+                  child: CommonButton(
                     text: AppStrings.addIngredient,
                     backgroundColor: AppColors.primary,
                     width: 196.w(context),

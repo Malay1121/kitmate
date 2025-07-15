@@ -58,6 +58,7 @@ class ContactUsView extends GetView<ContactUsController> {
                                     isEqualTo: controller.user?.uid ?? "")
                                 .orderBy("updated_at"),
                             shrinkWrap: true,
+                            isLive: true,
                             itemBuilder: (context, items, index) {
                               if (items.isEmpty) {
                                 return SizedBox();

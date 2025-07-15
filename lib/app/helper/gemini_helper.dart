@@ -54,7 +54,8 @@ class GeminiHelper {
             .toString());
         return decoded;
       } catch (e) {
-        return await fetch(systemPrompt: systemPrompt, data: data, text: text);
+        showSnackbar(message: "Error generating recipe");
+        return {};
       }
     } else {
       List errorCodes = [400, 403, 429];

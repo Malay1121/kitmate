@@ -16,6 +16,8 @@ export 'package:flutter_svg/flutter_svg.dart';
 export 'package:flutter_tts/flutter_tts.dart';
 export 'package:get/get.dart' hide HeaderValue, Response;
 export 'package:get_storage/get_storage.dart';
+export 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+export 'package:image_picker/image_picker.dart';
 export 'package:kitmate/app/helper/database_helper.dart';
 export 'package:kitmate/app/helper/subscription_manager.dart';
 export 'package:kitmate/app/routes/app_pages.dart';

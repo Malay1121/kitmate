@@ -2,6 +2,7 @@ import 'package:kitmate/app/helper/all_imports.dart';
 
 class TicketController extends CommonController {
   String? ticketId;
+  List messages = [];
   TextEditingController messageController = TextEditingController();
 
   void sendMessage() async {

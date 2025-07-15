@@ -32,6 +32,135 @@ class IngredientsController extends CommonController {
     update();
   }
 
+  File? profilePicture;
+
+  void pickBillImage(ImageSource source) async {
+    XFile? image = await ImagePicker().pickImage(source: source);
+    if (image != null) {
+      profilePicture = File(image.path);
+      getIngredientsFromBill(InputImage.fromFile(profilePicture!));
+      update();
+    }
+    Get.back();
+  }
+
+  void selectBillPicture() async {
+    Get.bottomSheet(
+      Container(
+        width: 220.w(Get.context!),
+        height: 166.h(Get.context!),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
+          ),
+          color: AppColors.white,
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: 4.h(Get.context!)),
+            Container(
+              width: 38.w(Get.context!),
+              height: 1.h(Get.context!),
+              color: AppColors.fontGrey,
+            ),
+            SizedBox(height: 14.h(Get.context!)),
+            AppText(
+              text: AppStrings.selectImageSource,
+              style: Styles.bold(
+                color: AppColors.fontDark,
+                fontSize: 14.t(Get.context!),
+              ),
+            ),
+            SizedBox(height: 10.h(Get.context!)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () => pickBillImage(ImageSource.camera),
+                  child: Container(
+                    width: 95.w(Get.context!),
+                    height: 80.h(Get.context!),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: AppColors.primary),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.camera_alt_outlined,
+                          size: 20.t(Get.context!),
+                          color: AppColors.primary,
+                        ),
+                        SizedBox(height: 10.h(Get.context!)),
+                        AppText(
+                          text: AppStrings.camera,
+                          style: Styles.semiBold(
+                            fontSize: 9.t(Get.context!),
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10.w(Get.context!)),
+                GestureDetector(
+                  onTap: () => pickBillImage(ImageSource.gallery),
+                  child: Container(
+                    width: 95.w(Get.context!),
+                    height: 80.h(Get.context!),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: AppColors.primary),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.photo_library_outlined,
+                          size: 20.t(Get.context!),
+                          color: AppColors.primary,
+                        ),
+                        SizedBox(height: 10.h(Get.context!)),
+                        AppText(
+                          text: AppStrings.gallery,
+                          style: Styles.semiBold(
+                            fontSize: 9.t(Get.context!),
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void getIngredientsFromBill(InputImage inputImage) async {
+    EasyLoading.show();
+    final textRecognizer = TextRecognizer();
+
+    RecognizedText recognizedText =
+        await textRecognizer.processImage(inputImage);
+    print("Recognized text: " + recognizedText.text);
+    Map<String, dynamic> geminiResult = await GeminiHelper.fetch(
+        systemPrompt: AppStrings.ingredientsFromBillPrompt,
+        text: recognizedText.text);
+    EasyLoading.dismiss();
+    if (geminiResult["context"] == true) {
+      Map result = geminiResult["data"];
+      confirmBillIngredients(
+          ingredientsList: getKey(result, ["ingredients"], []));
+    }
+  }
+
   bool listening = false;
   SpeechToText speechToText = SpeechToText();
   bool speechEnabled = false;
@@ -162,6 +291,175 @@ class IngredientsController extends CommonController {
     );
   }
 
+  void confirmBillIngredients({
+    required List ingredientsList,
+  }) async {
+    Get.dialog(
+      Dialog(
+        insetPadding: EdgeInsets.zero,
+        child: Container(
+          width: 196.w(Get.context!),
+          constraints: BoxConstraints(
+            maxHeight: 400.h(Get.context!),
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: 11.w(Get.context!), vertical: 11.h(Get.context!)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                AppText(
+                  text: AppStrings.confirmIngredients,
+                  style: Styles.semiBold(
+                    fontSize: 14.55.t(Get.context!),
+                    color: AppColors.fontDark,
+                  ),
+                ),
+                SizedBox(
+                  height: 14.5.h(Get.context!),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: ingredientsList.length,
+                    itemBuilder: (context, ind) {
+                      Map ingredient = ingredientsList[ind];
+                      TextEditingController ingredientNameController =
+                          TextEditingController(
+                              text: getKey(ingredient, ["label"], ""));
+                      TextEditingController quantityController =
+                          TextEditingController(
+                              text: getKey(ingredient, ["quantity"], "")
+                                  .toString());
+                      List<String> quantityUnits = <String>[
+                        AppStrings.gram,
+                        AppStrings.mililiter,
+                        AppStrings.pieces
+                      ];
+                      String quantityUnit =
+                          getKey(ingredient, ["quantity_unit"], "");
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          bottom: 5.h(context),
+                        ),
+                        child: Row(
+                          children: [
+                            CommonTextField(
+                              hintText: AppStrings.ingredientName,
+                              // height: 22.5,
+                              width: 80,
+                              hideMic: true,
+                              onChanged: (p0) {
+                                ingredientsList[ind]["label"] = p0;
+                              },
+                              controller: ingredientNameController,
+                            ),
+                            SizedBox(
+                              width: 5.w(context),
+                            ),
+                            CommonTextField(
+                              hintText: AppStrings.quantity,
+                              keyboardType: TextInputType.number,
+                              // height: 22.5,
+                              hideMic: true,
+                              width: 40,
+                              onChanged: (p0) {
+                                ingredientsList[ind]["quantity"] = p0;
+                              },
+                              controller: quantityController,
+                            ),
+                            SizedBox(
+                              width: 5.w(context),
+                            ),
+                            DropdownMenu<String>(
+                              width: 44.w(Get.context!),
+                              hintText: AppStrings.quantityUnit,
+                              initialSelection: quantityUnit,
+                              inputDecorationTheme: InputDecorationTheme(
+                                isDense: true,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    color: AppColors.primary,
+                                    width: 1,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    color: AppColors.primary,
+                                    width: 1,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    color: AppColors.primary,
+                                    width: 1,
+                                  ),
+                                ),
+                                constraints: BoxConstraints.tight(
+                                    Size.fromHeight(28.h(context))),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: BorderSide(
+                                    color: AppColors.primary,
+                                    width: 1,
+                                  ),
+                                ),
+                                fillColor: AppColors.white,
+                                hintStyle: Styles.medium(
+                                  color: AppColors.fontGrey,
+                                ),
+                              ),
+                              textStyle: Styles.semiBold(
+                                color: AppColors.fontDark,
+                              ),
+                              onSelected: (String? value) {
+                                ingredientsList[ind]["quantity_unit"] = value!;
+                                quantityUnit = value;
+                                update();
+                              },
+                              dropdownMenuEntries: quantityUnits
+                                  .map<DropdownMenuEntry<String>>(
+                                      (String value) {
+                                return DropdownMenuEntry<String>(
+                                    value: value, label: value);
+                              }).toList(),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 20.h(Get.context!),
+                ),
+                CommonButton(
+                    text: AppStrings.confirm,
+                    onTap: () async {
+                      EasyLoading.show();
+                      var databaseResult =
+                          await DatabaseHelper.updateIngredientsFromGemini(
+                              userId: user?.uid ?? "",
+                              add: true,
+                              ingredients: ingredients);
+                      Get.back();
+                      EasyLoading.dismiss();
+                    }),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void addIngredient({
     bool edit = false,
     Map? ingredient,
@@ -210,16 +508,22 @@ class IngredientsController extends CommonController {
                 ),
                 CommonTextField(
                   hintText: AppStrings.ingredientName,
-                  height: 22.5.h(Get.context!),
-                  width: 174.w(Get.context!),
+                  // height: 22.5,
+                  width: 174,
                   controller: ingredientNameController,
+                ),
+                SizedBox(
+                  height: 5.h(Get.context!),
                 ),
                 CommonTextField(
                   hintText: AppStrings.quantity,
                   keyboardType: TextInputType.number,
-                  height: 22.5.h(Get.context!),
-                  width: 174.w(Get.context!),
+                  // height: 22.5,
+                  width: 174,
                   controller: quantityController,
+                ),
+                SizedBox(
+                  height: 5.h(Get.context!),
                 ),
                 DropdownMenu<String>(
                   width: 174.w(Get.context!),
@@ -258,6 +562,8 @@ class IngredientsController extends CommonController {
                     hintStyle: Styles.medium(
                       color: AppColors.fontGrey,
                     ),
+                    constraints: BoxConstraints.tight(
+                        Size.fromHeight(28.h(Get.context!))),
                   ),
                   textStyle: Styles.semiBold(
                     color: AppColors.fontDark,

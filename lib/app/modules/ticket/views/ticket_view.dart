@@ -58,11 +58,13 @@ class TicketView extends GetView<TicketController> {
                                       .doc(controller.ticketId)
                                       .collection("chat")
                                       .orderBy("created_at", descending: true),
+                                  isLive: true,
                                   shrinkWrap: true,
                                   itemBuilder: (context, items, index) {
                                     if (items.isEmpty) {
                                       return SizedBox();
                                     }
+                                    controller.messages = items;
                                     Map chat = items[index].data() as Map;
                                     bool owner = getKey(chat, ["user"], null) ==
                                         (controller.user?.uid ?? "");
@@ -130,7 +132,14 @@ class TicketView extends GetView<TicketController> {
                                       ),
                                     ),
                                   ),
-                                )
+                                ),
+                          if (controller.messages.isNotEmpty &&
+                              getKey(controller.messages.last, ["user"],
+                                      null) !=
+                                  (controller.user?.uid ?? null))
+                            AppText(
+                                text:
+                                    "We have received your message, You will get a reply soon!"),
                         ],
                       ),
                     ),
