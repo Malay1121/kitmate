@@ -24,7 +24,6 @@ dependencies:
   cloud_firestore: ^5.5.1
   firebase_core: ^3.8.1
   firebase_analytics: ^11.3.6
-  appwrite: ^17.0.1
   flutter: 
     sdk: flutter
   firebase_storage: ^12.3.7
@@ -33,6 +32,7 @@ dependencies:
   firebase_pagination: ^4.1.0
   image_picker: ^1.1.2
   google_mlkit_text_recognition: ^0.15.0
+  new_version_plus: ^0.1.0
 
 
 dev_dependencies: 

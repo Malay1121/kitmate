@@ -4,7 +4,10 @@ import 'all_imports.dart';
 
 class GeminiHelper {
   static Future<Map<String, dynamic>> fetch(
-      {required String systemPrompt, String? text, Map? data}) async {
+      {required String systemPrompt,
+      String? text,
+      Map? data,
+      int tries = 1}) async {
     EasyLoading.show();
 
     String bodyEncoded = json.encode({
@@ -54,8 +57,15 @@ class GeminiHelper {
             .toString());
         return decoded;
       } catch (e) {
-        showSnackbar(message: "Error generating recipe");
-        return {};
+        if (tries <= 3) {
+          tries++;
+
+          return await fetch(
+              systemPrompt: systemPrompt, text: text, data: data, tries: tries);
+        } else {
+          showSnackbar(message: "Error generating recipe");
+          return {};
+        }
       }
     } else {
       List errorCodes = [400, 403, 429];
