@@ -16,6 +16,8 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/recipe/bindings/recipe_binding.dart';
 import '../modules/recipe/views/recipe_view.dart';
+import '../modules/shopping_list/bindings/shopping_list_binding.dart';
+import '../modules/shopping_list/views/shopping_list_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
 import '../modules/signup/views/signup_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
@@ -92,6 +94,11 @@ class AppPages {
       name: _Paths.TICKET,
       page: () => const TicketView(),
       binding: TicketBinding(),
+    ),
+    GetPage(
+      name: _Paths.SHOPPING_LIST,
+      page: () => const ShoppingListView(),
+      binding: ShoppingListBinding(),
     ),
   ];
 }

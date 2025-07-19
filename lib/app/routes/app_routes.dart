@@ -15,6 +15,7 @@ abstract class Routes {
   static const EDIT_PROFILE = _Paths.EDIT_PROFILE;
   static const CONTACT_US = _Paths.CONTACT_US;
   static const TICKET = _Paths.TICKET;
+  static const SHOPPING_LIST = _Paths.SHOPPING_LIST;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const EDIT_PROFILE = '/edit-profile';
   static const CONTACT_US = '/contact-us';
   static const TICKET = '/ticket';
+  static const SHOPPING_LIST = '/shopping-list';
 }

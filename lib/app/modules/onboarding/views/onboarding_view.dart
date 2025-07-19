@@ -265,7 +265,7 @@ class OnboardingView extends GetView<OnboardingController> {
                     if (controller.currentPage != 0)
                       CommonButton(
                         text: AppStrings.previous,
-                        width: 80,
+                        width: 80.w(context),
                         backgroundColor: AppColors.cardColor,
                         textColor: AppColors.fontDark,
                         onTap: () => controller.navigate(false),
@@ -276,7 +276,9 @@ class OnboardingView extends GetView<OnboardingController> {
                       ),
                     CommonButton(
                       text: AppStrings.next,
-                      width: controller.currentPage != 0 ? 80 : 196,
+                      width: controller.currentPage != 0
+                          ? 80.w(context)
+                          : 196.w(context),
                       onTap: () => controller.navigate(true),
                     ),
                   ],

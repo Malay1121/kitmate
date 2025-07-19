@@ -126,6 +126,8 @@ class IngredientsView extends GetView<IngredientsController> {
                                   children: [
                                     AppText(
                                       text: ingredient["label"],
+                                      maxLines: 2,
+                                      width: 109.w(context),
                                       minFontSize:
                                           10.t(context).floorToDouble(),
                                       overflow: TextOverflow.ellipsis,
@@ -137,11 +139,14 @@ class IngredientsView extends GetView<IngredientsController> {
                                     Spacer(),
                                     AppText(
                                       text:
-                                          "${ingredient["quantity"]} ${ingredient["quantity_unit"]}",
+                                          "${ingredient["quantity"]} ${ingredient["quantity_unit"]}"
+                                              .replaceAll("(1,2,3,4...)", ""),
+                                      width: 55.w(context),
                                       style: Styles.bold(
                                         fontSize: 7.t(context),
                                         color: AppColors.fontDark,
                                       ),
+                                      textAlign: TextAlign.end,
                                     ),
                                   ],
                                 ),

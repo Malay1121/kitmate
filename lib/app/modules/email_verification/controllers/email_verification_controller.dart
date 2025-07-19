@@ -28,7 +28,8 @@ class EmailVerificationController extends CommonController {
       ScaffoldMessenger.of(Get.context!)
           .showSnackBar(SnackBar(content: Text("Email Successfully Verified")));
       if (Get.arguments != null) {
-        Get.offAllNamed(Get.arguments["route"]);
+        Get.offAllNamed(Get.arguments["route"],
+            arguments: {"first_time": true});
       } else {
         Get.offAllNamed(Routes.HOME);
       }

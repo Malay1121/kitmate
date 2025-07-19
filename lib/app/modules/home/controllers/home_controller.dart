@@ -178,6 +178,11 @@ class HomeController extends CommonController {
   @override
   void onReady() {
     super.onReady();
+    if (Get.arguments != null) {
+      if (getKey(Get.arguments, ["first_time"], false)) {
+        Get.toNamed(Routes.INGREDIENTS);
+      }
+    }
   }
 
   @override
