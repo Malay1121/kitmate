@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:kitmate/app/helper/all_imports.dart';
 
 import '../controllers/ingredients_controller.dart';
@@ -11,6 +13,78 @@ class IngredientsView extends GetView<IngredientsController> {
       builder: (controller) {
         return SafeArea(
           child: Scaffold(
+            floatingActionButton: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              // alignment: Alignment.bottomRight,
+              children: [
+                if (controller.isDialOpen) ...[
+                  Padding(
+                    padding: EdgeInsets.only(),
+                    child: CommonButton(
+                      text: controller.listening
+                          ? "Listening... Go ahead!"
+                          : AppStrings.updateIngredientWithSpeech,
+                      backgroundColor: AppColors.primary,
+                      width: 196.w(context),
+                      textColor: AppColors.white,
+                      onTap: () => controller.getText(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.h(context),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(),
+                    child: CommonButton(
+                      text: AppStrings.addIngredientsFromBill,
+                      backgroundColor: AppColors.primary,
+                      width: 196.w(context),
+                      textColor: AppColors.white,
+                      onTap: () => controller.selectBillPicture(),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.h(context),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(),
+                    child: CommonButton(
+                      text: AppStrings.addIngredient,
+                      backgroundColor: AppColors.primary,
+                      width: 196.w(context),
+                      textColor: AppColors.white,
+                      onTap: () => controller.addIngredient(),
+                    ),
+                  ),
+                ],
+                SizedBox(
+                  height: 5.h(context),
+                ),
+                SizedBox(
+                  width: min(32.h(context), 32.w(context)),
+                  height: min(32.h(context), 32.w(context)),
+                  child: FittedBox(
+                    child: FloatingActionButton(
+                      heroTag: "mainFab",
+                      backgroundColor: const Color(0xFF8A47EB),
+                      onPressed: () {
+                        controller.isDialOpen = !controller.isDialOpen;
+                        controller.update();
+                      },
+                      child: Icon(
+                        controller.isDialOpen ? Icons.close : Icons.add,
+                        size: 16.t(context),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 40.h(context),
+                ),
+              ],
+            ),
             resizeToAvoidBottomInset: false,
             backgroundColor: AppColors.white,
             body: Column(
@@ -23,19 +97,27 @@ class IngredientsView extends GetView<IngredientsController> {
                   padding: EdgeInsets.symmetric(
                     horizontal: 11.w(context),
                   ),
-                  child: GestureDetector(
-                    onTap: () {
-                      print(userDetails);
-                    },
-                    child: AppText(
-                      text: AppStrings.ingredientsInStock,
-                      maxLines: 2,
-                      width: 160.w(context),
-                      style: Styles.semiBold(
-                        fontSize: 15.55.t(context),
-                        color: AppColors.fontDark,
+                  child: Row(
+                    children: [
+                      AppText(
+                        text: AppStrings.ingredients,
+                        maxLines: 2,
+                        width: 160.w(context),
+                        style: Styles.semiBold(
+                          fontSize: 15.55.t(context),
+                          color: AppColors.fontDark,
+                        ),
                       ),
-                    ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () => Get.toNamed(Routes.SHOPPING_LIST),
+                        child: Icon(
+                          Icons.shopping_cart_outlined,
+                          size: 14.t(context),
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(
@@ -173,54 +255,7 @@ class IngredientsView extends GetView<IngredientsController> {
                   ),
                 ),
                 SizedBox(
-                  height: 5.h(context),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 11.w(context),
-                  ),
-                  child: CommonButton(
-                    text: controller.listening
-                        ? "Listening... Go ahead!"
-                        : AppStrings.updateIngredientWithSpeech,
-                    backgroundColor: AppColors.primary,
-                    width: 196.w(context),
-                    textColor: AppColors.white,
-                    onTap: () => controller.getText(),
-                  ),
-                ),
-                SizedBox(
-                  height: 5.h(context),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 11.w(context),
-                  ),
-                  child: CommonButton(
-                    text: AppStrings.addIngredientsFromBill,
-                    backgroundColor: AppColors.primary,
-                    width: 196.w(context),
-                    textColor: AppColors.white,
-                    onTap: () => controller.selectBillPicture(),
-                  ),
-                ),
-                SizedBox(
-                  height: 5.h(context),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 11.w(context),
-                  ),
-                  child: CommonButton(
-                    text: AppStrings.addIngredient,
-                    backgroundColor: AppColors.primary,
-                    width: 196.w(context),
-                    textColor: AppColors.white,
-                    onTap: () => controller.addIngredient(),
-                  ),
-                ),
-                SizedBox(
-                  height: 11.h(context),
+                  height: 4.h(context),
                 ),
                 CommonBottomBar(
                   selectedTab: AppStrings.storage,

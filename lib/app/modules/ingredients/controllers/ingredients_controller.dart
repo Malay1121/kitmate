@@ -6,7 +6,7 @@ import '../../../helper/gemini_helper.dart';
 class IngredientsController extends CommonController {
   List visibleIngredients = [];
   TextEditingController searchController = TextEditingController();
-
+  bool isDialOpen = false;
   @override
   void onInit() {
     super.onInit();
