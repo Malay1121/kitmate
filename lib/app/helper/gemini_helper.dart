@@ -57,6 +57,7 @@ class GeminiHelper {
             .toString());
         return decoded;
       } catch (e) {
+        print("Looop detected in tries");
         if (tries <= 3) {
           tries++;
 

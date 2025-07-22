@@ -136,7 +136,7 @@ class _SettingsViewState extends State<SettingsView> {
             text: AppStrings.saveAndGenerate,
             onTap: () {
               getStorage.write("settings", widget.controller.settings);
-              widget.controller.generateRecipe();
+              widget.controller.generateRecipes();
               if (widget.popup) Get.back();
             }),
       ],

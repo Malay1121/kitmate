@@ -6,18 +6,22 @@ class SplashController extends AnonCommonController {
   bool emailVerified = false;
 
   void checkLogin() async {
-    final newVersionPlus = NewVersionPlus();
-    final status = await newVersionPlus.getVersionStatus();
-    if (status != null && status.canUpdate) {
-      newVersionPlus.showUpdateDialog(
-          context: Get.context!,
-          versionStatus: status,
-          dialogTitle: 'New update!',
-          dialogText: status.releaseNotes ?? "",
-          updateButtonText: 'Update',
-          dismissButtonText: 'Close App',
-          dismissAction: () => Get.back(),
-          allowDismissal: false);
+    try {
+      final newVersionPlus = NewVersionPlus();
+      final status = await newVersionPlus.getVersionStatus();
+      if (status != null && status.canUpdate) {
+        newVersionPlus.showUpdateDialog(
+            context: Get.context!,
+            versionStatus: status,
+            dialogTitle: 'New update!',
+            dialogText: status.releaseNotes ?? "",
+            updateButtonText: 'Update',
+            dismissButtonText: 'Close App',
+            dismissAction: () => Get.back(),
+            allowDismissal: false);
+      }
+    } catch (e) {
+      print(e.toString());
     }
     var userData = readUserDetails();
     // print(userData);

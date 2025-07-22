@@ -4,6 +4,7 @@ import 'package:kitmate/app/modules/home/views/settings_view.dart';
 
 class HomeController extends CommonController {
   Map? recipe;
+  List<dynamic>? recipes;
   Map settings = {
     "consider_current_time": true,
     "consider_allergies": true,
@@ -14,7 +15,7 @@ class HomeController extends CommonController {
     "servings": "",
   };
 
-  void generateRecipe() async {
+  void generateRecipes() async {
     EasyLoading.show();
     print({
       "preferences": userDetails["preferences"],
@@ -24,26 +25,31 @@ class HomeController extends CommonController {
           "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
     });
     if (ingredients.length >= 5) {
-      Map geminiResult =
-          await GeminiHelper.fetch(systemPrompt: AppStrings.dishPrompt, data: {
-        "preferences": userDetails["preferences"],
-        "ingredients": ingredients,
-        "settings": settings,
-        "current_time":
-            "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
-      });
+      Map geminiResult = await GeminiHelper.fetch(
+          systemPrompt: AppStrings.recipeListPrompt,
+          data: {
+            "preferences": userDetails["preferences"],
+            "ingredients": ingredients,
+            "settings": settings,
+            "current_time":
+                "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
+          });
 
       if (geminiResult["context"] == true) {
-        if (getKey(geminiResult, ["data", "recipe_found"], null) != null) {
-          recipe = geminiResult["data"];
-          String image =
-              "https://image.pollinations.ai/prompt/${recipe!["recipe_title"].toString().replaceAll(" ", "-")}";
+        if (getKey(geminiResult, ["recipe_found"], null) != null) {
+          recipes = geminiResult["data"];
+          for (Map recipe in recipes ?? []) {
+            String image =
+                "https://image.pollinations.ai/prompt/${recipe["recipe_title"].toString().replaceAll(" ", "-")}";
+            recipe["recipe_image"] = image;
+          }
+
           // String image = await getImage(recipe!["recipe_title"]);
-          recipe!["recipe_image"] = image;
           update();
         } else {
           showSnackbar(
-            message: AppStrings.recipeNotFound,
+            message: "${AppStrings.recipeNotFound}\n\n" +
+                getKey(geminiResult, ["recipe_reason"], ""),
           );
         }
       }
@@ -56,6 +62,36 @@ class HomeController extends CommonController {
   void closeRecipe() {
     recipe = null;
     update();
+  }
+
+  void startCooking(Map recipeData) async {
+    EasyLoading.show();
+    Map geminiResult = await GeminiHelper.fetch(
+        systemPrompt: AppStrings.recipeDetailsPrompt, data: recipeData);
+    if (getKey(geminiResult, ["context"], false)) {
+      if (getKey(geminiResult, ["data", "recipe_found"], false)) {
+        Get.toNamed(Routes.RECIPE,
+            arguments: getKey(geminiResult, ["data"], {}));
+      } else {
+        showSnackbar(message: AppStrings.recipeNotFound);
+      }
+    }
+    EasyLoading.dismiss();
+  }
+
+  void expandRecipe(Map recipeData) async {
+    EasyLoading.show();
+    Map geminiResult = await GeminiHelper.fetch(
+        systemPrompt: AppStrings.recipeDetailsPrompt, data: recipeData);
+    if (getKey(geminiResult, ["context"], false)) {
+      if (getKey(geminiResult, ["data", "recipe_found"], false)) {
+        recipe = getKey(geminiResult, ["data"], {});
+        update();
+      } else {
+        showSnackbar(message: AppStrings.recipeNotFound);
+      }
+    }
+    EasyLoading.dismiss();
   }
 
   void settingsPopup(HomeController controller) {
