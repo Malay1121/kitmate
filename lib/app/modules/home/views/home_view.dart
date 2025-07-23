@@ -56,6 +56,7 @@ class HomeView extends GetView<HomeController> {
                                   SizedBox(
                                     height: 20.h(context),
                                   ),
+                                  AppText(text: AppStrings.browseFeatures),
                                   Expanded(
                                       child: SettingsView(
                                     controller: controller,

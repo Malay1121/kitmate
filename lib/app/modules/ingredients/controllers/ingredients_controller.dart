@@ -298,6 +298,7 @@ class IngredientsController extends CommonController {
       Dialog(
         insetPadding: EdgeInsets.zero,
         child: Container(
+          height: 320.h(Get.context!),
           width: 196.w(Get.context!),
           constraints: BoxConstraints(
             maxHeight: 400.h(Get.context!),
@@ -342,94 +343,131 @@ class IngredientsController extends CommonController {
                       ];
                       String quantityUnit =
                           getKey(ingredient, ["quantity_unit"], "");
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          bottom: 5.h(context),
+                      return Container(
+                        width: 174.w(context),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 5.w(context),
+                          vertical: 5.h(context),
                         ),
-                        child: Row(
+                        decoration: BoxDecoration(
+                          color: AppColors.cardColor,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Column(
                           children: [
-                            CommonTextField(
-                              hintText: AppStrings.ingredientName,
-                              // height: 22.5,
-                              width: 80,
-                              hideMic: true,
-                              onChanged: (p0) {
-                                ingredientsList[ind]["label"] = p0;
-                              },
-                              controller: ingredientNameController,
-                            ),
                             SizedBox(
-                              width: 5.w(context),
-                            ),
-                            CommonTextField(
-                              hintText: AppStrings.quantity,
-                              keyboardType: TextInputType.number,
-                              // height: 22.5,
-                              hideMic: true,
-                              width: 40,
-                              onChanged: (p0) {
-                                ingredientsList[ind]["quantity"] = p0;
-                              },
-                              controller: quantityController,
-                            ),
-                            SizedBox(
-                              width: 5.w(context),
-                            ),
-                            DropdownMenu<String>(
-                              width: 44.w(Get.context!),
-                              hintText: AppStrings.quantityUnit,
-                              initialSelection: quantityUnit,
-                              inputDecorationTheme: InputDecorationTheme(
-                                isDense: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color: AppColors.primary,
-                                    width: 1,
+                              height: 28.h(context),
+                              width: 164.w(context),
+                              child: TextField(
+                                controller: ingredientNameController,
+                                onChanged: (p0) {
+                                  ingredientsList[ind]["label"] = p0;
+                                },
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  border: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: AppColors.lightGrey,
+                                    ),
                                   ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color: AppColors.primary,
-                                    width: 1,
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: AppColors.primary,
+                                    ),
                                   ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color: AppColors.primary,
-                                    width: 1,
-                                  ),
-                                ),
-                                constraints: BoxConstraints.tight(
-                                    Size.fromHeight(28.h(context))),
-                                disabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(
-                                    color: AppColors.primary,
-                                    width: 1,
-                                  ),
-                                ),
-                                fillColor: AppColors.white,
-                                hintStyle: Styles.medium(
-                                  color: AppColors.fontGrey,
                                 ),
                               ),
-                              textStyle: Styles.semiBold(
-                                color: AppColors.fontDark,
-                              ),
-                              onSelected: (String? value) {
-                                ingredientsList[ind]["quantity_unit"] = value!;
-                                quantityUnit = value;
-                                update();
-                              },
-                              dropdownMenuEntries: quantityUnits
-                                  .map<DropdownMenuEntry<String>>(
-                                      (String value) {
-                                return DropdownMenuEntry<String>(
-                                    value: value, label: value);
-                              }).toList(),
+                            ),
+                            SizedBox(
+                              height: 5.w(context),
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  height: 28.h(context),
+                                  width: 79.5.w(context),
+                                  child: TextField(
+                                    controller: quantityController,
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (p0) {
+                                      ingredientsList[ind]["quantity"] = p0;
+                                    },
+                                    decoration: InputDecoration(
+                                      // isDense: true,
+                                      border: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: AppColors.lightGrey,
+                                        ),
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: AppColors.primary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5.w(context),
+                                ),
+                                DropdownMenu<String>(
+                                  width: 79.5.w(Get.context!),
+                                  hintText: AppStrings.quantityUnit,
+                                  initialSelection: quantityUnit,
+                                  inputDecorationTheme: InputDecorationTheme(
+                                    isDense: true,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                        color: AppColors.primary,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                        color: AppColors.primary,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                        color: AppColors.primary,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    constraints: BoxConstraints.tight(
+                                        Size.fromHeight(28.h(context))),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      borderSide: BorderSide(
+                                        color: AppColors.lightGrey,
+                                        width: 1,
+                                      ),
+                                    ),
+                                    fillColor: AppColors.white,
+                                    hintStyle: Styles.medium(
+                                      color: AppColors.fontGrey,
+                                    ),
+                                  ),
+                                  textStyle: Styles.semiBold(
+                                    color: AppColors.fontDark,
+                                  ),
+                                  onSelected: (String? value) {
+                                    ingredientsList[ind]["quantity_unit"] =
+                                        value!;
+                                    quantityUnit = value;
+                                    update();
+                                  },
+                                  dropdownMenuEntries: quantityUnits
+                                      .map<DropdownMenuEntry<String>>(
+                                          (String value) {
+                                    return DropdownMenuEntry<String>(
+                                        value: value, label: value);
+                                  }).toList(),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -438,7 +476,7 @@ class IngredientsController extends CommonController {
                   ),
                 ),
                 SizedBox(
-                  height: 20.h(Get.context!),
+                  height: 10.h(Get.context!),
                 ),
                 CommonButton(
                     text: AppStrings.confirm,
@@ -452,6 +490,12 @@ class IngredientsController extends CommonController {
                       Get.back();
                       EasyLoading.dismiss();
                     }),
+                CommonButton(
+                  text: AppStrings.cancel,
+                  backgroundColor: AppColors.cardColor,
+                  textColor: AppColors.fontDark,
+                  onTap: () => Get.back(),
+                ),
               ],
             ),
           ),
