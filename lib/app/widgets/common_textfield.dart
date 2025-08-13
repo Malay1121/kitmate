@@ -17,6 +17,7 @@ class CommonTextField extends StatefulWidget {
     this.prefixIconConstraints,
     this.onChanged,
     this.hideMic = false,
+    this.enabled,
   });
   String hintText;
   double? width;
@@ -25,6 +26,7 @@ class CommonTextField extends StatefulWidget {
   bool hideMic;
   TextEditingController? controller;
   bool obscureText;
+  bool? enabled;
   TextInputType? keyboardType;
   TextInputAction? textInputAction;
   int? maxLines;
@@ -88,6 +90,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
         style: Styles.medium(
           color: AppColors.fontGrey,
         ),
+        enabled: widget.enabled,
         textInputAction: widget.textInputAction,
         decoration: InputDecoration(
           isDense: true,

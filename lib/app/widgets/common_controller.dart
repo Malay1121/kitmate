@@ -2,6 +2,7 @@ import '../helper/all_imports.dart';
 
 Map userDetails = {};
 RxList ingredients = [].obs;
+RxList generatedRecipes = [].obs;
 
 class CommonController extends AnonCommonController {
   User? get user {

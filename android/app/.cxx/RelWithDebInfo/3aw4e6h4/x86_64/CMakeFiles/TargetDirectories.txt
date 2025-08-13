@@ -1,0 +1,2 @@
+C:/Users/Malay/kitmate/android/app/.cxx/RelWithDebInfo/3aw4e6h4/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Malay/kitmate/android/app/.cxx/RelWithDebInfo/3aw4e6h4/x86_64/CMakeFiles/rebuild_cache.dir

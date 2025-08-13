@@ -1,5 +1,4 @@
 import 'package:kitmate/app/helper/all_imports.dart';
-import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../helper/gemini_helper.dart';
 
@@ -156,69 +155,11 @@ class IngredientsController extends CommonController {
     EasyLoading.dismiss();
     if (geminiResult["context"] == true) {
       Map result = geminiResult["data"];
-      confirmBillIngredients(
-          ingredientsList: getKey(result, ["ingredients"], []));
+      confirmIngredients(ingredientsList: getKey(result, ["ingredients"], []));
     }
   }
 
-  bool listening = false;
-  SpeechToText speechToText = SpeechToText();
-  bool speechEnabled = false;
-
-  Future<String> getText() async {
-    speechEnabled = await speechToText.initialize(onError: (errorNotification) {
-      print(errorNotification);
-      listening = false;
-      update();
-      EasyLoading.dismiss();
-    }, onStatus: (status) {
-      if (status == "done") {
-        print(status);
-      }
-      print(status);
-    });
-    String result = "";
-    if (speechEnabled) {
-      listening = true;
-      update();
-      await speechToText.listen(
-          listenOptions: SpeechListenOptions(listenMode: ListenMode.dictation),
-          partialResults: false,
-          onResult: (res) async {
-            EasyLoading.show();
-
-            result = res.recognizedWords;
-            listening = false;
-            update();
-            Map<String, dynamic> geminiResult = await GeminiHelper.fetch(
-                systemPrompt: AppStrings.ingredientsPrompt, text: result);
-            if (geminiResult["context"] == true) {
-              Map result = geminiResult["data"];
-
-              await DatabaseHelper.updateIngredientsFromGemini(
-                  userId: user?.uid ?? "",
-                  add: true,
-                  ingredients: getKey(result, ["add"], []));
-              await DatabaseHelper.updateIngredientsFromGemini(
-                  userId: user?.uid ?? "",
-                  add: false,
-                  ingredients: getKey(result, ["remove"], []));
-              if (result != null) {
-                update();
-              }
-            }
-            EasyLoading.dismiss();
-          });
-    } else {
-      if (!(await speechToText.hasPermission)) {
-        showSnackbar(message: AppStrings.youHaveDeniedMicPermission);
-      } else {
-        showSnackbar(message: "Error with Speech");
-      }
-    }
-
-    return result;
-  }
+  SpeechToIngredients speechToIngredients = SpeechToIngredients();
 
   void removeIngredient(Map ingredient) {
     Get.dialog(
@@ -291,7 +232,7 @@ class IngredientsController extends CommonController {
     );
   }
 
-  void confirmBillIngredients({
+  void confirmIngredients({
     required List ingredientsList,
   }) async {
     Get.dialog(

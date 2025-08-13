@@ -6,21 +6,41 @@ GetStorage getStorage = GetStorage();
 
 List<Map> tabs = [
   {
-    "title": AppStrings.mealPlans,
-    "icon": Icons.food_bank_outlined,
+    "title": AppStrings.home,
+    "icon": Icons.home_outlined,
+    "selected_icon": Icons.home_rounded,
     "page": Routes.HOME,
   },
   {
+    "title": AppStrings.saved,
+    "icon": Icons.favorite_border,
+    "selected_icon": Icons.favorite_rounded,
+    "page": Routes.SAVED_RECIPES,
+  },
+  {
+    "title": AppStrings.generate,
+    "icon_asset_svg": AppImages.icWand,
+    "page": Routes.GENERATE_RECIPE,
+  },
+  {
     "title": AppStrings.storage,
-    "icon": Icons.local_grocery_store_outlined,
+    "icon": Icons.storage_outlined,
+    "selected_icon": Icons.storage_rounded,
     "page": Routes.INGREDIENTS,
   },
   {
     "title": AppStrings.profile,
     "icon": Icons.person_outline_rounded,
+    "selected_icon": Icons.person_rounded,
     "page": Routes.PROFILE,
   },
 ];
+
+Map freeLimitations = {
+  "max_ingredients": 30,
+  "max_recipes": 3,
+  "ingredients_from_speech": 3
+};
 
 List proFeatures = [
   {
@@ -282,6 +302,115 @@ Future<String> getImage(String query) async {
     print(request.reasonPhrase);
   }
   return "";
+}
+
+void proPopup() async {
+  if (!(await SubscriptionManager.isProUser())) {
+    Get.dialog(
+      Dialog(
+        insetPadding: EdgeInsets.zero,
+        child: StatefulBuilder(builder: (context, setState) {
+          return Container(
+            // height: 320.h(Get.context!),
+            width: 196.w(Get.context!),
+            constraints: BoxConstraints(
+                // maxHeight: 400.h(Get.context!),
+                ),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: 11.w(Get.context!), vertical: 11.h(Get.context!)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppText(
+                    text: AppStrings.proPlanRequired,
+                    style: Styles.semiBold(
+                      color: AppColors.fontDark,
+                      fontSize: 13.t(context),
+                    ),
+                    maxLines: 2,
+                    width: 150.w(context),
+                    centered: true,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 5.h(context),
+                  ),
+                  AppText(
+                    text: AppStrings.upgradeYourAccountForFullAccess,
+                    style: Styles.medium(
+                      color: AppColors.fontGrey,
+                      fontSize: 9.5.t(context),
+                    ),
+                    maxLines: 2,
+                    width: 150.w(context),
+                    centered: true,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 10.h(context),
+                  ),
+                  for (Map feature in proFeatures)
+                    Container(
+                      width: 180.w(context),
+                      margin: EdgeInsets.symmetric(
+                        vertical: 2.h(context),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            getKey(
+                              feature,
+                              ["icon"],
+                              Icons.star_outline,
+                            ),
+                            color: AppColors.lightGrey2,
+                            size: 10.t(context),
+                          ),
+                          SizedBox(
+                            width: 4.w(context),
+                          ),
+                          AppText(
+                            text: getKey(feature, ["label"], ""),
+                            width: 165.w(context) - 12.t(context),
+                            maxLines: null,
+                            style: Styles.regular(
+                              color: AppColors.fontDark,
+                              fontSize: 9.t(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  SizedBox(
+                    height: 20.h(context),
+                  ),
+                  CommonButton(
+                    text: AppStrings.upgrade,
+                    onTap: () => Get.toNamed(Routes.SUBSCRIPTIONS),
+                  ),
+                  SizedBox(
+                    height: 5.h(context),
+                  ),
+                  CommonButton(
+                    text: AppStrings.cancel,
+                    textColor: AppColors.fontDark,
+                    backgroundColor: Colors.transparent,
+                    onTap: () => Get.back(),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
 }
 
 // Future<Map<String, dynamic>> fetchDetailsAuto(

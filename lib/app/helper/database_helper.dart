@@ -141,13 +141,22 @@ class DatabaseHelper {
           String ingredientId = querySnapshot.docs.first.id;
           Map baseIngredient = querySnapshot.docs.first.data() as Map;
 
-          double quantity = getKey(baseIngredient, ["quantity"], 0).toDouble();
-          if (quantity - getKey(ingredient, ["quantity"], 0) <= 0 && !add) {
+          double quantity =
+              double.parse(getKey(baseIngredient, ["quantity"], 0).toString())
+                  .toDouble();
+          if (quantity -
+                      double.parse(
+                          getKey(ingredient, ["quantity"], 0).toString()) <=
+                  0 &&
+              !add) {
             removeIngredients(userId: userId, ingredients: [baseIngredient]);
           } else {
             baseIngredient["quantity"] = add
-                ? quantity + getKey(ingredient, ["quantity"], 0)
-                : quantity - getKey(ingredient, ["quantity"], 0);
+                ? quantity +
+                    double.parse(getKey(ingredient, ["quantity"], 0).toString())
+                : quantity -
+                    double.parse(
+                        getKey(ingredient, ["quantity"], 0).toString());
             await FirebaseFirestore.instance
                 .collection("users")
                 .doc(userId)
@@ -251,6 +260,54 @@ class DatabaseHelper {
           .update({
         "seen": true,
       });
+      return {"message": "Success"};
+    } on FirebaseException catch (error) {
+      showFirebaseError(error.message);
+      return null;
+    }
+  }
+
+  static Future saveRecipe(
+      {required String userId, required Map<String, dynamic> recipe}) async {
+    try {
+      String createdAt = toUtc(DateTime.now());
+
+      // Add metadata to recipe
+      recipe.addEntries({
+        "id": FirebaseFirestore.instance
+            .collection("users")
+            .doc(userId)
+            .collection("saved_recipes")
+            .doc()
+            .id,
+        "saved_at": createdAt,
+        "created_at": createdAt,
+      }.entries);
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .collection("saved_recipes")
+          .doc(recipe["id"])
+          .set(recipe);
+
+      return {"message": "Success", "recipe_id": recipe["id"]};
+    } on FirebaseException catch (error) {
+      showFirebaseError(error.message);
+      return null;
+    }
+  }
+
+  static Future deleteRecipe(
+      {required String userId, required String recipeId}) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userId)
+          .collection("saved_recipes")
+          .doc(recipeId)
+          .delete();
+
       return {"message": "Success"};
     } on FirebaseException catch (error) {
       showFirebaseError(error.message);

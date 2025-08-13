@@ -5,6 +5,7 @@ import 'package:kitmate/app/modules/home/views/settings_view.dart';
 class HomeController extends CommonController {
   Map? recipe;
   List<dynamic>? recipes;
+  List<dynamic> savedRecipes = [];
   Map settings = {
     "consider_current_time": true,
     "consider_allergies": true,
@@ -14,6 +15,8 @@ class HomeController extends CommonController {
     "custom_message": "",
     "servings": "",
   };
+
+  SpeechToIngredients speechToIngredients = SpeechToIngredients();
 
   void generateRecipes() async {
     EasyLoading.show();
@@ -65,33 +68,69 @@ class HomeController extends CommonController {
   }
 
   void startCooking(Map recipeData) async {
+    Get.toNamed(Routes.RECIPE, arguments: recipeData);
+  }
+
+  void saveRecipe(Map recipeData) async {
     EasyLoading.show();
-    Map geminiResult = await GeminiHelper.fetch(
-        systemPrompt: AppStrings.recipeDetailsPrompt, data: recipeData);
-    if (getKey(geminiResult, ["context"], false)) {
-      if (getKey(geminiResult, ["data", "recipe_found"], false)) {
-        Get.toNamed(Routes.RECIPE,
-            arguments: getKey(geminiResult, ["data"], {}));
-      } else {
-        showSnackbar(message: AppStrings.recipeNotFound);
-      }
+
+    // Check if recipe is already saved
+    var existingRecipe = savedRecipes.firstWhereOrNull((recipe) =>
+        getKey(recipe, ["recipe_title"], "") ==
+        getKey(recipeData, ["recipe_title"], ""));
+
+    if (existingRecipe != null) {
+      showSnackbar(message: AppStrings.recipeAlreadySaved);
+      EasyLoading.dismiss();
+      return;
+    }
+
+    var result = await DatabaseHelper.saveRecipe(
+      userId: user?.uid ?? "",
+      recipe: Map<String, dynamic>.from(recipeData),
+    );
+
+    if (result != null) {
+      showSnackbar(message: AppStrings.recipeSaved);
+      loadSavedRecipes(); // Refresh the saved recipes list
     }
     EasyLoading.dismiss();
   }
 
-  void expandRecipe(Map recipeData) async {
+  void loadSavedRecipes() {
+    // This will be handled by FirestorePagination in the view
+    // But we keep a local list for quick access/checking
+    update();
+  }
+
+  void deleteRecipe(String recipeId) async {
     EasyLoading.show();
-    Map geminiResult = await GeminiHelper.fetch(
-        systemPrompt: AppStrings.recipeDetailsPrompt, data: recipeData);
-    if (getKey(geminiResult, ["context"], false)) {
-      if (getKey(geminiResult, ["data", "recipe_found"], false)) {
-        recipe = getKey(geminiResult, ["data"], {});
-        update();
-      } else {
-        showSnackbar(message: AppStrings.recipeNotFound);
-      }
+    var result = await DatabaseHelper.deleteRecipe(
+      userId: user?.uid ?? "",
+      recipeId: recipeId,
+    );
+
+    if (result != null) {
+      savedRecipes
+          .removeWhere((recipe) => getKey(recipe, ["id"], "") == recipeId);
+      showSnackbar(message: "Recipe deleted successfully");
+      update();
     }
     EasyLoading.dismiss();
+  }
+
+  String getRelativeTime(int timestamp) {
+    final now = DateTime.now();
+    final savedTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    final difference = now.difference(savedTime);
+
+    if (difference.inDays == 0) {
+      return AppStrings.today;
+    } else if (difference.inDays == 1) {
+      return AppStrings.yesterday;
+    } else {
+      return "${difference.inDays} ${AppStrings.daysAgo}";
+    }
   }
 
   void settingsPopup(HomeController controller) {
@@ -164,6 +203,7 @@ class HomeController extends CommonController {
   @override
   void onInit() {
     super.onInit();
+    loadSavedRecipes();
 
     userStream = FirebaseFirestore.instance
         .collection("users")

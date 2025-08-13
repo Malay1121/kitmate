@@ -12,6 +12,7 @@ class AppImages {
   static String icPlant = "${svgsDirectory}ic_plant.svg";
   static String icFreeBadge = "${svgsDirectory}ic_free_badge.png";
   static String icProBadge = "${svgsDirectory}ic_pro_badge.png";
+  static String icWand = "${svgsDirectory}ic_wand.svg";
 
   static String icExperience = "${imagesDirectory}ic_experience.png";
   static String icOrganic = "${imagesDirectory}ic_organic.png";

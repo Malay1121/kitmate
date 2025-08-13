@@ -19,18 +19,24 @@ class IngredientsView extends GetView<IngredientsController> {
               // alignment: Alignment.bottomRight,
               children: [
                 if (controller.isDialOpen) ...[
-                  Padding(
-                    padding: EdgeInsets.only(),
-                    child: CommonButton(
-                      text: controller.listening
-                          ? "Listening... Go ahead!"
-                          : AppStrings.updateIngredientWithSpeech,
-                      backgroundColor: AppColors.primary,
-                      width: 196.w(context),
-                      textColor: AppColors.white,
-                      onTap: () => controller.getText(),
-                    ),
-                  ),
+                  StreamBuilder(
+                      stream: controller.speechToIngredients.listening.stream,
+                      builder: (context, snapshot) {
+                        bool listening = false;
+                        if (snapshot.hasData) {
+                          listening = snapshot.data ?? listening;
+                        }
+                        return CommonButton(
+                          text: listening
+                              ? "Listening... Go ahead!"
+                              : AppStrings.updateIngredientWithSpeech,
+                          backgroundColor: AppColors.primary,
+                          width: 196.w(context),
+                          textColor: AppColors.white,
+                          onTap: () => controller.speechToIngredients
+                              .getText(controller.user!),
+                        );
+                      }),
                   SizedBox(
                     height: 5.h(context),
                   ),
