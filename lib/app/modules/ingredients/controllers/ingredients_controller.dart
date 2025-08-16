@@ -591,7 +591,7 @@ class IngredientsController extends CommonController {
                         };
                         var result = await DatabaseHelper.addIngredients(
                           userId: user?.uid ?? "",
-                          ingredients: [content],
+                          ingredientsList: [content],
                         );
 
                         if (result != null) {

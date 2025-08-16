@@ -24,6 +24,7 @@ class SubscriptionManager {
 
   static Future<bool> isProUser() async {
     final info = await getCustomerInfo();
+
     return info?.entitlements.all[entitlementId]?.isActive ?? false;
   }
 
@@ -70,4 +71,8 @@ class SubscriptionManager {
       showSnackbar(message: "RevenueCat logout failed.");
     }
   }
+
+  // static void showPaywall() async {
+  //   final paywallResult = await RevenueCatUI.presentPaywall();
+  // }
 }

@@ -53,9 +53,11 @@ class SplashController extends AnonCommonController {
   @override
   void onInit() {
     super.onInit();
+    try {
+      checkLogin();
 
-    checkLogin();
-    DatabaseHelper.getApis();
+      DatabaseHelper.getApis();
+    } catch (e) {}
     Future.delayed(
       const Duration(seconds: 3),
       () {

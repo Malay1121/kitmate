@@ -200,6 +200,216 @@ class HomeController extends CommonController {
     );
   }
 
+  void checkIngredientsMaxedOut() {
+    if (pro == false) {
+      {
+        String searchText = "";
+        TextEditingController searchController = TextEditingController();
+        List<Map<dynamic, dynamic>> selectedIngredients = [];
+
+        for (int i = 0;
+            i <
+                ingredients.length -
+                    getKey(freeLimitations, ["max_ingredients"], 30);
+            i++) {
+          selectedIngredients.add(ingredients[i]);
+        }
+        // Ingredients limit check
+        if (ingredients.length >
+            getKey(freeLimitations, ["max_ingredients"], 30)) {
+          Get.dialog(
+            PopScope(
+              canPop: false,
+              child: Dialog(
+                insetPadding: EdgeInsets.zero,
+                child: StatefulBuilder(
+                  builder: (context, setState) {
+                    return SingleChildScrollView(
+                      child: Container(
+                        width: 196.w(Get.context!),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 11.w(context),
+                          vertical: 11.h(context),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            AppText(
+                              text: AppStrings.maxIngredientsReached,
+                              style: Styles.semiBold(
+                                color: AppColors.fontDark,
+                                fontSize: 13.t(context),
+                              ),
+                              maxLines: 2,
+                              width: 150.w(context),
+                              centered: true,
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 5.h(context),
+                            ),
+                            AppRichText(
+                              textAlign: TextAlign.center,
+                              width: 150.w(context),
+                              centered: true,
+                              maxLines: 2,
+                              text: TextSpan(
+                                text: (ingredients.length -
+                                        getKey(freeLimitations,
+                                            ["max_ingredients"], 30))
+                                    .toString(),
+                                style: Styles.bold(
+                                  color: AppColors.primary,
+                                  fontSize: 9.5.t(context),
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        " ${AppStrings.ingredientsNeedsToBeRemoved}",
+                                    style: Styles.medium(
+                                      color: AppColors.fontGrey,
+                                      fontSize: 9.5.t(context),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h(context),
+                            ),
+                            Center(
+                              child: CommonTextField(
+                                hintText: AppStrings.searchIngredients,
+                                controller: searchController,
+                                onChanged: (p0) {
+                                  setState(() {
+                                    searchText = p0;
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h(context),
+                            ),
+                            SizedBox(
+                              height: 250.h(context),
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: ingredients
+                                    .where(
+                                      (p0) => getKey(p0, ["label"], "")
+                                          .toString()
+                                          .toLowerCase()
+                                          .startsWith(searchText.toLowerCase()),
+                                    )
+                                    .length,
+                                itemBuilder: (context, index) {
+                                  Map ingredient = ingredients[index];
+                                  return Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 11.w(context),
+                                      vertical: 5.h(context),
+                                    ),
+                                    margin: EdgeInsets.only(
+                                      bottom: 11.h(context),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.cardColor,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    width: 174.w(context),
+                                    child: Row(
+                                      children: [
+                                        AppText(
+                                          text: ingredient["label"],
+                                          maxLines: 2,
+                                          width: 109.w(context),
+                                          minFontSize:
+                                              10.t(context).floorToDouble(),
+                                          overflow: TextOverflow.ellipsis,
+                                          style: Styles.bold(
+                                            fontSize: 10.t(context),
+                                            color: AppColors.fontDark,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Checkbox(
+                                          value: selectedIngredients
+                                              .contains(ingredient),
+                                          onChanged: (value) {
+                                            setState(() {
+                                              if (selectedIngredients
+                                                  .contains(ingredient)) {
+                                                selectedIngredients
+                                                    .remove(ingredient);
+                                              } else {
+                                                selectedIngredients
+                                                    .add(ingredient);
+                                              }
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5.h(context),
+                            ),
+                            CommonButton(
+                              text: AppStrings.upgrade,
+                              onTap: () => Get.toNamed(Routes.SUBSCRIPTIONS),
+                            ),
+                            SizedBox(
+                              height: 5.h(context),
+                            ),
+                            CommonButton(
+                              text: AppStrings.removeIngredients,
+                              backgroundColor: Colors.transparent,
+                              textColor: AppColors.fontDark,
+                              onTap: () async {
+                                if (selectedIngredients.length >=
+                                    ingredients.length -
+                                        getKey(freeLimitations,
+                                            ["max_ingredients"], 30)) {
+                                  EasyLoading.show();
+                                  await DatabaseHelper.removeIngredients(
+                                    userId: user?.uid ?? "",
+                                    ingredients: selectedIngredients,
+                                  );
+                                  EasyLoading.dismiss();
+                                  Get.back();
+                                } else {
+                                  showSnackbar(
+                                      message:
+                                          "${ingredients.length - getKey(freeLimitations, [
+                                                "max_ingredients"
+                                              ], 30)} ${AppStrings.ingredientsNeedsToBeRemoved}");
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            barrierDismissible: false,
+          );
+        }
+      }
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -246,6 +456,7 @@ class HomeController extends CommonController {
             continue;
           }
         }
+        checkIngredientsMaxedOut();
         update();
       },
     );

@@ -29,6 +29,9 @@ class CommonController extends AnonCommonController {
   void onInit() {
     super.onInit();
     isProUser();
+    Purchases.addCustomerInfoUpdateListener(
+      (customerInfo) => isProUser(),
+    );
     ingredients.listen(
       (p0) => update(),
     );
