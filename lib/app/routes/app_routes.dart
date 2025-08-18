@@ -16,6 +16,8 @@ abstract class Routes {
   static const CONTACT_US = _Paths.CONTACT_US;
   static const TICKET = _Paths.TICKET;
   static const SHOPPING_LIST = _Paths.SHOPPING_LIST;
+  static const GENERATE_RECIPE = _Paths.GENERATE_RECIPE;
+  static const SAVED_RECIPES = _Paths.SAVED_RECIPES;
 }
 
 abstract class _Paths {
@@ -33,4 +35,6 @@ abstract class _Paths {
   static const CONTACT_US = '/contact-us';
   static const TICKET = '/ticket';
   static const SHOPPING_LIST = '/shopping-list';
+  static const GENERATE_RECIPE = '/generate-recipe';
+  static const SAVED_RECIPES = '/saved-recipes';
 }

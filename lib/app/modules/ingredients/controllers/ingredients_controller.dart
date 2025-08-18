@@ -148,7 +148,7 @@ class IngredientsController extends CommonController {
 
     RecognizedText recognizedText =
         await textRecognizer.processImage(inputImage);
-    print("Recognized text: " + recognizedText.text);
+    // print("Recognized text: " + recognizedText.text);
     Map<String, dynamic> geminiResult = await GeminiHelper.fetch(
         systemPrompt: AppStrings.ingredientsFromBillPrompt,
         text: recognizedText.text);

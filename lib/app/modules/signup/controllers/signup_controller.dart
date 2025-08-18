@@ -100,7 +100,7 @@ class SignupController extends AnonCommonController {
   //           requiredNetworkType: NetworkType.NONE), (String taskId) async {
   //     // <-- Event handler
   //     // This is the fetch-event callback.
-  //     print("[BackgroundFetch] Event received $taskId");
+  //     // print("[BackgroundFetch] Event received $taskId");
   //     const AndroidNotificationDetails androidNotificationDetails =
   //         AndroidNotificationDetails('your channel id', 'your channel name',
   //             channelDescription: 'your channel description',
@@ -120,10 +120,10 @@ class SignupController extends AnonCommonController {
   //   }, (String taskId) async {
   //     // <-- Task timeout handler.
   //     // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
-  //     print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
+  //     // print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
   //     BackgroundFetch.finish(taskId);
   //   });
-  //   print('[BackgroundFetch] configure success: $status');
+  //   // print('[BackgroundFetch] configure success: $status');
   //   _status = status;
   //   update();
   //
@@ -138,20 +138,20 @@ class SignupController extends AnonCommonController {
   //   update();
   //   if (enabled) {
   //     BackgroundFetch.start().then((int status) {
-  //       print('[BackgroundFetch] start success: $status');
+  //       // print('[BackgroundFetch] start success: $status');
   //     }).catchError((e) {
-  //       print('[BackgroundFetch] start FAILURE: $e');
+  //       // print('[BackgroundFetch] start FAILURE: $e');
   //     });
   //   } else {
   //     BackgroundFetch.stop().then((int status) {
-  //       print('[BackgroundFetch] stop success: $status');
+  //       // print('[BackgroundFetch] stop success: $status');
   //     });
   //   }
   // }
   //
   // void _onClickStatus() async {
   //   int status = await BackgroundFetch.status;
-  //   print('[BackgroundFetch] status: $status');
+  //   // print('[BackgroundFetch] status: $status');
   //   _status = status;
   //   update();
   // }

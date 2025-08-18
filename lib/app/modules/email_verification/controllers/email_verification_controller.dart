@@ -19,6 +19,7 @@ class EmailVerificationController extends CommonController {
   @override
   void onClose() {
     super.onClose();
+    timer?.cancel();
   }
 
   checkEmailVerified() async {

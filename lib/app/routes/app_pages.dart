@@ -6,6 +6,8 @@ import '../modules/edit_profile/bindings/edit_profile_binding.dart';
 import '../modules/edit_profile/views/edit_profile_view.dart';
 import '../modules/email_verification/bindings/email_verification_binding.dart';
 import '../modules/email_verification/views/email_verification_view.dart';
+import '../modules/generate_recipe/bindings/generate_recipe_binding.dart';
+import '../modules/generate_recipe/views/generate_recipe_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/ingredients/bindings/ingredients_binding.dart';
@@ -16,6 +18,8 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/recipe/bindings/recipe_binding.dart';
 import '../modules/recipe/views/recipe_view.dart';
+import '../modules/saved_recipes/bindings/saved_recipes_binding.dart';
+import '../modules/saved_recipes/views/saved_recipes_view.dart';
 import '../modules/shopping_list/bindings/shopping_list_binding.dart';
 import '../modules/shopping_list/views/shopping_list_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
@@ -99,6 +103,16 @@ class AppPages {
       name: _Paths.SHOPPING_LIST,
       page: () => const ShoppingListView(),
       binding: ShoppingListBinding(),
+    ),
+    GetPage(
+      name: _Paths.GENERATE_RECIPE,
+      page: () => const GenerateRecipeView(),
+      binding: GenerateRecipeBinding(),
+    ),
+    GetPage(
+      name: _Paths.SAVED_RECIPES,
+      page: () => const SavedRecipesView(),
+      binding: SavedRecipesBinding(),
     ),
   ];
 }

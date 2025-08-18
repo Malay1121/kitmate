@@ -32,7 +32,7 @@ class GeminiHelper {
       ],
       "generationConfig": {"response_mime_type": "application/json"}
     });
-    // print(bodyEncoded);
+    // // print(bodyEncoded);
     var headers = {'Content-Type': 'application/json'};
     // final dio = Dio(BaseOptions(connectTimeout: Duration.zero));
     // var request = await dio.post(
@@ -50,14 +50,12 @@ class GeminiHelper {
 
     if (request.statusCode == 200) {
       String response = request.body;
-      print(response);
       try {
         Map<String, dynamic> decoded = json.decode(json
             .decode(response)["candidates"][0]["content"]["parts"][0]["text"]
             .toString());
         return decoded;
       } catch (e) {
-        print("Looop detected in tries");
         if (tries <= 3) {
           tries++;
 
@@ -78,7 +76,7 @@ class GeminiHelper {
         EasyLoading.dismiss();
         return reData;
       }
-      // print(request.statusCode);
+      // // print(request.statusCode);
       return {};
     }
   }

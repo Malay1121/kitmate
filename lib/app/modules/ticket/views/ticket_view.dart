@@ -1,5 +1,3 @@
-import 'package:firebase_pagination/firebase_pagination.dart';
-
 import '../../../helper/all_imports.dart';
 import '../controllers/ticket_controller.dart';
 
@@ -118,18 +116,15 @@ class TicketView extends GetView<TicketController> {
                                   padding: EdgeInsets.only(
                                     top: 36.5.h(context),
                                   ),
-                                  child: GestureDetector(
-                                    onTap: () => print(controller.ticketId),
-                                    child: AppText(
-                                      text: AppStrings
-                                          .createTicketByExplainingIssueAndSendingTheMessage,
-                                      maxLines: null,
-                                      centered: true,
-                                      textAlign: TextAlign.center,
-                                      style: Styles.semiBold(
-                                        fontSize: 9.t(context),
-                                        color: AppColors.fontDark,
-                                      ),
+                                  child: AppText(
+                                    text: AppStrings
+                                        .createTicketByExplainingIssueAndSendingTheMessage,
+                                    maxLines: null,
+                                    centered: true,
+                                    textAlign: TextAlign.center,
+                                    style: Styles.semiBold(
+                                      fontSize: 9.t(context),
+                                      color: AppColors.fontDark,
                                     ),
                                   ),
                                 ),

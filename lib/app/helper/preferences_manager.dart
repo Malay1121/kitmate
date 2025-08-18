@@ -19,15 +19,12 @@ class PreferencesManager {
   bool speechEnabled = false;
   Future<String> getText() async {
     speechEnabled = await speechToText.initialize(onError: (errorNotification) {
-      print(errorNotification);
       listening.value = false;
       EasyLoading.dismiss();
     }, onStatus: (status) {
       if (status == "done") {
-        print(status);
         listening.value = false;
       }
-      print(status);
     });
     String result = "";
     if (speechEnabled) {
@@ -44,7 +41,6 @@ class PreferencesManager {
                 await GeminiHelper.fetch(systemPrompt: prompt, text: result);
             if (geminiResult["context"] == true) {
               List existingItems = options;
-              print(geminiResult);
               List finalItems = [
                 for (var item in existingItems) item,
                 for (var item in geminiResult["data"]) item,

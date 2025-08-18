@@ -23,7 +23,7 @@ class SplashController extends AnonCommonController {
             allowDismissal: false);
       }
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
     }
     var userData = readUserDetails();
     if (userData != null && userData != {}) {
@@ -34,9 +34,9 @@ class SplashController extends AnonCommonController {
         if (!emailVerified) {
           await user.user?.sendEmailVerification();
         }
-        processesDone = true;
-        navigate();
       }
+      processesDone = true;
+      navigate();
     }
   }
 

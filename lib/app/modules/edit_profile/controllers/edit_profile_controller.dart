@@ -28,15 +28,15 @@ class EditProfileController extends CommonController {
 
   Future<String> getText(int currentPage) async {
     speechEnabled = await speechToText.initialize(onError: (errorNotification) {
-      print(errorNotification);
+      // print(errorNotification);
       listening = false;
       update();
       EasyLoading.dismiss();
     }, onStatus: (status) {
       if (status == "done") {
-        print(status);
+        // print(status);
       }
-      print(status);
+      // print(status);
     });
     String result = "";
     if (speechEnabled) {
@@ -55,7 +55,7 @@ class EditProfileController extends CommonController {
                 systemPrompt: data[currentPage]["prompt"], text: result);
             if (geminiResult["context"] == true) {
               List existingItems = data[currentPage]["selected"];
-              print(geminiResult);
+              // print(geminiResult);
               List finalItems = [
                 for (var item in existingItems) item,
                 for (var item in geminiResult["data"]) item,

@@ -10,14 +10,14 @@ class SpeechToIngredients {
 
   Future<String?> getText(User user) async {
     speechEnabled = await speechToText.initialize(onError: (errorNotification) {
-      print(errorNotification);
+      // print(errorNotification);
       listening.value = false;
       return;
     }, onStatus: (status) {
       if (status == "done") {
-        print(status);
+        // print(status);
       }
-      print(status);
+      // print(status);
     });
     String result = "";
     if (speechEnabled) {
@@ -45,8 +45,8 @@ class SpeechToIngredients {
                 ingredient.addEntries({"operation": "remove"}.entries);
                 ingredientsList.add(ingredient);
               }
-              print(result);
-              print(ingredientsList);
+              // print(result);
+              // print(ingredientsList);
               confirmIngredients(
                   ingredientsList: ingredientsList.obs, user: user);
             }
@@ -369,8 +369,9 @@ class SpeechToIngredients {
                                             element["operation"] == "remove",
                                       )
                                       .toList());
-                              Get.back();
                               EasyLoading.dismiss();
+
+                              Get.back();
                             }),
                         SizedBox(
                           height: 5.h(Get.context!),

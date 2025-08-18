@@ -79,7 +79,22 @@ class EmailVerificationView extends GetView<EmailVerificationController> {
                       try {
                         controller.user?.sendEmailVerification();
                       } catch (e) {
-                        debugPrint('$e');
+                        // print('$e');
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 5.h(context),
+                  ),
+                  CommonButton(
+                    text: "Logout",
+                    backgroundColor: Colors.transparent,
+                    textColor: AppColors.black,
+                    onTap: () {
+                      try {
+                        logout();
+                      } catch (e) {
+                        // print('$e');
                       }
                     },
                   ),

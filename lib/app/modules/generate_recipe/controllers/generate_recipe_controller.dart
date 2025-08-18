@@ -85,11 +85,11 @@ class GenerateRecipeController extends CommonController {
   };
   PreferencesManager allergyManager = PreferencesManager(
       recordLabel: AppStrings.recordIngredients,
-      options: [].obs,
+      options: RxList.from(getKey(userDetails, ["preferences", "allergy"], [])),
       prompt: AppStrings.allergyPrompt);
   PreferencesManager dietManager = PreferencesManager(
       recordLabel: AppStrings.recordDiets,
-      options: [].obs,
+      options: RxList.from(getKey(userDetails, ["preferences", "diet"], [])),
       prompt: AppStrings.dietPrompt);
 
   void generateRecipes() async {
@@ -103,12 +103,13 @@ class GenerateRecipeController extends CommonController {
       };
       input.addEntries(data.entries);
     }
-    print(input);
-    if (ingredients.length >= 5) {
+    // print(input);
+    if (!(ingredients.length < 5 &&
+        getKey(settingsData, ["pantry_match", "selected"], AppStrings.none) !=
+            AppStrings.none)) {
       Map geminiResult = await GeminiHelper.fetch(
           systemPrompt: AppStrings.recipeListPrompt,
           data: {
-            "preferences": userDetails["preferences"],
             "ingredients": ingredients,
             "settings": input,
             "current_time":

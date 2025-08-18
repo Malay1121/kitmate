@@ -43,7 +43,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
   void speak() async {
     bool available = await speech.initialize(
       onStatus: (status) {
-        print(status);
+        // print(status);
         if (status == "done" || status == "notListening") {
           widget.listening = false;
 
@@ -67,7 +67,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
         },
       );
     } else {
-      print("The user has denied the use of speech recognition.");
+      // print("The user has denied the use of speech recognition.");
     }
   }
 

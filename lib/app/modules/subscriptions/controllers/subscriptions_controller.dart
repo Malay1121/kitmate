@@ -21,16 +21,13 @@ class SubscriptionsController extends CommonController {
     }
   }
 
-  Future<void> purchase(Package? package) async {
+  Future<void> purchase(CustomerInfo customerInfo) async {
     try {
       EasyLoading.show();
-      if (package != null) {
-        CustomerInfo customerInfo = await Purchases.purchasePackage(package);
+      if (customerInfo.entitlements.all["pro"]?.isActive == true) {
+        await SubscriptionManager.syncSubscriptionStatus();
+        showSnackbar(message: "You've successfully upgraded to Pro!");
 
-        if (customerInfo.entitlements.all["pro"]?.isActive == true) {
-          await SubscriptionManager.syncSubscriptionStatus();
-          showSnackbar(message: "You've successfully upgraded to Pro!");
-        }
         update();
       }
       EasyLoading.dismiss();
@@ -39,7 +36,7 @@ class SubscriptionsController extends CommonController {
           e == PurchasesErrorCode.purchaseCancelledError) {
         // User cancelled
       } else {
-        print("Purchase failed: $e");
+        // print("Purchase failed: $e");
       }
       EasyLoading.dismiss();
     }

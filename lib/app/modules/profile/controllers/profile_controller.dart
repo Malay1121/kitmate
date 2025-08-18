@@ -8,13 +8,6 @@ class ProfileController extends CommonController {
     Get.toNamed(route);
   }
 
-  void logout() async {
-    await FirebaseAuth.instance.signOut();
-    await SubscriptionManager.logOut();
-    writeUserDetails({});
-    Get.offAllNamed(Routes.SPLASH);
-  }
-
   void initSettings() {
     settingsOption = [
       {
@@ -30,8 +23,7 @@ class ProfileController extends CommonController {
       {
         "title": AppStrings.aboutUs,
         "icon": Icons.people,
-        "onTap": () =>
-            launchUrl(Uri.parse("https://kitmate-app.web.app/about-us")),
+        "onTap": () => launchUrl(Uri.parse("https://kitmate.app/about-us")),
       },
       {
         "title": AppStrings.contactUs,
@@ -42,13 +34,13 @@ class ProfileController extends CommonController {
         "title": AppStrings.privacyPolicy,
         "icon": Icons.privacy_tip,
         "onTap": () =>
-            launchUrl(Uri.parse("https://kitmate-app.web.app/privacy-policy")),
+            launchUrl(Uri.parse("https://kitmate.app/privacy-policy.html")),
       },
       {
         "title": AppStrings.termsAndConditions,
         "icon": Icons.book,
         "onTap": () => launchUrl(
-            Uri.parse("https://kitmate-app.web.app/terms-and-conditions")),
+            Uri.parse("https://kitmate.app/terms-and-conditions.html")),
       },
       {
         "title": AppStrings.logout,
@@ -58,8 +50,7 @@ class ProfileController extends CommonController {
       {
         "title": AppStrings.deleteAccount,
         "icon": Icons.delete,
-        "onTap": () =>
-            launchUrl(Uri.parse("https://kitmate-app.web.app/data-removal")),
+        "onTap": () => launchUrl(Uri.parse("https://kitmate.app/account")),
       },
     ];
     update();
