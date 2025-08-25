@@ -1,66 +1,11 @@
 import 'package:kitmate/app/helper/all_imports.dart';
-import 'package:kitmate/app/helper/gemini_helper.dart';
-import 'package:kitmate/app/modules/home/views/settings_view.dart';
 
 class HomeController extends CommonController {
   Map? recipe;
   List<dynamic>? recipes;
   List<dynamic> savedRecipes = [];
-  Map settings = {
-    "consider_current_time": true,
-    "consider_allergies": true,
-    "consider_diet": true,
-    "allow_flexibility": false,
-    "time_limit": "",
-    "custom_message": "",
-    "servings": "",
-  };
 
   SpeechToIngredients speechToIngredients = SpeechToIngredients();
-
-  void generateRecipes() async {
-    EasyLoading.show();
-    print({
-      "preferences": userDetails["preferences"],
-      "ingredients": ingredients,
-      "settings": settings,
-      "current_time":
-          "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
-    });
-    if (ingredients.length >= 5) {
-      Map geminiResult = await GeminiHelper.fetch(
-          systemPrompt: AppStrings.recipeListPrompt,
-          data: {
-            "preferences": userDetails["preferences"],
-            "ingredients": ingredients,
-            "settings": settings,
-            "current_time":
-                "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
-          });
-
-      if (geminiResult["context"] == true) {
-        if (getKey(geminiResult, ["recipe_found"], null) != null) {
-          recipes = geminiResult["data"];
-          for (Map recipe in recipes ?? []) {
-            String image =
-                "https://image.pollinations.ai/prompt/${recipe["recipe_title"].toString().replaceAll(" ", "-")}";
-            recipe["recipe_image"] = image;
-          }
-
-          // String image = await getImage(recipe!["recipe_title"]);
-          update();
-        } else {
-          showSnackbar(
-            message: "${AppStrings.recipeNotFound}\n\n" +
-                getKey(geminiResult, ["recipe_reason"], ""),
-          );
-        }
-      }
-    } else {
-      showSnackbar(message: AppStrings.ingredientNumberValidation);
-    }
-    EasyLoading.dismiss();
-  }
 
   void closeRecipe() {
     recipe = null;
@@ -117,87 +62,6 @@ class HomeController extends CommonController {
       update();
     }
     EasyLoading.dismiss();
-  }
-
-  String getRelativeTime(int timestamp) {
-    final now = DateTime.now();
-    final savedTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-    final difference = now.difference(savedTime);
-
-    if (difference.inDays == 0) {
-      return AppStrings.today;
-    } else if (difference.inDays == 1) {
-      return AppStrings.yesterday;
-    } else {
-      return "${difference.inDays} ${AppStrings.daysAgo}";
-    }
-  }
-
-  void settingsPopup(HomeController controller) {
-    showDialog(
-      builder: (context) {
-        return Dialog(
-          backgroundColor: AppColors.white,
-          insetPadding: EdgeInsets.zero,
-          child: StatefulBuilder(builder: (context, setState) {
-            return Container(
-              width: 196.w(Get.context!),
-              height: 320.h(Get.context!),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 11.w(Get.context!),
-                ),
-                child: SizedBox(
-                  height: 260.h(Get.context!),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 14.5.h(Get.context!),
-                      ),
-                      AppText(
-                        text: AppStrings.settings,
-                        maxLines: null,
-                        centered: true,
-                        textAlign: TextAlign.center,
-                        width: 160.w(Get.context!),
-                        height: 20.h(context),
-                        style: Styles.semiBold(
-                          fontSize: 14.55.t(Get.context!),
-                          color: AppColors.fontDark,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 11.w(Get.context!),
-                        ),
-                        child: SizedBox(
-                          height: 275.5.h(context),
-                          child: SettingsView(
-                            controller: controller,
-                            customMessage:
-                                getKey(settings, ["custom_message"], ""),
-                            servings: getKey(settings, ["servings"], ""),
-                            popup: true,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.h(Get.context!),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }),
-        );
-      },
-      context: Get.context!,
-    );
   }
 
   void checkIngredientsMaxedOut() {
@@ -422,7 +286,7 @@ class HomeController extends CommonController {
         .listen(
       (event) {
         userDetails = event.data() ?? {};
-        print("userDetails: $userDetails");
+        // print("userDetails: $userDetails");
         update();
       },
     );
@@ -475,5 +339,10 @@ class HomeController extends CommonController {
   @override
   void onClose() {
     super.onClose();
+    try {
+      userStream?.cancel();
+      ingredientsStream?.cancel();
+      ingredients.value = [];
+    } catch (e) {}
   }
 }

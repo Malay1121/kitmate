@@ -350,25 +350,32 @@ class SpeechToIngredients {
                             text: AppStrings.confirm,
                             onTap: () async {
                               EasyLoading.show();
-                              await DatabaseHelper.updateIngredientsFromGemini(
-                                userId: user.uid ?? "",
-                                add: true,
-                                ingredients: ingredientsList
-                                    .where(
-                                      (element) =>
-                                          element["operation"] == "add",
-                                    )
-                                    .toList(),
-                              );
-                              await DatabaseHelper.updateIngredientsFromGemini(
+                              try {
+                                await DatabaseHelper
+                                    .updateIngredientsFromGemini(
                                   userId: user.uid ?? "",
-                                  add: false,
+                                  add: true,
                                   ingredients: ingredientsList
                                       .where(
                                         (element) =>
-                                            element["operation"] == "remove",
+                                            element["operation"] == "add",
                                       )
-                                      .toList());
+                                      .toList(),
+                                );
+                                await DatabaseHelper
+                                    .updateIngredientsFromGemini(
+                                        userId: user.uid ?? "",
+                                        add: false,
+                                        ingredients: ingredientsList
+                                            .where(
+                                              (element) =>
+                                                  element["operation"] ==
+                                                  "remove",
+                                            )
+                                            .toList());
+                              } catch (e) {
+                                EasyLoading.dismiss();
+                              }
                               EasyLoading.dismiss();
 
                               Get.back();

@@ -63,18 +63,20 @@ class _CommonBottomBarState extends State<CommonBottomBar> {
                                 width: 12.t(context),
                                 height: 12.t(context),
                               ),
-                            if (tab["title"] == widget.selectedTab)
-                              AppText(
-                                text: tab["title"],
-                                height: 12.h(context),
-                                centered: true,
-                                style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontFamily: SfProDisplay,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 8.t(context),
-                                ),
+                            // if (tab["title"] == widget.selectedTab)
+                            AppText(
+                              text: tab["title"],
+                              height: 12.h(context),
+                              centered: true,
+                              style: TextStyle(
+                                color: tab["title"] == widget.selectedTab
+                                    ? AppColors.primary
+                                    : AppColors.fontGrey,
+                                fontFamily: SfProDisplay,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 8.t(context),
                               ),
+                            ),
                           ],
                         ),
                       )

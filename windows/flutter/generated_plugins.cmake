@@ -9,7 +9,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   firebase_core
   firebase_storage
   flutter_timezone
-  flutter_tts
+  speech_to_text_windows
   url_launcher_windows
 )
 

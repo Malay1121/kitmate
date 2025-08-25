@@ -31,11 +31,13 @@ class SignupController extends AnonCommonController {
         "email": emailController.text,
         "password": generateMd5(passwordController.text),
       };
-      await DatabaseHelper.createUser(data: userDetails);
-      Get.toNamed(
-        Routes.EMAIL_VERIFICATION,
-        arguments: {"route": Routes.ONBOARDING},
-      );
+      dynamic returnedUser = await DatabaseHelper.createUser(data: userDetails);
+      if (returnedUser != null) {
+        Get.toNamed(
+          Routes.EMAIL_VERIFICATION,
+          arguments: {"route": Routes.ONBOARDING},
+        );
+      }
       EasyLoading.dismiss();
     }
   }

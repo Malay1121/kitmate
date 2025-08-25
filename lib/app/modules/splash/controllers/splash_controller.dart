@@ -6,11 +6,13 @@ class SplashController extends AnonCommonController {
   bool emailVerified = false;
   bool processesDone = false;
   bool timeDone = false;
+  bool updateCheck = false;
 
   void checkLogin() async {
     try {
-      final newVersionPlus = NewVersionPlus();
+      final newVersionPlus = NewVersionPlus(androidId: "com.malay.kitmate");
       final status = await newVersionPlus.getVersionStatus();
+
       if (status != null && status.canUpdate) {
         newVersionPlus.showUpdateDialog(
             context: Get.context!,
@@ -21,27 +23,38 @@ class SplashController extends AnonCommonController {
             dismissButtonText: 'Close App',
             dismissAction: () => Get.back(),
             allowDismissal: false);
+        updateCheck = false;
+      } else {
+        updateCheck = true;
+
+        navigate();
       }
     } catch (e) {
       // print(e.toString());
     }
-    var userData = readUserDetails();
-    if (userData != null && userData != {}) {
-      UserCredential? user = await DatabaseHelper.loginUser(data: userData);
-      if (user != null) {
-        firstTime = false;
-        emailVerified = user.user?.emailVerified ?? false;
-        if (!emailVerified) {
-          await user.user?.sendEmailVerification();
+    await DatabaseHelper.getOperationStatus();
+    if (!getKey(operations, ["maintenance"], false)) {
+      var userData = readUserDetails();
+      if (userData != null && userData != {}) {
+        UserCredential? user = await DatabaseHelper.loginUser(data: userData);
+        if (user != null) {
+          firstTime = false;
+          emailVerified = user.user?.emailVerified ?? false;
+          if (!emailVerified) {
+            await user.user?.sendEmailVerification();
+          }
         }
       }
       processesDone = true;
       navigate();
+    } else {
+      showSnackbar(
+          message: "App is under maintenance, please try again later!");
     }
   }
 
   void navigate() {
-    if (processesDone && timeDone) {
+    if (processesDone && timeDone && updateCheck) {
       Get.offAndToNamed(!firstTime
           ? emailVerified
               ? Routes.HOME
@@ -53,6 +66,7 @@ class SplashController extends AnonCommonController {
   @override
   void onInit() {
     super.onInit();
+
     try {
       checkLogin();
 

@@ -108,7 +108,7 @@ class OnboardingController extends CommonController {
           "settings": settings,
         });
 
-        Get.offAllNamed(Routes.INGREDIENTS);
+        Get.offAllNamed(Routes.HOME);
       } else {
         currentPage++;
         update();

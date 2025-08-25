@@ -202,8 +202,8 @@ class HomeView extends GetView<HomeController> {
                                                     AppColors.primary,
                                                 width: 196.w(context),
                                                 textColor: AppColors.white,
-                                                onTap: () => controller
-                                                    .generateRecipes(),
+                                                onTap: () => Get.toNamed(
+                                                    Routes.GENERATE_RECIPE),
                                               ),
                                             ],
                                           ),
@@ -592,6 +592,8 @@ class HomeView extends GetView<HomeController> {
 
                                         if (!hasRecipes) {
                                           return Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               AppText(
                                                 text: AppStrings.savedRecipes,
@@ -602,6 +604,7 @@ class HomeView extends GetView<HomeController> {
                                               ),
                                               SizedBox(height: 8.h(context)),
                                               Container(
+                                                width: 190.w(context),
                                                 padding: EdgeInsets.all(
                                                     16.h(context)),
                                                 decoration: BoxDecoration(
