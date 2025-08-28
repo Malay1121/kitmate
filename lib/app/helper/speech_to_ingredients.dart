@@ -144,7 +144,7 @@ class SpeechToIngredients {
                                           child: TextField(
                                             controller:
                                                 ingredientNameController,
-                                            onChanged: (p0) {
+                                            onSubmitted: (p0) {
                                               setState(() {
                                                 ingredientsList[ind]["label"] =
                                                     p0;

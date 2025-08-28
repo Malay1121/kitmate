@@ -6,10 +6,11 @@ class IngredientsController extends CommonController {
   List visibleIngredients = [];
   TextEditingController searchController = TextEditingController();
   bool isDialOpen = false;
+
   @override
   void onInit() {
     super.onInit();
-
+    AdMobManager.instance.preloadNativeAds(count: 10);
     update();
   }
 
@@ -28,6 +29,37 @@ class IngredientsController extends CommonController {
 
   void onSearch(String text) {
     searchText = text;
+    update();
+  }
+
+  void addDemoIngredients() {
+    ingredients.addAll([
+      {
+        "id": "1",
+        "label": "Tomatoes",
+        "quantity": 5,
+        "quantity_unit": "pieces"
+      },
+      {"id": "2", "label": "Onions", "quantity": 3, "quantity_unit": "pieces"},
+      {"id": "3", "label": "Garlic", "quantity": 2, "quantity_unit": "pieces"},
+      {"id": "4", "label": "Rice", "quantity": 500, "quantity_unit": "gram"},
+      {"id": "5", "label": "Chicken", "quantity": 1, "quantity_unit": "pieces"},
+      {"id": "6", "label": "Salt", "quantity": 100, "quantity_unit": "gram"},
+      {"id": "7", "label": "Pepper", "quantity": 50, "quantity_unit": "gram"},
+      {
+        "id": "8",
+        "label": "Oil",
+        "quantity": 250,
+        "quantity_unit": "mililiter"
+      },
+      {"id": "9", "label": "Bread", "quantity": 2, "quantity_unit": "pieces"},
+      {
+        "id": "10",
+        "label": "Milk",
+        "quantity": 1000,
+        "quantity_unit": "mililiter"
+      },
+    ]);
     update();
   }
 
@@ -148,7 +180,6 @@ class IngredientsController extends CommonController {
 
     RecognizedText recognizedText =
         await textRecognizer.processImage(inputImage);
-    // print("Recognized text: " + recognizedText.text);
     Map<String, dynamic> geminiResult = await GeminiHelper.fetch(
         systemPrompt: AppStrings.ingredientsFromBillPrompt,
         text: recognizedText.text);
@@ -301,7 +332,7 @@ class IngredientsController extends CommonController {
                               width: 164.w(context),
                               child: TextField(
                                 controller: ingredientNameController,
-                                onChanged: (p0) {
+                                onSubmitted: (p0) {
                                   ingredientsList[ind]["label"] = p0;
                                 },
                                 decoration: InputDecoration(
@@ -330,11 +361,10 @@ class IngredientsController extends CommonController {
                                   child: TextField(
                                     controller: quantityController,
                                     keyboardType: TextInputType.number,
-                                    onChanged: (p0) {
+                                    onSubmitted: (p0) {
                                       ingredientsList[ind]["quantity"] = p0;
                                     },
                                     decoration: InputDecoration(
-                                      // isDense: true,
                                       border: UnderlineInputBorder(
                                         borderSide: BorderSide(
                                           color: AppColors.lightGrey,
@@ -423,11 +453,10 @@ class IngredientsController extends CommonController {
                     text: AppStrings.confirm,
                     onTap: () async {
                       EasyLoading.show();
-                      var databaseResult =
-                          await DatabaseHelper.updateIngredientsFromGemini(
-                              userId: user?.uid ?? "",
-                              add: true,
-                              ingredients: ingredients);
+                      await DatabaseHelper.updateIngredientsFromGemini(
+                          userId: user?.uid ?? "",
+                          add: true,
+                          ingredients: ingredients);
                       Get.back();
                       EasyLoading.dismiss();
                     }),
@@ -493,7 +522,6 @@ class IngredientsController extends CommonController {
                 ),
                 CommonTextField(
                   hintText: AppStrings.ingredientName,
-                  // height: 22.5,
                   width: 174,
                   controller: ingredientNameController,
                 ),
@@ -503,7 +531,6 @@ class IngredientsController extends CommonController {
                 CommonTextField(
                   hintText: AppStrings.quantity,
                   keyboardType: TextInputType.number,
-                  // height: 22.5,
                   width: 174,
                   controller: quantityController,
                 ),
@@ -578,7 +605,7 @@ class IngredientsController extends CommonController {
                         ingredient["quantity_unit"] = quantityUnit;
                         var result = await DatabaseHelper.updateIngredient(
                           userId: user?.uid ?? "",
-                          data: ingredient! as Map<String, dynamic>,
+                          data: ingredient as Map<String, dynamic>,
                         );
                         if (result != null) {
                           Get.back();

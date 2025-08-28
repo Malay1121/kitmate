@@ -32,7 +32,8 @@ class GenerateRecipeController extends CommonController {
       "description":
           "If you want the recipe of a specific dish, enter the dish name bellow. Leave it blank to get multiple dish options",
       "child": Container(),
-      "enabled": true,
+      "enabled": false,
+      "selected": "",
     },
     "meal_type": {
       "label": AppStrings.typeOfMeal,
@@ -93,53 +94,78 @@ class GenerateRecipeController extends CommonController {
       prompt: AppStrings.dietPrompt);
 
   void generateRecipes() async {
-    EasyLoading.show();
-    Map input = {};
-    for (String question in settingsData.keys) {
-      Map data = {
-        question: getKey(settingsData, [question, "enabled"], true)
-            ? settingsData[question]["selected"]
-            : null,
-      };
-      input.addEntries(data.entries);
-    }
-    // print(input);
-    if (!(ingredients.length < 5 &&
-        getKey(settingsData, ["pantry_match", "selected"], AppStrings.none) !=
-            AppStrings.none)) {
-      Map geminiResult = await GeminiHelper.fetch(
-          systemPrompt: AppStrings.recipeListPrompt,
-          data: {
-            "ingredients": ingredients,
-            "settings": input,
-            "current_time":
-                "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
-          });
-      List recipes = [];
-
-      if (geminiResult["context"] == true) {
-        if (getKey(geminiResult, ["recipe_found"], null) != null) {
-          recipes = geminiResult["data"];
-          for (Map recipe in recipes) {
-            String image =
-                "https://image.pollinations.ai/prompt/${recipe["recipe_title"].toString().replaceAll(" ", "-")}";
-            recipe["recipe_image"] = image;
-          }
-          generatedRecipes.value = recipes;
-
-          // String image = await getImage(recipe!["recipe_title"]);
-          update();
-        } else {
-          showSnackbar(
-            message: "${AppStrings.recipeNotFound}\n\n" +
-                getKey(geminiResult, ["recipe_reason"], ""),
-          );
-        }
-      }
+    if (!pro) {
+      _performRecipeGeneration();
+      await AdMobManager.instance.showInterstitialAd(
+        onAdClosed: () async {},
+      );
     } else {
-      showSnackbar(message: AppStrings.ingredientNumberValidation);
+      await _performRecipeGeneration();
     }
-    EasyLoading.dismiss();
+  }
+
+  Future<void> _performRecipeGeneration() async {
+    EasyLoading.show();
+    try {
+      Map input = {};
+      for (String question in settingsData.keys) {
+        Map data = {
+          question: getKey(settingsData, [question, "enabled"], true)
+              ? settingsData[question]["selected"]
+              : null,
+        };
+        input.addEntries(data.entries);
+      }
+      if (!(ingredients.length < 5 &&
+          getKey(settingsData, ["pantry_match", "selected"], AppStrings.none) !=
+              AppStrings.none)) {
+        Map geminiResult = await GeminiHelper.fetch(
+            systemPrompt: AppStrings.recipeListPrompt,
+            complex: true,
+            data: {
+              "ingredients": ingredients,
+              "settings": input,
+              "current_time":
+                  "${DateTime.now().hour} : ${DateTime.now().minute} : ${DateTime.now().second}",
+            });
+        List recipes = [];
+
+        if (geminiResult["context"] == true) {
+          if (getKey(geminiResult, ["recipe_found"], null) != null) {
+            recipes = geminiResult["data"];
+            for (Map recipe in recipes) {
+              String image =
+                  "https://image.pollinations.ai/prompt/${recipe["recipe_title"].toString().replaceAll(" ", "-")}";
+              recipe["recipe_image"] = image;
+            }
+            generatedRecipes.value = recipes;
+
+            int adCount = ((recipes.length / 2).floor()).clamp(0, 5);
+            if (adCount > 0) {
+              AdMobManager.instance.preloadMediumNativeAds(count: adCount);
+              AdMobManager.instance.preloadNativeAds(count: adCount);
+            }
+
+            update();
+
+            EasyLoading.dismiss();
+          } else {
+            showSnackbar(
+              message: "${AppStrings.recipeNotFound}\n\n" +
+                  getKey(geminiResult, ["recipe_reason"], ""),
+            );
+            EasyLoading.dismiss();
+          }
+        } else {
+          EasyLoading.dismiss();
+        }
+      } else {
+        showSnackbar(message: AppStrings.ingredientNumberValidation);
+        EasyLoading.dismiss();
+      }
+    } catch (e) {
+      EasyLoading.dismiss();
+    }
   }
 
   void closeRecipe() {
@@ -150,7 +176,9 @@ class GenerateRecipeController extends CommonController {
   void startCooking(Map recipeData) async {
     EasyLoading.show();
     Map geminiResult = await GeminiHelper.fetch(
-        systemPrompt: AppStrings.recipeDetailsPrompt, data: recipeData);
+        systemPrompt: AppStrings.recipeDetailsPrompt,
+        data: recipeData,
+        complex: true);
     if (getKey(geminiResult, ["context"], false)) {
       if (getKey(geminiResult, ["data", "recipe_found"], false)) {
         Get.toNamed(Routes.RECIPE,
@@ -167,7 +195,10 @@ class GenerateRecipeController extends CommonController {
 
     if (!generated) {
       Map geminiResult = await GeminiHelper.fetch(
-          systemPrompt: AppStrings.recipeDetailsPrompt, data: recipeData);
+        systemPrompt: AppStrings.recipeDetailsPrompt,
+        data: recipeData,
+        complex: true,
+      );
       if (getKey(geminiResult, ["context"], false)) {
         if (getKey(geminiResult, ["data", "recipe_found"], false)) {
           String image =
@@ -194,7 +225,10 @@ class GenerateRecipeController extends CommonController {
   void expandRecipe(Map recipeData) async {
     EasyLoading.show();
     Map geminiResult = await GeminiHelper.fetch(
-        systemPrompt: AppStrings.recipeDetailsPrompt, data: recipeData);
+      systemPrompt: AppStrings.recipeDetailsPrompt,
+      data: recipeData,
+      complex: true,
+    );
     if (getKey(geminiResult, ["context"], false)) {
       if (getKey(geminiResult, ["data", "recipe_found"], false)) {
         expandedRecipePopup(user, getKey(geminiResult, ["data"], {}));
@@ -212,6 +246,8 @@ class GenerateRecipeController extends CommonController {
     generatedRecipes.listen(
       (p0) => update(),
     );
+
+    AdMobManager.instance.loadInterstitialAd();
   }
 
   @override

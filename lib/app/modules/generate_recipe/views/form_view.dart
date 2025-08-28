@@ -68,6 +68,21 @@ class _FormViewState extends State<FormView> {
           children: [
             CommonTextField(
               hintText: AppStrings.typeRecipeName,
+              onChanged: (p0) {
+                if (isEmptyString(p0)) {
+                  setState(() {
+                    widget.controller.settingsData["dish_name"]["enabled"] =
+                        false;
+                  });
+                } else {
+                  setState(() {
+                    widget.controller.settingsData["dish_name"]["enabled"] =
+                        true;
+                    widget.controller.settingsData["dish_name"]["selected"] =
+                        p0.toString();
+                  });
+                }
+              },
             ),
             SizedBox(
               height: 4.h(Get.context!),
@@ -284,10 +299,8 @@ class _FormViewState extends State<FormView> {
         return GestureDetector(
           onTap: () => proPopup(),
           child: CommonTextField(
-            // controller: customMessageController,
             enabled: widget.controller.pro,
             hintText: AppStrings.writeOrTypeCustomConditions,
-
             maxLines: 4,
             height: 50.h(context),
             onChanged: (value) {
@@ -300,7 +313,6 @@ class _FormViewState extends State<FormView> {
         return GestureDetector(
           onTap: () => proPopup(),
           child: CommonTextField(
-            // controller: servingsController,
             hintText: AppStrings.numberOfDishes,
             enabled: widget.controller.pro,
             onChanged: (value) {

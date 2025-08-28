@@ -1,4 +1,5 @@
 import '../../../helper/all_imports.dart';
+import '../../../widgets/voice_assistant_widget.dart';
 import '../controllers/recipe_controller.dart';
 
 class RecipeView extends GetView<RecipeController> {
@@ -190,32 +191,55 @@ class RecipeView extends GetView<RecipeController> {
                                                                 MainAxisAlignment
                                                                     .spaceBetween,
                                                             children: [
-                                                              AppText(
-                                                                text: ingredient[
-                                                                        "label"]
-                                                                    .toString(),
-                                                                style: Styles
-                                                                    .medium(
-                                                                  fontSize: 9.5
-                                                                      .t(context),
-                                                                  color: AppColors
-                                                                      .fontDark,
+                                                              ConstrainedBox(
+                                                                constraints:
+                                                                    BoxConstraints(
+                                                                  maxWidth: 85.w(
+                                                                      context),
+                                                                ),
+                                                                child: AppText(
+                                                                  text: ingredient[
+                                                                          "label"]
+                                                                      .toString(),
+                                                                  width: 85.w(
+                                                                      context),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: Styles
+                                                                      .medium(
+                                                                    fontSize: 9.5
+                                                                        .t(context),
+                                                                    color: AppColors
+                                                                        .fontDark,
+                                                                  ),
                                                                 ),
                                                               ),
-                                                              AppText(
-                                                                text: getKey(
-                                                                        ingredient,
-                                                                        [
-                                                                          "quantity_label"
-                                                                        ],
-                                                                        "")
-                                                                    .toString(),
-                                                                style: Styles
-                                                                    .regular(
-                                                                  fontSize: 8.t(
+                                                              ConstrainedBox(
+                                                                constraints:
+                                                                    BoxConstraints(
+                                                                  maxWidth: 85.w(
                                                                       context),
-                                                                  color: AppColors
-                                                                      .fontDark,
+                                                                ),
+                                                                child: AppText(
+                                                                  text: getKey(
+                                                                          ingredient,
+                                                                          [
+                                                                            "quantity_label"
+                                                                          ],
+                                                                          "")
+                                                                      .toString(),
+                                                                  maxLines: 2,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: Styles
+                                                                      .regular(
+                                                                    fontSize: 8.t(
+                                                                        context),
+                                                                    color: AppColors
+                                                                        .fontDark,
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ],
@@ -281,6 +305,13 @@ class RecipeView extends GetView<RecipeController> {
                                     SizedBox(
                                       height: 10.h(context),
                                     ),
+                                  VoiceAssistantWidget(
+                                    isActive: controller.isVoiceAssistantActive,
+                                    onToggle: controller.toggleVoiceAssistant,
+                                  ),
+                                  SizedBox(
+                                    height: 10.h(context),
+                                  ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

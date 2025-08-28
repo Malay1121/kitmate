@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kitmate/app/helper/all_imports.dart';
 
@@ -7,6 +8,7 @@ void main() async {
   await dotenv.load();
 
   await Firebase.initializeApp();
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   await Purchases.configure(
     PurchasesConfiguration(dotenv.env['revenuecat'] ?? ""),
   );
@@ -21,6 +23,8 @@ void main() async {
       "index": 0,
     },
   };
+  MobileAds.instance.initialize();
+  AdMobManager.initialize();
 
   initializeSize(220, 477);
   configureEasyLoading();

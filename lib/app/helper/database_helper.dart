@@ -13,6 +13,20 @@ class DatabaseHelper {
     }
   }
 
+  static Future getOperationStatus() async {
+    try {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection("operations")
+          .doc("operations")
+          .get();
+      operations = documentSnapshot.data() != null
+          ? documentSnapshot.data() as Map
+          : operations;
+    } on FirebaseException catch (error) {
+      showFirebaseError(error.message);
+    }
+  }
+
   static Future createUser({required Map<String, dynamic> data}) async {
     try {
       UserCredential user = await FirebaseAuth.instance
@@ -23,7 +37,10 @@ class DatabaseHelper {
           .collection("users")
           .doc(data["uid"])
           .set(data);
-      writeUserDetails(data);
+      print("data: ${data}");
+      if (data != {}) writeUserDetails(data);
+      print("data: ${readUserDetails()}");
+
       await SubscriptionManager.loginRevenueCat();
 
       return user.user;
@@ -36,7 +53,8 @@ class DatabaseHelper {
     try {
       UserCredential user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(
-              email: data["email"], password: generateMd5(data["password"]));
+              email: getKey(data, ["email"], ""),
+              password: generateMd5(getKey(data, ["password"], "")));
       Map<String, dynamic>? userData = (await FirebaseFirestore.instance
               .collection("users")
               .doc(user.user!.uid)
@@ -77,8 +95,18 @@ class DatabaseHelper {
   }
 
   static Future addIngredients(
-      {required String userId, required List ingredients}) async {
+      {required String userId, required List ingredientsList}) async {
     try {
+      bool pro = await SubscriptionManager.isProUser();
+      if (!pro &&
+          ingredients.length + ingredientsList.length >
+              getKey(freeLimitations, ["max_ingredients"], 30)) {
+        showSnackbar(
+            message: "You need pro to add more than ${getKey(freeLimitations, [
+                  "max_ingredients"
+                ], 30)} ingredients");
+        proPopup();
+      }
       WriteBatch batch = FirebaseFirestore.instance.batch();
       CollectionReference ingredientsCollection = FirebaseFirestore.instance
           .collection('users')
@@ -86,7 +114,7 @@ class DatabaseHelper {
           .collection("ingredients");
       String created_at = toUtc(DateTime.now());
 
-      for (Map ingredient in ingredients) {
+      for (Map ingredient in ingredientsList) {
         DocumentReference documentReference = ingredientsCollection.doc();
         ingredient.addEntries({
           "id": documentReference.id,
@@ -166,7 +194,7 @@ class DatabaseHelper {
           }
         } else {
           if (add) {
-            addIngredients(userId: userId, ingredients: [ingredient]);
+            addIngredients(userId: userId, ingredientsList: [ingredient]);
           } else {
             showSnackbar(
                 message: getKey(ingredient, ["label"], "Ingredient") +

@@ -5,6 +5,7 @@ import 'all_imports.dart';
 class GeminiHelper {
   static Future<Map<String, dynamic>> fetch(
       {required String systemPrompt,
+      bool complex = false,
       String? text,
       Map? data,
       int tries = 1}) async {
@@ -32,7 +33,7 @@ class GeminiHelper {
       ],
       "generationConfig": {"response_mime_type": "application/json"}
     });
-    // // print(bodyEncoded);
+    // print(bodyEncoded);
     var headers = {'Content-Type': 'application/json'};
     // final dio = Dio(BaseOptions(connectTimeout: Duration.zero));
     // var request = await dio.post(
@@ -42,7 +43,7 @@ class GeminiHelper {
     //     ), data: bodyEncoded);
     var request = await http.post(
       Uri.parse(
-          'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${getApi("gemini")}'),
+          'https://generativelanguage.googleapis.com/v1beta/models/${complex ? "gemini-2.5-flash" : "gemini-2.0-flash-exp"}:generateContent?key=${getApi("gemini")}'),
       headers: headers,
       body: bodyEncoded,
     );
@@ -50,6 +51,7 @@ class GeminiHelper {
 
     if (request.statusCode == 200) {
       String response = request.body;
+      // print(response);
       try {
         Map<String, dynamic> decoded = json.decode(json
             .decode(response)["candidates"][0]["content"]["parts"][0]["text"]
@@ -62,7 +64,7 @@ class GeminiHelper {
           return await fetch(
               systemPrompt: systemPrompt, text: text, data: data, tries: tries);
         } else {
-          showSnackbar(message: "Error generating recipe");
+          showSnackbar(message: "Error processing");
           return {};
         }
       }
